@@ -1048,173 +1048,247 @@ html.dark canvas,html.dark img,html.dark video,html.dark .no-invert { filter:inv
     <!-- ═══════════════════════════════════════════════
          HUB 3 — INTERVIEW
     ═══════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════
+         HUB 3 — INTERVIEW HUB (Full Experience Design)
+         Dual-perspective: Recruiter Tools ↔ Candidate Experience
+    ═══════════════════════════════════════════════ -->
     <section id="hub-3" class="hub-section p-8">
-      <div class="flex justify-between items-end mb-10">
-        <div>
-          <h1 class="text-5xl font-bold leading-tight tracking-tight">Interview Hub</h1>
-          <p class="text-on-surface-variant mt-2 text-lg">Lên lịch thông minh — Đánh giá chuẩn hóa — Tổng hợp panel AI.</p>
+
+      <!-- KPI Command Bar -->
+      <div class="grid grid-cols-5 gap-4 mb-7">
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Hôm nay</p>
+              <p class="text-3xl font-black text-on-surface">3</p>
+              <p class="text-xs text-on-surface-variant mt-1">phỏng vấn đã lên lịch</p></div>
+            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-xl">event</span>
+          </div>
         </div>
-        <div class="flex gap-3">
-          <button class="bg-surface-container-lowest text-primary border border-outline-variant/30 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-high transition-colors">Cấu hình rubric</button>
-          <button class="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 flex items-center gap-2"><span class="material-symbols-outlined text-sm">add</span> Lên lịch phỏng vấn</button>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Time-to-feedback</p>
+              <p class="text-3xl font-black text-on-surface">18h</p>
+              <p class="text-xs text-green-600 mt-1">▼ 6h vs. TB ngành</p></div>
+            <span class="material-symbols-outlined text-secondary bg-secondary/10 p-2 rounded-xl">timer</span>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Đồng thuận panel</p>
+              <p class="text-3xl font-black text-on-surface">84%</p>
+              <p class="text-xs text-on-surface-variant mt-1">calibration tốt</p></div>
+            <span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-xl">group_work</span>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Chuyển đổi offer</p>
+              <p class="text-3xl font-black text-on-surface">68%</p>
+              <p class="text-xs text-green-600 mt-1">▲ 5% vs. Q1</p></div>
+            <span class="material-symbols-outlined text-green-600 bg-green-50 p-2 rounded-xl">handshake</span>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Candidate NPS</p>
+              <p class="text-3xl font-black text-on-surface">4.6<span class="text-lg font-normal text-outline">/5</span></p>
+              <p class="text-xs text-on-surface-variant mt-1">28 phản hồi</p></div>
+            <span class="material-symbols-outlined text-amber-500 bg-amber-50 p-2 rounded-xl">star</span>
+          </div>
         </div>
       </div>
-      <div class="grid grid-cols-12 gap-6">
 
-        <!-- Smart Scheduling Calendar -->
-        <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h2 class="text-xl font-bold">Lịch thông minh</h2>
-              <span class="text-xs font-bold uppercase tracking-wider text-primary mt-1 block">AI tối ưu khung giờ · 19/04/2026</span>
-            </div>
-            <div class="flex gap-1 bg-surface-container-low p-1 rounded-lg">
-              <button class="px-4 py-1.5 bg-surface-container-lowest text-primary rounded-md shadow-sm text-xs font-semibold">Hôm nay</button>
-              <button class="px-4 py-1.5 text-on-surface-variant hover:text-on-surface rounded-md text-xs font-medium">Tuần</button>
-              <button class="px-4 py-1.5 text-on-surface-variant hover:text-on-surface rounded-md text-xs font-medium">Tháng</button>
-            </div>
-          </div>
-          <!-- Time grid headers -->
-          <div class="grid grid-cols-6 gap-2 text-xs font-medium text-on-surface-variant mb-3 pl-14 uppercase tracking-wider">
-            <div>9:00</div><div>10:00</div><div>11:00</div><div>13:00</div><div>14:00</div><div>16:00</div>
-          </div>
-          <!-- Timeline rows -->
-          <div class="space-y-4 relative bg-surface-container-low/40 rounded-xl p-4">
-            <!-- Vertical grid lines -->
-            <div class="absolute inset-0 grid grid-cols-6 pl-14 pointer-events-none opacity-10">
-              <div class="border-l border-on-surface"></div><div class="border-l border-on-surface"></div>
-              <div class="border-l border-on-surface"></div><div class="border-l border-on-surface"></div>
-              <div class="border-l border-on-surface"></div><div class="border-l border-on-surface"></div>
-            </div>
-            <!-- Row 1 -->
-            <div class="flex items-center relative z-10">
-              <div class="w-14 text-xs text-on-surface-variant font-medium text-right pr-3 flex-shrink-0">Phòng A</div>
-              <div class="flex-1 relative h-14">
-                <div class="absolute left-[8%] w-[28%] h-full bg-primary/10 border-l-4 border-primary rounded-r-xl p-3 flex flex-col justify-center cursor-pointer hover:bg-primary/20 transition-colors">
-                  <div class="text-sm font-bold text-primary">Senior Recruiter</div>
-                  <div class="text-xs text-primary/70 flex items-center mt-0.5"><span class="material-symbols-outlined text-xs mr-1">person</span>Nguyễn Thị Mai · V1</div>
-                </div>
+      <!-- Main Grid: Pipeline | Active Panel | Candidate Experience -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+
+        <!-- ── Col 1-3: Interview Pipeline ── -->
+        <div class="col-span-3 space-y-4">
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 overflow-hidden">
+            <div class="p-4 border-b border-outline-variant/10">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="font-bold text-on-surface">Lịch phỏng vấn</h2>
+                <button onclick="ivOpenScheduler()" class="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:opacity-90 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">add</span>Lên lịch
+                </button>
+              </div>
+              <div class="flex gap-1 bg-surface-container-low p-1 rounded-lg">
+                <button onclick="ivFilterSessions('today')" id="iv-filter-today" class="flex-1 py-1 text-xs font-semibold rounded-md bg-surface-container-lowest text-primary shadow-sm">Hôm nay</button>
+                <button onclick="ivFilterSessions('week')" id="iv-filter-week" class="flex-1 py-1 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface">Tuần</button>
+                <button onclick="ivFilterSessions('all')" id="iv-filter-all" class="flex-1 py-1 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface">Tất cả</button>
               </div>
             </div>
-            <!-- Row 2 -->
-            <div class="flex items-center relative z-10">
-              <div class="w-14 text-xs text-on-surface-variant font-medium text-right pr-3 flex-shrink-0">Online 1</div>
-              <div class="flex-1 relative h-14">
-                <div class="absolute left-[38%] w-[26%] h-full bg-secondary/10 border-l-4 border-secondary rounded-r-xl p-3 flex flex-col justify-center cursor-pointer hover:bg-secondary/20 transition-colors">
-                  <div class="text-sm font-bold text-secondary">HR Manager</div>
-                  <div class="text-xs text-secondary/70 flex items-center mt-0.5"><span class="material-symbols-outlined text-xs mr-1">groups</span>Phạm Đức Long · Panel 3</div>
-                </div>
-              </div>
-            </div>
-            <!-- Row 3 -->
-            <div class="flex items-center relative z-10">
-              <div class="w-14 text-xs text-on-surface-variant font-medium text-right pr-3 flex-shrink-0">Online 2</div>
-              <div class="flex-1 relative h-14">
-                <div class="absolute left-[68%] w-[22%] h-full bg-tertiary/10 border-l-4 border-tertiary rounded-r-xl p-3 flex flex-col justify-center cursor-pointer hover:bg-tertiary/20 transition-colors">
-                  <div class="text-sm font-bold text-tertiary">TA Lead</div>
-                  <div class="text-xs text-tertiary/70 flex items-center mt-0.5"><span class="material-symbols-outlined text-xs mr-1">chat</span>Vũ Thanh Hằng · Final</div>
-                </div>
-              </div>
-            </div>
+            <div id="iv-session-list" class="divide-y divide-outline-variant/10 max-h-[460px] overflow-y-auto"></div>
           </div>
-          <!-- No-show stat -->
-          <div class="flex gap-4 mt-6 pt-5 border-t border-surface-variant/50">
-            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><div class="w-3 h-3 rounded-full bg-primary"></div>Vòng 1</div>
-            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><div class="w-3 h-3 rounded-full bg-secondary"></div>Vòng 2</div>
-            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><div class="w-3 h-3 rounded-full bg-tertiary"></div>Vòng cuối</div>
-            <span class="ml-auto text-xs font-bold text-secondary bg-secondary/10 px-3 py-1 rounded-full">No-show giảm 40% nhờ nhắc tự động</span>
+          <!-- SLA Reminder Rules -->
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="material-symbols-outlined text-amber-600 text-base">notifications_active</span>
+              <span class="text-xs font-bold text-amber-800">SLA Nhắc nhở tự động</span>
+            </div>
+            <div class="space-y-1.5 text-xs text-amber-700">
+              <div class="flex justify-between"><span>Gửi mời ứng viên</span><span class="font-bold">-48h</span></div>
+              <div class="flex justify-between"><span>Nhắc + prep guide</span><span class="font-bold">-24h</span></div>
+              <div class="flex justify-between"><span>Nhắc + link join</span><span class="font-bold">-2h</span></div>
+              <div class="flex justify-between"><span>Deadline feedback panel</span><span class="font-bold">+24h</span></div>
+              <div class="flex justify-between"><span>Thông báo kết quả UV</span><span class="font-bold">+48h</span></div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-amber-200 text-xs text-amber-700 font-semibold">No-show giảm 40% ▼ · NPS tăng 0.8 điểm ▲</div>
           </div>
         </div>
 
-        <!-- Right Column -->
-        <div class="col-span-12 lg:col-span-4 space-y-6">
-          <!-- Stats -->
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-              <p class="text-xs uppercase tracking-wider text-outline mb-2">Chuyển đổi</p>
-              <p class="text-3xl font-bold text-primary">68%</p>
-              <p class="text-xs text-green-600 mt-1">▲ PV → Offer</p>
-            </div>
-            <div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-              <p class="text-xs uppercase tracking-wider text-outline mb-2">Tuần này</p>
-              <p class="text-3xl font-bold">14</p>
-              <p class="text-xs text-outline mt-1">phỏng vấn</p>
-            </div>
-          </div>
-          <!-- Active Rubric — Talent Prism -->
-          <div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-lg font-bold">Rubric đang dùng</h3>
-                <span class="text-xs font-bold uppercase tracking-wider text-secondary mt-1 block">Recruiter Level 3</span>
+        <!-- ── Col 4-9: Active Interview Panel ── -->
+        <div class="col-span-6 bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 overflow-hidden flex flex-col">
+          <!-- Candidate header -->
+          <div id="iv-candidate-header" class="p-5 border-b border-outline-variant/10 bg-gradient-to-r from-primary/5 to-surface-container-lowest flex-shrink-0">
+            <div class="flex items-center gap-4">
+              <div id="iv-avatar" class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center text-xl font-black flex-shrink-0">NM</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h2 id="iv-cname" class="text-xl font-black">Nguyễn Thị Mai</h2>
+                  <span id="iv-cv-score" class="bg-secondary-container text-on-secondary-container text-xs font-bold px-2.5 py-1 rounded-full">CV 88%</span>
+                  <span id="iv-round-badge" class="bg-primary/10 text-primary text-xs font-bold px-2.5 py-1 rounded-full">Vòng 2 — Panel</span>
+                </div>
+                <p id="iv-crole" class="text-sm text-on-surface-variant mt-0.5">Senior Recruiter · LinkedIn</p>
               </div>
-              <span class="material-symbols-outlined text-tertiary">analytics</span>
-            </div>
-            <div class="relative h-28 flex items-center justify-center mt-2">
-              <div class="absolute w-20 h-20 rounded-full bg-secondary-container/50 border border-secondary/20 flex items-center justify-center -translate-x-5 -translate-y-2">
-                <span class="text-xs font-bold text-on-surface-variant">Chuyên môn</span>
+              <div class="text-right flex-shrink-0">
+                <div id="iv-time-display" class="text-2xl font-black text-primary">09:00</div>
+                <div id="iv-duration-display" class="text-xs text-on-surface-variant">60 phút · Online</div>
+                <button id="iv-join-btn" onclick="ivJoinMeeting()" class="mt-2 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:opacity-90 flex items-center gap-1 ml-auto">
+                  <span class="material-symbols-outlined text-sm">video_call</span>Vào phòng họp
+                </button>
               </div>
-              <div class="absolute w-20 h-20 rounded-full bg-tertiary/10 border border-tertiary/20 flex items-center justify-center translate-x-5 -translate-y-2">
-                <span class="text-xs font-bold text-on-surface-variant">Văn hóa</span>
-              </div>
-              <div class="absolute w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center translate-y-5">
-                <span class="text-xs font-bold text-on-surface-variant">Lãnh đạo</span>
-              </div>
-              <div class="z-10 bg-surface-container-lowest shadow rounded-full px-3 py-1 border border-outline-variant/30 text-xs font-bold text-primary">88% phù hợp</div>
             </div>
           </div>
+          <!-- Phase tabs -->
+          <div class="flex border-b border-outline-variant/10 flex-shrink-0">
+            <button onclick="ivTab('prep')" id="iv-tab-prep" class="flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-primary/5">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">checklist</span>Chuẩn bị
+            </button>
+            <button onclick="ivTab('scorecard')" id="iv-tab-scorecard" class="flex-1 py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">edit_note</span>Scorecard
+            </button>
+            <button onclick="ivTab('debrief')" id="iv-tab-debrief" class="flex-1 py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">group_work</span>Debrief & Quyết định
+            </button>
+          </div>
+          <!-- Tab content -->
+          <div id="iv-tab-content" class="p-5 overflow-y-auto flex-1" style="max-height:460px"></div>
         </div>
 
-        <!-- Panel Synthesis -->
-        <div class="col-span-12 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="flex justify-between items-end mb-6">
-            <div>
-              <h3 class="text-xl font-bold">Tổng hợp Panel — Nguyễn Thị Mai</h3>
-              <span class="text-xs font-bold uppercase tracking-wider text-tertiary mt-1 block">Phản hồi tổng hợp từ AI</span>
+        <!-- ── Col 10-12: Candidate Experience (Empathy View) ── -->
+        <div class="col-span-3 space-y-4">
+          <!-- Journey tracker -->
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 p-5">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-primary text-base">person_pin</span>
+              <h3 class="font-bold text-sm">Trải nghiệm ứng viên</h3>
+              <span class="ml-auto text-xs text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded-full">● Live</span>
             </div>
-            <button class="text-primary text-sm font-semibold hover:underline">Xem đầy đủ scorecard</button>
+            <p class="text-xs text-on-surface-variant mb-4 leading-relaxed">Recruiter thấy chính xác ứng viên đang nhận được gì — tạo ra sự đồng cảm và trải nghiệm nhất quán.</p>
+            <div id="iv-candidate-journey" class="space-y-0.5"></div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Feedback 1 -->
-            <div class="bg-surface p-5 rounded-xl border border-outline-variant/10 hover:shadow-md transition-shadow">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">TM</div>
-                <div><div class="text-sm font-bold">Trần Minh Khoa</div><div class="text-xs text-outline">Technical Lead</div></div>
-                <div class="ml-auto bg-secondary-container text-on-secondary-container text-xs font-bold px-2 py-1 rounded-full">Strong Yes</div>
-              </div>
-              <p class="text-sm text-on-surface-variant leading-relaxed mb-3">Kỹ năng phân tích JD tốt, nắm vững quy trình end-to-end. Giao tiếp tự tin và rõ ràng.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Sourcing</span>
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Giao tiếp</span>
-              </div>
+          <!-- Portal preview -->
+          <div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-primary/15 p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-primary text-base">preview</span>
+              <h3 class="font-bold text-sm text-primary">Gói ứng viên nhận được</h3>
             </div>
-            <!-- Feedback 2 -->
-            <div class="bg-surface p-5 rounded-xl border border-outline-variant/10 hover:shadow-md transition-shadow">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center font-bold text-secondary">LP</div>
-                <div><div class="text-sm font-bold">Lê Phương Anh</div><div class="text-xs text-outline">HRBP Manager</div></div>
-                <div class="ml-auto bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded-full">Yes</div>
-              </div>
-              <p class="text-sm text-on-surface-variant leading-relaxed mb-3">Phù hợp tốt với văn hóa công ty. Đặt câu hỏi sắc bén về lộ trình phát triển — thái độ tốt.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Văn hóa</span>
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Chủ động</span>
-              </div>
+            <div id="iv-portal-preview" class="space-y-2 text-xs mb-4"></div>
+            <div class="space-y-2">
+              <button onclick="ivSendAction('prep_guide')" class="w-full bg-primary text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">description</span>Gửi tài liệu chuẩn bị
+              </button>
+              <button onclick="ivSendAction('reminder')" class="w-full bg-surface-container-high text-on-surface text-xs font-bold py-2 rounded-xl hover:bg-surface-container-highest flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">notifications</span>Gửi nhắc nhở
+              </button>
+              <button onclick="ivSendAction('thankyou')" class="w-full bg-surface-container-high text-on-surface text-xs font-bold py-2 rounded-xl hover:bg-surface-container-highest flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">favorite</span>Cảm ơn sau phỏng vấn
+              </button>
+              <button onclick="ivSendAction('result')" class="w-full bg-surface-container-high text-on-surface text-xs font-bold py-2 rounded-xl hover:bg-surface-container-highest flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">task_alt</span>Thông báo kết quả
+              </button>
             </div>
-            <!-- AI Summary -->
-            <div class="bg-gradient-to-br from-surface-container-high to-surface-container-low p-5 rounded-xl border border-outline-variant/20">
-              <div class="flex items-center gap-2 mb-4 text-primary">
-                <span class="material-symbols-outlined">auto_awesome</span>
-                <span class="text-sm font-bold">Nhận xét AI tổng hợp</span>
-              </div>
-              <h4 class="text-3xl font-black text-on-surface mb-1">88<span class="text-lg text-on-surface-variant font-normal">/100</span></h4>
-              <p class="text-sm text-on-surface-variant leading-relaxed">Panel đồng thuận cao. Ứng viên thể hiện năng lực kỹ thuật lẫn phù hợp văn hóa. Đề xuất tiến đến vòng cuối.</p>
-              <button class="mt-5 w-full bg-surface-container-lowest text-primary py-2 rounded-lg text-sm font-bold border border-outline-variant/20 hover:bg-white transition-colors">Tạo báo cáo đầy đủ</button>
-            </div>
+          </div>
+          <!-- Panel composition -->
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 p-5">
+            <h3 class="font-bold text-sm mb-3">Thành phần panel</h3>
+            <div id="iv-panel-list" class="space-y-2"></div>
           </div>
         </div>
 
       </div>
+
+      <!-- Intelligence Footer -->
+      <div class="grid grid-cols-3 gap-6">
+        <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10">
+          <h3 class="font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">filter_alt</span>Phễu chuyển đổi vòng</h3>
+          <div id="iv-funnel" class="space-y-3"></div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10">
+          <h3 class="font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-base">psychology</span>Câu hỏi dự đoán tốt nhất</h3>
+          <div class="space-y-3" id="iv-question-insight"></div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10">
+          <h3 class="font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-tertiary text-base">monitor_heart</span>Sức khỏe quy trình</h3>
+          <div class="space-y-3" id="iv-health"></div>
+        </div>
+      </div>
+
+      <!-- Scheduler Modal -->
+      <div id="iv-scheduler-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center backdrop-blur-sm" onclick="if(event.target===this)this.classList.add('hidden')">
+        <div class="bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-lg w-full mx-4">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold">Lên lịch phỏng vấn</h2>
+            <button onclick="document.getElementById('iv-scheduler-modal').classList.add('hidden')" class="text-outline hover:text-on-surface"><span class="material-symbols-outlined">close</span></button>
+          </div>
+          <div class="space-y-4">
+            <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Ứng viên</label>
+              <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                <option>Nguyễn Thị Mai — Senior Recruiter</option>
+                <option>Phạm Đức Long — HR Manager</option>
+                <option>Lê Thanh Tùng — TA Lead</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Vòng phỏng vấn</label>
+                <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                  <option>Vòng 1 — HR Screening</option>
+                  <option>Vòng 2 — Panel</option>
+                  <option>Vòng 3 — Final</option>
+                </select>
+              </div>
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Hình thức</label>
+                <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                  <option>Online (Google Meet)</option>
+                  <option>Onsite — Văn phòng</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Ngày & Giờ</label>
+                <input type="datetime-local" class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+              </div>
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Thời lượng</label>
+                <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                  <option>30 phút</option><option>45 phút</option><option selected>60 phút</option><option>90 phút</option>
+                </select>
+              </div>
+            </div>
+            <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Panelist (email)</label>
+              <input type="text" placeholder="Thêm email panelist, cách nhau bằng dấu phẩy..." class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+            </div>
+            <div class="bg-primary/5 rounded-xl p-3 text-xs text-primary border border-primary/15">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">auto_awesome</span>
+              AI sẽ tự động tạo Google Meet link · Gửi mời tới ứng viên + panel · Lên lịch nhắc SLA
+            </div>
+            <div class="flex gap-3 pt-1">
+              <button onclick="ivScheduleConfirm()" class="flex-1 bg-primary text-white font-bold py-2.5 rounded-xl hover:opacity-90 text-sm">Xác nhận & Gửi mời</button>
+              <button onclick="document.getElementById('iv-scheduler-modal').classList.add('hidden')" class="px-5 bg-surface-container-high text-on-surface font-bold py-2.5 rounded-xl text-sm">Hủy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ═══════════════════════════════════════════════
@@ -3596,6 +3670,600 @@ showHub = function(n) {
 
 // Init if already on hub-1
 if (document.getElementById('hub-1').classList.contains('active')) s1Init();
+
+/* ═══════════════════════════════════════════════════
+   HUB 3 — INTERVIEW HUB ENGINE
+   Dual-perspective: Recruiter Tools ↔ Candidate UX
+═══════════════════════════════════════════════════ */
+
+const IV_SESSIONS = [
+  {
+    id:'iv001', time:'09:00', timeEnd:'10:00', duration:60,
+    candidate:{ name:'Nguyễn Thị Mai', role:'Senior Recruiter', avatar:'NM', cvScore:88, source:'LinkedIn' },
+    round:2, roundName:'Vòng 2 — Panel', roundType:'panel',
+    status:'active', mode:'online', link:'meet.google.com/rhu-axbc-nmf',
+    panel:[
+      { name:'Trần Minh Khoa', role:'Technical Lead', avatar:'TK', submitted:true,  verdict:'strong_yes', score:4.2, note:'Kỹ năng sourcing đa kênh tốt, phân tích JD sắc bén. Kinh nghiệm end-to-end rõ ràng.' },
+      { name:'Lê Phương Anh',  role:'HRBP Manager',  avatar:'LA', submitted:true,  verdict:'yes',        score:4.5, note:'Phù hợp văn hóa tốt. Hỏi sắc về lộ trình — thái độ ownership cao.' },
+      { name:'Vũ Thanh Hằng',  role:'TA Lead',       avatar:'VH', submitted:false, verdict:null,         score:null, note:'' },
+    ],
+    scores:{ expertise:4, culture:5, leadership:3, communication:5, problem_solving:4 },
+    journeyDone:['invited','confirmed','prep_sent','in_interview'],
+  },
+  {
+    id:'iv002', time:'14:00', timeEnd:'14:45', duration:45,
+    candidate:{ name:'Phạm Đức Long', role:'HR Manager', avatar:'PL', cvScore:76, source:'TopCV' },
+    round:1, roundName:'Vòng 1 — HR Screening', roundType:'screening',
+    status:'upcoming', mode:'online', link:'meet.google.com/xyz-pldg-uvw',
+    panel:[
+      { name:'Vũ Thanh Hằng', role:'TA Lead', avatar:'VH', submitted:false, verdict:null, score:null, note:'' },
+    ],
+    scores:{ motivation:0, communication:0, culture:0, expectations:0 },
+    journeyDone:['invited','confirmed','prep_sent'],
+  },
+  {
+    id:'iv003', time:'16:00', timeEnd:'17:30', duration:90,
+    candidate:{ name:'Lê Thanh Tùng', role:'TA Lead', avatar:'LT', cvScore:92, source:'Referral' },
+    round:3, roundName:'Vòng 3 — Final', roundType:'final',
+    status:'upcoming', mode:'onsite', link:'',
+    panel:[
+      { name:'Nguyễn Anh Tuấn', role:'CEO',        avatar:'NA', submitted:false, verdict:null, score:null, note:'' },
+      { name:'Lê Phương Anh',   role:'HRBP Manager', avatar:'LA', submitted:false, verdict:null, score:null, note:'' },
+    ],
+    scores:{ vision:0, leadership:0, culture:0, communication:0 },
+    journeyDone:['invited','confirmed'],
+  },
+];
+
+const IV_RUBRIC = {
+  screening:[
+    { key:'motivation',    label:'Động lực & Định hướng',   icon:'psychology',       weight:25 },
+    { key:'communication', label:'Giao tiếp & Kết nối',     icon:'record_voice_over', weight:25 },
+    { key:'culture',       label:'Phù hợp văn hóa',         icon:'handshake',         weight:25 },
+    { key:'expectations',  label:'Kỳ vọng lương & lộ trình',icon:'trending_up',       weight:25 },
+  ],
+  panel:[
+    { key:'expertise',       label:'Chuyên môn kỹ thuật',    icon:'engineering',       weight:35 },
+    { key:'problem_solving', label:'Tư duy giải quyết vấn đề',icon:'lightbulb',        weight:20 },
+    { key:'communication',   label:'Giao tiếp & Thuyết phục', icon:'record_voice_over', weight:20 },
+    { key:'culture',         label:'Phù hợp văn hóa',         icon:'handshake',         weight:15 },
+    { key:'leadership',      label:'Tư duy lãnh đạo',         icon:'manage_accounts',   weight:10 },
+  ],
+  final:[
+    { key:'vision',        label:'Tầm nhìn & Chiến lược',     icon:'explore',           weight:30 },
+    { key:'leadership',    label:'Năng lực lãnh đạo',          icon:'manage_accounts',   weight:30 },
+    { key:'culture',       label:'Cultural fit cấp cao',       icon:'handshake',          weight:25 },
+    { key:'communication', label:'Ảnh hưởng & Thuyết phục',   icon:'record_voice_over',  weight:15 },
+  ],
+};
+
+const IV_QUESTIONS = {
+  screening:[
+    { dim:'motivation',    q:'Điều gì thu hút bạn đến cơ hội này ngay thời điểm hiện tại?',       predict:85, type:'Open' },
+    { dim:'culture',       q:'Mô tả môi trường làm việc mà bạn phát huy tốt nhất?',               predict:80, type:'Cultural' },
+    { dim:'communication', q:'Kể về thành tích bạn tự hào nhất trong 2 năm gần nhất?',            predict:88, type:'STAR' },
+    { dim:'expectations',  q:'Kỳ vọng mức lương và lộ trình 2-3 năm tới của bạn?',               predict:75, type:'Practical' },
+  ],
+  panel:[
+    { dim:'expertise',       q:'Mô tả quy trình sourcing end-to-end bạn đã làm tốt nhất?',        predict:92, type:'STAR' },
+    { dim:'communication',   q:'Làm sao bạn thuyết phục hiring manager khi không đồng ý về UV?',  predict:90, type:'Situational' },
+    { dim:'expertise',       q:'Bạn xây dựng boolean search như thế nào cho vị trí kỹ thuật khó?',predict:88, type:'Technical' },
+    { dim:'problem_solving', q:'Khi pipeline trống 2 tuần trước deadline, bạn làm gì ngay lập tức?',predict:85, type:'Situational' },
+    { dim:'leadership',      q:'Bạn đã từng mentor junior recruiter chưa? Cách tiếp cận?',        predict:82, type:'Behavioral' },
+    { dim:'culture',         q:'Mô tả lần bạn không đồng ý với quyết định của team nhưng vẫn thực hiện?',predict:78, type:'Cultural' },
+  ],
+  final:[
+    { dim:'vision',        q:'Bạn muốn xây dựng bộ phận TA như thế nào trong 2 năm tới?',        predict:94, type:'Strategic' },
+    { dim:'leadership',    q:'Kể về lần bạn phải đưa ra quyết định khó với ít thông tin?',       predict:90, type:'STAR' },
+    { dim:'culture',       q:'Điều gì khiến bạn chọn công ty này thay vì offer cạnh tranh hơn?', predict:87, type:'Cultural' },
+    { dim:'communication', q:'Bạn sẽ truyền cảm hứng cho team như thế nào trong 90 ngày đầu?',  predict:84, type:'Behavioral' },
+  ],
+};
+
+const IV_JOURNEY_STEPS = [
+  { key:'invited',          label:'Nhận mời phỏng vấn',        icon:'mail',            desc:'Email mời kèm thông tin vòng, panel, hình thức' },
+  { key:'confirmed',        label:'Xác nhận lịch',             icon:'event_available', desc:'Ứng viên click confirm — lịch được lock' },
+  { key:'prep_sent',        label:'Nhận tài liệu chuẩn bị',   icon:'description',     desc:'Prep guide: panel bio, agenda, culture deck' },
+  { key:'in_interview',     label:'Đang phỏng vấn',            icon:'video_call',      desc:'Session live — 2 chiều đánh giá diễn ra' },
+  { key:'feedback_pending', label:'Chờ kết quả',               icon:'hourglass_empty', desc:'Panel nộp feedback → AI tổng hợp' },
+  { key:'decision',         label:'Nhận kết quả',              icon:'task_alt',        desc:'Thông báo rõ ràng + lý do + bước tiếp theo' },
+];
+
+let ivActiveId = 'iv001';
+let ivCurrentTab = 'prep';
+let ivLiveScores = {};
+let ivLiveVerdict = null;
+
+function ivInit() {
+  ivRenderSessionList();
+  ivSelectSession(ivActiveId);
+  ivRenderFunnel();
+  ivRenderInsights();
+}
+
+function ivRenderSessionList() {
+  const list = document.getElementById('iv-session-list');
+  if (!list) return;
+  const statusDot = { active:'bg-green-500', upcoming:'bg-primary', done:'bg-outline', cancelled:'bg-red-400' };
+  list.innerHTML = IV_SESSIONS.map(s => `
+    <div onclick="ivSelectSession('${s.id}')"
+         class="p-4 cursor-pointer hover:bg-surface-container-low transition-colors ${s.id===ivActiveId?'bg-primary/5 border-l-4 border-primary':''}">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0">${s.candidate.avatar}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-bold truncate">${s.candidate.name}</span>
+            <span class="w-2 h-2 rounded-full flex-shrink-0 ${statusDot[s.status]}"></span>
+          </div>
+          <div class="text-xs text-on-surface-variant truncate">${s.roundName}</div>
+        </div>
+        <div class="text-right flex-shrink-0">
+          <div class="text-sm font-bold text-primary">${s.time}</div>
+          <div class="text-xs text-outline">${s.duration}p</div>
+        </div>
+      </div>
+      ${s.status==='active'?'<div class="mt-2 flex items-center gap-1 text-xs text-green-600 font-bold"><span class="material-symbols-outlined text-xs">radio_button_checked</span>Đang diễn ra live</div>':''}
+    </div>`).join('');
+}
+
+function ivSelectSession(id) {
+  ivActiveId = id;
+  const s = IV_SESSIONS.find(x=>x.id===id);
+  if (!s) return;
+  // Header
+  document.getElementById('iv-avatar').textContent = s.candidate.avatar;
+  document.getElementById('iv-cname').textContent = s.candidate.name;
+  document.getElementById('iv-crole').textContent = s.candidate.role + ' · ' + s.candidate.source;
+  document.getElementById('iv-cv-score').textContent = 'CV '+s.candidate.cvScore+'%';
+  document.getElementById('iv-round-badge').textContent = s.roundName;
+  document.getElementById('iv-time-display').textContent = s.time;
+  document.getElementById('iv-duration-display').textContent = s.duration+' phút · '+(s.mode==='online'?'Online':'Onsite');
+  const joinBtn = document.getElementById('iv-join-btn');
+  if (joinBtn) joinBtn.style.display = s.mode==='online'?'flex':'none';
+  // Live scores reset
+  ivLiveScores = { ...s.scores };
+  ivLiveVerdict = null;
+  // Render panels
+  ivRenderCandidateJourney(s);
+  ivRenderPortalPreview(s);
+  ivRenderPanelList(s);
+  ivRenderSessionList();
+  ivTab(ivCurrentTab);
+}
+
+function ivTab(tab) {
+  ivCurrentTab = tab;
+  ['prep','scorecard','debrief'].forEach(t => {
+    const btn = document.getElementById('iv-tab-'+t);
+    if (!btn) return;
+    if (t===tab) {
+      btn.className = 'flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-primary/5';
+    } else {
+      btn.className = 'flex-1 py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent';
+    }
+  });
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  const el = document.getElementById('iv-tab-content');
+  if (!el||!s) return;
+  if (tab==='prep')      el.innerHTML = ivBuildPrepTab(s);
+  if (tab==='scorecard') el.innerHTML = ivBuildScorecardTab(s);
+  if (tab==='debrief')   el.innerHTML = ivBuildDebriefTab(s);
+}
+
+function ivBuildPrepTab(s) {
+  const qs = IV_QUESTIONS[s.roundType]||IV_QUESTIONS.panel;
+  const agendas = {
+    screening:`<div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Giới thiệu & kết nối</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Ứng viên self-intro</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">20'</span><span>Câu hỏi sàng lọc chính</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Q&A từ ứng viên</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Next steps & timeline rõ ràng</span></div>`,
+    panel:    `<div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Giới thiệu panel & mục tiêu vòng</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Ứng viên tóm tắt background</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">30'</span><span>Câu hỏi chuyên môn & situational</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Câu hỏi văn hóa & tư duy lãnh đạo</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Q&A sắc bén từ ứng viên</span></div>`,
+    final:    `<div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Rapport & cultural tone-setting</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">30'</span><span>Tầm nhìn chiến lược & 90-day plan</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">25'</span><span>Case lãnh đạo & quyết định khó</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">15'</span><span>Q&A sâu — ứng viên evaluate công ty</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Offer expectation preview & next step</span></div>`,
+  };
+  const objectives = {
+    screening:'Sàng lọc sơ bộ — động lực, phù hợp văn hóa, kỳ vọng, thông tin cơ bản',
+    panel:'Đánh giá sâu chuyên môn, tư duy giải quyết vấn đề, calibration qua nhiều góc nhìn',
+    final:'Quyết định cuối — tầm nhìn, lãnh đạo, cultural add, commitment hai chiều',
+  };
+  return `
+    <div class="bg-surface-container-low rounded-xl p-4 mb-4 flex items-center gap-4">
+      <span class="material-symbols-outlined text-primary text-2xl">flag</span>
+      <div class="flex-1">
+        <div class="text-xs font-bold uppercase tracking-wider text-outline mb-0.5">Mục tiêu vòng này</div>
+        <div class="text-sm font-semibold">${objectives[s.roundType]||objectives.panel}</div>
+      </div>
+      <div class="text-right text-xs text-outline">${s.duration}' · ${s.panel.length} panelist</div>
+    </div>
+
+    <div class="mb-4">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary text-base">auto_awesome</span>
+        <h4 class="font-bold text-sm">Câu hỏi AI gợi ý</h4>
+        <span class="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full font-bold">${qs.length} câu · xếp theo predictive score</span>
+      </div>
+      <div class="space-y-2">
+        ${qs.map(q=>`
+          <div class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/10 hover:border-primary/30 transition-colors cursor-pointer group"
+               title="Predictive power: ${q.predict}%">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs font-bold bg-surface-container-high px-2 py-0.5 rounded text-on-surface-variant">${q.type}</span>
+                  <span class="text-xs text-primary font-bold">↑${q.predict}% predict hire</span>
+                </div>
+                <p class="text-sm text-on-surface leading-relaxed">${q.q}</p>
+              </div>
+              <button onclick="showToast('Đã copy câu hỏi ✓')" class="opacity-0 group-hover:opacity-100 transition-opacity text-xs text-primary font-bold bg-primary/10 px-2 py-1 rounded-lg flex-shrink-0">
+                <span class="material-symbols-outlined text-xs">content_copy</span>
+              </button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="bg-surface-container-low rounded-xl p-4">
+      <h4 class="font-bold text-sm mb-3">Agenda đề xuất (${s.duration} phút)</h4>
+      <div class="space-y-2 text-sm text-on-surface-variant">${agendas[s.roundType]||agendas.panel}</div>
+    </div>`;
+}
+
+function ivBuildScorecardTab(s) {
+  const rubric = IV_RUBRIC[s.roundType]||IV_RUBRIC.panel;
+  const weighted = rubric.reduce((sum,c)=>{
+    const sc = ivLiveScores[c.key]||0;
+    return sum + (sc*c.weight/100);
+  },0);
+  const total = Math.round(weighted*20);
+  const scoreColor = total>=80?'text-green-600':total>=60?'text-primary':'text-amber-600';
+  return `
+    <div class="flex items-center justify-between mb-4 pb-4 border-b border-outline-variant/10">
+      <div>
+        <p class="text-xs text-outline mb-1">Điểm tổng hợp (weighted)</p>
+        <p class="text-4xl font-black ${scoreColor}">${total}<span class="text-lg font-normal text-outline">/100</span></p>
+        <p class="text-xs text-on-surface-variant mt-1">${total>=80?'Xuất sắc — Strong hire':total>=60?'Tốt — Recommend hire':total>=40?'Cân nhắc':'Không phù hợp'}</p>
+      </div>
+      <button onclick="ivSubmitScorecard()" class="bg-primary text-white font-bold px-5 py-2.5 rounded-xl hover:opacity-90 text-sm flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">send</span>Nộp feedback
+      </button>
+    </div>
+
+    <div class="space-y-3 mb-4">
+      ${rubric.map(c=>`
+        <div class="bg-surface-container-low rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-base">${c.icon}</span>
+              <span class="font-semibold text-sm">${c.label}</span>
+              <span class="text-xs text-outline">(${c.weight}%)</span>
+            </div>
+            <span class="text-sm font-black text-primary">${ivLiveScores[c.key]||0}/5</span>
+          </div>
+          <div class="flex gap-2 mb-2">
+            ${[1,2,3,4,5].map(n=>`
+              <button onclick="ivSetScore('${c.key}',${n})"
+                      class="flex-1 py-2 rounded-lg text-sm font-bold transition-all ${(ivLiveScores[c.key]||0)>=n?'bg-primary text-white shadow':'bg-surface-container-high text-on-surface-variant hover:bg-primary/20'}">
+                ${n}
+              </button>`).join('')}
+          </div>
+          <div class="flex justify-between text-xs text-outline px-1"><span>Yếu</span><span>Đạt</span><span>Xuất sắc</span></div>
+        </div>`).join('')}
+    </div>
+
+    <div class="bg-surface-container-low rounded-xl p-4 mb-4">
+      <label class="text-xs font-bold uppercase tracking-wider text-outline mb-2 block">Ghi chú chi tiết</label>
+      <textarea id="iv-notes" rows="3" placeholder="Nhận xét cụ thể: ví dụ điển hình ứng viên đưa ra, điểm mạnh, điểm cần phát triển..."
+                class="w-full text-sm bg-transparent resize-none outline-none text-on-surface placeholder-outline/50 leading-relaxed"></textarea>
+    </div>
+
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="text-xs font-bold text-outline">Verdict của bạn:</span>
+      ${[
+        {v:'strong_yes',label:'Strong Yes',bg:'bg-green-100 text-green-700 border-green-300'},
+        {v:'yes',label:'Yes',bg:'bg-blue-100 text-blue-700 border-blue-300'},
+        {v:'maybe',label:'Maybe',bg:'bg-amber-100 text-amber-700 border-amber-300'},
+        {v:'no',label:'No',bg:'bg-red-100 text-red-700 border-red-300'},
+      ].map(item=>`
+        <button onclick="ivSetVerdict('${item.v}')" id="iv-verdict-${item.v}"
+                class="text-xs font-bold px-3 py-1.5 rounded-full border ${item.bg} transition-opacity hover:opacity-80">
+          ${item.label}
+        </button>`).join('')}
+    </div>`;
+}
+
+function ivBuildDebriefTab(s) {
+  const submitted = s.panel.filter(p=>p.submitted);
+  const total = s.panel.length;
+  const allIn = submitted.length===total;
+  const avgScore = submitted.length ? submitted.reduce((a,p)=>a+(p.score||0),0)/submitted.length : 0;
+  const verdictMap = {strong_yes:0,yes:0,maybe:0,no:0};
+  submitted.forEach(p=>{ if(verdictMap[p.verdict]!==undefined) verdictMap[p.verdict]++; });
+  const consensus = submitted.length<2?'Chờ thêm feedback':
+    (verdictMap.strong_yes+verdictMap.yes===submitted.length)?'Đồng thuận Hire':
+    (verdictMap.no===submitted.length)?'Đồng thuận Reject':'Ý kiến phân kỳ — cần calibrate';
+  const consensusColor = consensus.includes('Hire')?'text-green-600':consensus.includes('Reject')?'text-red-500':'text-amber-600';
+
+  return `
+    <div class="mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="font-bold text-sm">Phản hồi panel (${submitted.length}/${total})</h4>
+        ${!allIn
+          ?`<span class="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full font-bold">⏳ Chờ ${total-submitted.length} người nộp</span>`
+          :`<span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full font-bold">✓ Đủ feedback</span>`}
+      </div>
+      <div class="space-y-3">
+        ${s.panel.map(p=>`
+          <div class="bg-surface-container-low rounded-xl p-4 ${!p.submitted?'opacity-55':''}">
+            <div class="flex items-center gap-3 ${p.submitted&&p.note?'mb-3':''}">
+              <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xs flex-shrink-0">${p.avatar}</div>
+              <div class="flex-1">
+                <div class="text-sm font-bold">${p.name}</div>
+                <div class="text-xs text-outline">${p.role}</div>
+              </div>
+              ${p.submitted
+                ?`<span class="text-xs font-bold px-2.5 py-1 rounded-full ${p.verdict==='strong_yes'?'bg-green-100 text-green-700':p.verdict==='yes'?'bg-blue-100 text-blue-700':p.verdict==='maybe'?'bg-amber-100 text-amber-700':'bg-red-100 text-red-700'}">${p.verdict==='strong_yes'?'Strong Yes':p.verdict==='yes'?'Yes':p.verdict==='maybe'?'Maybe':'No'}</span>
+                   <span class="text-lg font-black text-primary ml-1">${p.score?.toFixed(1)}</span>`
+                :`<span class="text-xs text-outline italic">Chưa nộp</span>`}
+            </div>
+            ${p.submitted&&p.note?`<p class="text-xs text-on-surface-variant italic border-l-2 border-primary/30 pl-3 leading-relaxed">${p.note}</p>`:''}
+          </div>`).join('')}
+      </div>
+    </div>
+
+    ${allIn?`
+      <div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-5 border border-primary/15 mb-4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-primary">auto_awesome</span>
+          <h4 class="font-bold text-sm">AI Tổng hợp panel</h4>
+          <span class="ml-auto text-xs font-bold ${consensusColor}">${consensus}</span>
+        </div>
+        <div class="flex items-end gap-4 mb-3">
+          <div class="text-5xl font-black text-primary">${Math.round(avgScore*20)}<span class="text-xl font-normal text-outline">/100</span></div>
+          <div class="pb-1">
+            <div class="text-xs text-outline">Avg score: ${avgScore.toFixed(1)}/5 · ${submitted.length} panelists</div>
+            <div class="flex gap-1 mt-1">
+              ${submitted.map(p=>`<span class="w-3 h-3 rounded-full ${p.verdict==='strong_yes'?'bg-green-500':p.verdict==='yes'?'bg-blue-500':p.verdict==='maybe'?'bg-amber-400':'bg-red-400'}" title="${p.name}: ${p.verdict}"></span>`).join('')}
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed">
+          Panel ${verdictMap.strong_yes>0?'mạnh mẽ đồng thuận':'có sự đồng thuận'} về ứng viên.
+          Điểm mạnh nổi bật: ${avgScore>=4?'chuyên môn vững và phù hợp văn hóa rõ ràng':'tiềm năng phát triển tốt'}.
+          ${verdictMap.maybe+verdictMap.no>0?'Lưu ý: có điểm phân kỳ cần calibrate trong debrief call.':''}
+          Khuyến nghị: <strong>${avgScore>=4?'Tiến đến vòng tiếp / Offer':avgScore>=3?'Giữ lại, cân nhắc thêm':'Kết thúc quy trình với phản hồi tốt'}</strong>.
+        </p>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <button onclick="ivDecide('advance')" class="bg-green-600 text-white font-bold py-3 rounded-xl text-xs hover:opacity-90">
+          <span class="material-symbols-outlined text-base block mb-1">arrow_forward</span>Tiến vòng tiếp / Offer
+        </button>
+        <button onclick="ivDecide('hold')" class="bg-amber-500 text-white font-bold py-3 rounded-xl text-xs hover:opacity-90">
+          <span class="material-symbols-outlined text-base block mb-1">pause_circle</span>Giữ lại, xem xét
+        </button>
+        <button onclick="ivDecide('reject')" class="bg-surface-container-high text-on-surface font-bold py-3 rounded-xl text-xs hover:bg-surface-container-highest">
+          <span class="material-symbols-outlined text-base block mb-1">close</span>Không tiếp tục
+        </button>
+      </div>`
+    :`<div class="bg-surface-container-low rounded-xl p-6 text-center text-on-surface-variant">
+        <span class="material-symbols-outlined text-4xl text-outline block mb-2">hourglass_empty</span>
+        <p class="text-sm">Chờ <strong>${total-submitted.length}</strong> panelist còn lại nộp feedback</p>
+        <p class="text-xs text-outline mt-1">AI tổng hợp sẽ hiện ngay khi đủ phản hồi</p>
+      </div>`}`;
+}
+
+function ivRenderCandidateJourney(s) {
+  const el = document.getElementById('iv-candidate-journey');
+  if (!el) return;
+  el.innerHTML = IV_JOURNEY_STEPS.map((step, i) => {
+    const done = s.journeyDone.includes(step.key);
+    const active = !done && i===s.journeyDone.length;
+    return `
+      <div class="flex items-start gap-3 py-2">
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center ${done?'bg-green-100':active?'bg-primary/10':'bg-surface-container-high'}">
+            <span class="material-symbols-outlined text-sm ${done?'text-green-600':active?'text-primary':'text-outline'}">
+              ${done?'check_circle':step.icon}
+            </span>
+          </div>
+          ${i<IV_JOURNEY_STEPS.length-1?`<div class="w-px flex-1 min-h-[12px] mt-1 ${done?'bg-green-300':'bg-outline-variant/30'}"></div>`:''}
+        </div>
+        <div class="flex-1 pb-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold ${done?'text-on-surface':active?'text-primary':'text-outline'}">${step.label}</span>
+            ${active?'<span class="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0"></span>':''}
+          </div>
+          <p class="text-xs text-outline leading-relaxed">${step.desc}</p>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function ivRenderPortalPreview(s) {
+  const el = document.getElementById('iv-portal-preview');
+  if (!el) return;
+  const prepSent = s.journeyDone.includes('prep_sent');
+  el.innerHTML = `
+    <div class="bg-white rounded-xl border border-outline-variant/20 p-3 space-y-1.5">
+      <div class="text-xs font-bold text-primary mb-2">Ứng viên đã nhận:</div>
+      ${[
+        {label:`Email mời + confirm link`, done:s.journeyDone.includes('invited')},
+        {label:`Panel bios (${s.panel.length} người)`, done:prepSent},
+        {label:`Agenda chi tiết (${s.duration} phút)`, done:prepSent},
+        {label:`Culture & values overview`, done:prepSent},
+        {label:s.mode==='online'?`Google Meet link`:`Địa chỉ + hướng dẫn đến`, done:s.journeyDone.includes('confirmed')},
+      ].map(item=>`
+        <div class="flex items-center gap-1.5 text-xs ${item.done?'text-on-surface-variant':'text-outline/50'}">
+          <span class="material-symbols-outlined text-xs ${item.done?'text-green-600':'text-outline'}">${item.done?'check_circle':'radio_button_unchecked'}</span>
+          ${item.label}
+        </div>`).join('')}
+    </div>
+    <p class="text-xs text-outline text-center">Ứng viên xem portal này qua email — cập nhật real-time</p>`;
+}
+
+function ivRenderPanelList(s) {
+  const el = document.getElementById('iv-panel-list');
+  if (!el) return;
+  const vc = {strong_yes:'text-green-600',yes:'text-blue-600',maybe:'text-amber-600',no:'text-red-500'};
+  const vl = {strong_yes:'Strong Yes',yes:'Yes',maybe:'Maybe',no:'No'};
+  el.innerHTML = s.panel.map(p=>`
+    <div class="flex items-center gap-2 py-2 border-b border-outline-variant/10 last:border-0">
+      <div class="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xs flex-shrink-0">${p.avatar}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-xs font-bold truncate">${p.name}</div>
+        <div class="text-xs text-outline truncate">${p.role}</div>
+      </div>
+      ${p.submitted?`<span class="text-xs font-bold ${vc[p.verdict]}">${vl[p.verdict]}</span>`:`<span class="text-xs text-outline italic">Pending</span>`}
+    </div>`).join('');
+}
+
+function ivSetScore(key, val) {
+  ivLiveScores[key] = val;
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  if (s) { s.scores={...ivLiveScores}; document.getElementById('iv-tab-content').innerHTML=ivBuildScorecardTab(s); }
+}
+
+function ivSetVerdict(v) {
+  ivLiveVerdict = v;
+  ['strong_yes','yes','maybe','no'].forEach(x=>{
+    const btn = document.getElementById('iv-verdict-'+x);
+    if (btn) btn.style.opacity = x===v?'1':'0.45';
+  });
+}
+
+function ivSubmitScorecard() {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  if (!s) return;
+  const pending = s.panel.find(p=>!p.submitted);
+  if (pending) {
+    pending.submitted=true;
+    pending.verdict = ivLiveVerdict||'yes';
+    pending.score = Math.max(1, Object.values(ivLiveScores).reduce((a,b)=>a+b,0) / (Object.keys(ivLiveScores).length||1));
+    pending.note = document.getElementById('iv-notes')?.value||'Giao tiếp tốt, thể hiện tư duy hệ thống rõ ràng.';
+    s.journeyDone = [...new Set([...s.journeyDone,'feedback_pending'])];
+  }
+  ivRenderCandidateJourney(s);
+  ivRenderPanelList(s);
+  showToast('Feedback đã nộp ✓ AI đang tổng hợp...');
+  ivTab('debrief');
+}
+
+function ivDecide(action) {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  const labels = {advance:'Chuyển vòng tiếp / Offer letter',hold:'Giữ lại để xem xét thêm',reject:'Kết thúc quy trình'};
+  showToast(`Quyết định: ${labels[action]} ✓`);
+  if (s&&action!=='reject') { s.journeyDone=[...new Set([...s.journeyDone,'decision'])]; ivRenderCandidateJourney(s); }
+}
+
+function ivSendAction(type) {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  const msgs = {
+    prep_guide:'Đã gửi tài liệu chuẩn bị: panel bios, agenda, culture deck ✓',
+    reminder:'Đã gửi nhắc nhở kèm link phỏng vấn ✓',
+    thankyou:'Đã gửi lời cảm ơn cá nhân hóa sau phỏng vấn ✓',
+    result:'Đã gửi thông báo kết quả với lý do rõ ràng ✓',
+  };
+  showToast(msgs[type]||'Đã gửi ✓');
+  if (s&&type==='prep_guide'&&!s.journeyDone.includes('prep_sent')) {
+    s.journeyDone.push('prep_sent');
+    ivRenderCandidateJourney(s);
+    ivRenderPortalPreview(s);
+  }
+}
+
+function ivJoinMeeting() {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  if (s?.link) showToast('Mở Google Meet: '+s.link);
+}
+
+function ivOpenScheduler() {
+  document.getElementById('iv-scheduler-modal').classList.remove('hidden');
+}
+
+function ivScheduleConfirm() {
+  document.getElementById('iv-scheduler-modal').classList.add('hidden');
+  showToast('AI tìm khung giờ, tạo Meet link và gửi mời thành công ✓');
+}
+
+function ivFilterSessions(f) {
+  ['today','week','all'].forEach(x=>{
+    const btn=document.getElementById('iv-filter-'+x);
+    if(!btn) return;
+    btn.className = x===f
+      ?'flex-1 py-1 text-xs font-semibold rounded-md bg-surface-container-lowest text-primary shadow-sm'
+      :'flex-1 py-1 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface';
+  });
+}
+
+function ivRenderFunnel() {
+  const el = document.getElementById('iv-funnel');
+  if (!el) return;
+  const stages=[
+    {label:'CV Passed',n:48,color:'bg-primary'},
+    {label:'HR Screen',n:32,color:'bg-secondary'},
+    {label:'Panel',n:18,color:'bg-tertiary'},
+    {label:'Final',n:9,color:'bg-green-500'},
+    {label:'Offer',n:6,color:'bg-amber-500'},
+  ];
+  el.innerHTML = stages.map((s,i)=>`
+    <div>
+      <div class="flex justify-between text-xs mb-1">
+        <span class="font-medium text-on-surface-variant">${s.label}</span>
+        <span class="font-bold">${s.n} <span class="text-outline font-normal">${i>0?'('+Math.round(s.n/stages[i-1].n*100)+'%)':''}</span></span>
+      </div>
+      <div class="h-2 bg-surface-container-low rounded-full overflow-hidden">
+        <div class="h-full ${s.color} rounded-full transition-all" style="width:${s.n/48*100}%"></div>
+      </div>
+    </div>`).join('');
+}
+
+function ivRenderInsights() {
+  const qi = document.getElementById('iv-question-insight');
+  if (qi) qi.innerHTML = [
+    {q:'Case sourcing end-to-end', predict:92},
+    {q:'Xử lý xung đột với HM',   predict:90},
+    {q:'Boolean search kỹ thuật', predict:88},
+    {q:'Pipeline trống gấp',      predict:85},
+    {q:'Mentor junior recruiter',  predict:82},
+  ].map(item=>`
+    <div class="flex items-center gap-2">
+      <div class="flex-1 text-xs text-on-surface-variant truncate">${item.q}</div>
+      <div class="text-xs font-black text-primary flex-shrink-0">${item.predict}%</div>
+      <div class="w-14 h-1.5 bg-surface-container-low rounded-full overflow-hidden flex-shrink-0">
+        <div class="h-full bg-primary rounded-full" style="width:${item.predict}%"></div>
+      </div>
+    </div>`).join('');
+
+  const health = document.getElementById('iv-health');
+  if (health) health.innerHTML = [
+    {label:'Feedback đúng SLA 24h', val:'87%',    color:'text-green-600', icon:'check_circle'},
+    {label:'Panel calibration drift',val:'±0.3',  color:'text-primary',   icon:'show_chart'},
+    {label:'Avg vòng đến offer',     val:'2.4',   color:'text-secondary', icon:'loop'},
+    {label:'No-show rate',           val:'4.2%',  color:'text-amber-600', icon:'person_off'},
+    {label:'Candidate NPS (30d)',    val:'4.6/5', color:'text-primary',   icon:'star'},
+    {label:'Time-to-offer (avg)',    val:'12 ngày',color:'text-tertiary', icon:'schedule'},
+  ].map(item=>`
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+        <span class="material-symbols-outlined text-sm ${item.color}">${item.icon}</span>${item.label}
+      </div>
+      <span class="text-xs font-black ${item.color}">${item.val}</span>
+    </div>`).join('');
+}
+
+// Chain showHub override for hub-3
+const _origShowHubIV = showHub;
+showHub = function(n) {
+  _origShowHubIV(n);
+  if (n===3) setTimeout(ivInit, 50);
+};
 
 /* ═══════════════════════════════════
    CV INTELLIGENCE — EXTENDED FEATURES
