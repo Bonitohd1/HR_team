@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>RecruitHub 9 — Talent Ecosystem</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -523,135 +523,276 @@ html.dark canvas,html.dark img,html.dark video,html.dark .no-invert { filter:inv
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         HUB 1 — SOURCING
+         HUB 1 — SOURCING HUB (FULL REBUILD)
     ═══════════════════════════════════════════════ -->
     <section id="hub-1" class="hub-section active p-8">
-      <div class="flex justify-between items-end mb-10">
+
+      <!-- HEADER -->
+      <div class="flex justify-between items-start mb-8">
         <div>
+          <p class="text-xs font-bold tracking-widest uppercase text-primary mb-2">Sourcing Intelligence</p>
           <h1 class="text-5xl font-bold text-on-surface leading-tight tracking-tight">Sourcing Hub</h1>
-          <p class="text-on-surface-variant mt-2 text-lg">AI-powered candidate attraction and channel intelligence.</p>
+          <p class="text-on-surface-variant mt-2 text-lg">Tìm ứng viên đúng nguồn — tối ưu từng kênh — pipeline không bao giờ cạn.</p>
         </div>
-        <div class="flex gap-3">
-          <button class="bg-surface-container-lowest text-primary border border-outline-variant/30 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-high transition-colors">Manage Channels</button>
-          <button class="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity">+ New Campaign</button>
+        <div class="flex gap-3 items-center">
+          <button onclick="s1OpenCampaignModal()" class="bg-surface-container-lowest text-primary border border-outline-variant/30 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">campaign</span> Chiến dịch
+          </button>
+          <button onclick="s1RunAllChannels()" class="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">rocket_launch</span> Sourcing toàn kênh
+          </button>
         </div>
       </div>
-      <div class="grid grid-cols-12 gap-6">
-        <!-- AI Boolean Search -->
-        <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-8 relative overflow-hidden shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-          <div class="flex items-center gap-3 mb-6">
-            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">auto_awesome</span>
-            <h2 class="text-2xl font-semibold">AI Boolean Search</h2>
-          </div>
-          <div class="bg-surface-container-high p-4 rounded-xl border-l-4 border-primary mb-5">
-            <p class="text-sm text-on-surface-variant font-mono">Mô tả ứng viên lý tưởng bằng ngôn ngữ tự nhiên...</p>
-          </div>
-          <div class="relative mb-5">
-            <textarea class="w-full h-28 bg-surface-container-lowest border-2 border-surface-variant rounded-xl p-4 text-sm focus:border-primary focus:ring-0 resize-none transition-colors" placeholder="Vd: Tìm Senior Recruiter có 5+ năm kinh nghiệm tuyển Tech tại TP.HCM, thành thạo LinkedIn Recruiter và ATS..."></textarea>
-            <button onclick="h1DoSearch()" class="absolute bottom-4 right-4 bg-primary text-white p-2 rounded-lg hover:bg-primary/80 transition-colors">
-              <span class="material-symbols-outlined text-sm">send</span>
-            </button>
-          </div>
-          <div class="flex items-center justify-between">
-            <div class="flex gap-2 flex-wrap">
-              <span class="text-xs uppercase tracking-wider font-semibold bg-surface-variant/50 text-on-surface px-3 py-1 rounded-full">Gợi ý</span>
-              <span onclick="document.querySelector('#hub-1 textarea').value='Senior Recruiter IT có 5+ năm kinh nghiệm tại TP.HCM, thành thạo LinkedIn Recruiter'" class="text-xs uppercase tracking-wider font-semibold text-primary px-3 py-1 cursor-pointer hover:underline">Senior Recruiter IT</span>
-              <span onclick="document.querySelector('#hub-1 textarea').value='HR Business Partner cho công ty 500+ nhân sự, kinh nghiệm HRBP, thành thạo data-driven HR'" class="text-xs uppercase tracking-wider font-semibold text-primary px-3 py-1 cursor-pointer hover:underline">HR Business Partner</span>
+
+      <!-- KPI COMMAND BAR -->
+      <div class="grid grid-cols-5 gap-4 mb-7">
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-primary">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Pipeline tuần này</p>
+          <p class="text-3xl font-black text-primary" id="s1-kpi-pipeline">247</p>
+          <p class="text-xs text-green-600 mt-1 font-semibold">▲ 18% vs tuần trước</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-secondary">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Kênh đang hoạt động</p>
+          <p class="text-3xl font-black text-secondary">6 / 7</p>
+          <p class="text-xs text-outline mt-1">1 kênh cần cấu hình</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-tertiary">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Kênh hiệu quả nhất</p>
+          <p class="text-lg font-black text-tertiary">LinkedIn</p>
+          <p class="text-xs text-green-600 mt-1 font-semibold">Tỉ lệ chuyển đổi 4.9%</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-orange-400">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Shortlist chờ PV</p>
+          <p class="text-3xl font-black">34</p>
+          <p class="text-xs text-orange-500 mt-1 font-semibold">8 ưu tiên cao</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-green-500">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Referral active</p>
+          <p class="text-3xl font-black text-green-600">12</p>
+          <p class="text-xs text-green-600 mt-1 font-semibold">24tr pending payout</p>
+        </div>
+      </div>
+
+      <!-- MAIN: MULTI-SOURCE SEARCH + CHANNEL PANEL -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+
+        <!-- LEFT: MULTI-SOURCE SEARCH ENGINE -->
+        <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.07)] overflow-hidden">
+          <!-- Search header -->
+          <div class="px-7 pt-7 pb-5 border-b border-outline-variant/15">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg text-xl">manage_search</span>
+              <div>
+                <h2 class="text-xl font-bold">Multi-Source Search</h2>
+                <p class="text-xs text-outline mt-0.5">Tìm 1 lần — AI sinh query tối ưu cho từng kênh đồng thời</p>
+              </div>
             </div>
-            <button class="text-sm font-semibold text-primary flex items-center gap-1"><span class="material-symbols-outlined text-sm">tune</span> Bộ lọc nâng cao</button>
+            <!-- Natural language input -->
+            <div class="relative">
+              <textarea id="s1-query" rows="3" class="w-full bg-surface-container border-2 border-surface-variant rounded-xl px-4 py-3 pr-14 text-sm focus:border-primary focus:ring-0 resize-none transition-colors" placeholder="Mô tả ứng viên lý tưởng... Vd: Senior Recruiter 5+ năm, tuyển Tech/IT, TP.HCM, thành thạo Boolean & ATS"></textarea>
+              <button onclick="s1MultiSearch()" class="absolute bottom-3 right-3 bg-primary text-white px-3 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1 text-sm font-semibold">
+                <span class="material-symbols-outlined text-base">bolt</span>Search
+              </button>
+            </div>
+            <!-- Chips gợi ý -->
+            <div class="flex gap-2 mt-3 flex-wrap">
+              <span class="text-xs text-outline font-semibold">Gợi ý nhanh:</span>
+              <button onclick="s1SetQuery('Senior Recruiter IT 5+ năm, thành thạo LinkedIn Recruiter và ATS, TP.HCM')" class="text-xs bg-primary/8 text-primary px-3 py-1 rounded-full hover:bg-primary/15 transition-colors font-medium">Senior Recruiter IT</button>
+              <button onclick="s1SetQuery('HR Business Partner 4+ năm, kinh nghiệm HRBP data-driven, quản lý 500+ nhân sự')" class="text-xs bg-secondary/10 text-secondary px-3 py-1 rounded-full hover:bg-secondary/20 transition-colors font-medium">HR Business Partner</button>
+              <button onclick="s1SetQuery('Talent Acquisition Lead quản lý team 5 người, kinh nghiệm mass hiring và executive search')" class="text-xs bg-tertiary/10 text-tertiary px-3 py-1 rounded-full hover:bg-tertiary/20 transition-colors font-medium">TA Lead</button>
+              <button onclick="s1SetQuery('Software Engineer Backend 3+ năm Node.js/Python, kinh nghiệm startup, TP.HCM hoặc remote')" class="text-xs bg-orange-100 text-orange-700 px-3 py-1 rounded-full hover:bg-orange-200 transition-colors font-medium">Backend Engineer</button>
+            </div>
+            <!-- Channel selector -->
+            <div class="flex gap-2 mt-4 flex-wrap" id="s1-channel-pills">
+              <!-- rendered by JS -->
+            </div>
           </div>
-          <!-- AI Search Results -->
-          <div id="h1-search-results">
-            <div class="border-t border-surface-variant pt-4 mt-2">
-              <div id="h1-results-inner"></div>
+
+          <!-- Search Results Area -->
+          <div id="s1-results-area" class="px-7 py-5">
+            <!-- Default state -->
+            <div id="s1-results-empty" class="flex flex-col items-center justify-center py-12 text-center">
+              <span class="material-symbols-outlined text-6xl text-primary/15 mb-3">travel_explore</span>
+              <p class="font-semibold text-on-surface-variant">Nhập mô tả ứng viên và nhấn Search</p>
+              <p class="text-sm text-outline mt-1">AI sẽ sinh Boolean query tối ưu và tìm song song trên tất cả kênh được chọn</p>
+            </div>
+            <!-- Results populated by JS -->
+            <div id="s1-results-content" class="hidden"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: CHANNEL PERFORMANCE + QUICK STATS -->
+        <div class="col-span-12 lg:col-span-4 flex flex-col gap-5">
+          <!-- Source-to-Hire ratio -->
+          <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold">Source-to-Hire Q2</h3>
+              <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-full">Live</span>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#0077B5] inline-block"></span>LinkedIn</span><span>4.9% · 1:9</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-[#0077B5] rounded-full" style="width:88%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>Referral</span><span>8.2% · 1:5</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-green-500 rounded-full" style="width:100%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-orange-400 inline-block"></span>TopCV</span><span>2.1% · 1:18</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-orange-400 rounded-full" style="width:38%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-400 inline-block"></span>VietnamWorks</span><span>1.8% · 1:22</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-blue-400 rounded-full" style="width:30%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-tertiary inline-block"></span>GitHub/Tech</span><span>6.1% · 1:7</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-tertiary rounded-full" style="width:75%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>Facebook Group</span><span>1.4% · 1:28</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-blue-600 rounded-full" style="width:22%"></div></div>
+              </div>
+            </div>
+            <p class="text-xs text-outline mt-4 text-center">Referral & GitHub/Tech có ROI cao nhất — ưu tiên đầu tư</p>
+          </div>
+
+          <!-- AI Insight -->
+          <div class="bg-gradient-to-br from-primary to-primary/80 text-white rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,50,138,0.2)]">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">lightbulb</span>
+              <span class="font-bold text-sm">AI Insight tuần này</span>
+            </div>
+            <p class="text-sm text-white/90 leading-relaxed mb-4">Referral conversion <strong>gấp 1.7x</strong> so với Q1. Đề xuất tăng bounty lên 8tr cho vị trí Tech để kích hoạt thêm 15 giới thiệu tiềm năng.</p>
+            <div class="flex gap-2">
+              <button onclick="showToast('Đã tăng Referral Bounty Tech lên 8tr')" class="flex-1 bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 rounded-lg transition-colors">Áp dụng ngay</button>
+              <button onclick="showToast('Đã lưu insight để xem xét')" class="flex-1 bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 rounded-lg transition-colors">Xem sau</button>
             </div>
           </div>
         </div>
-        <!-- Source-to-Hire -->
-        <div class="col-span-12 lg:col-span-4 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)] flex flex-col justify-between">
+      </div>
+
+      <!-- CHANNEL INTELLIGENCE GRID -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-4">
           <div>
-            <h2 class="text-2xl font-semibold mb-1">Source-to-Hire</h2>
-            <p class="text-xs uppercase tracking-wider text-outline mb-5">Chuyển đổi Q3</p>
+            <h2 class="text-xl font-bold">Channel Intelligence</h2>
+            <p class="text-sm text-outline">Chiến lược tối ưu riêng cho từng kênh — click để xem hướng dẫn & công cụ</p>
           </div>
-          <div class="flex flex-col items-center justify-center">
-            <div class="w-40 h-40 rounded-full border-[14px] border-surface-variant relative flex items-center justify-center mb-4">
-              <div class="absolute inset-0 rounded-full border-[14px] border-primary" style="clip-path:polygon(50% 50%,50% 0,100% 0,100% 50%,100% 100%,50% 100%,50% 50%);transform:rotate(-45deg)"></div>
-              <div class="absolute inset-0 rounded-full border-[14px] border-secondary" style="clip-path:polygon(50% 50%,50% 100%,0 100%,0 50%,50% 50%);transform:rotate(45deg)"></div>
-              <div class="text-center z-10 bg-surface-container-lowest w-24 h-24 rounded-full flex flex-col items-center justify-center">
-                <span class="text-3xl font-bold text-on-surface">1:12</span>
-                <span class="text-xs uppercase tracking-wider text-outline">Avg Ratio</span>
+          <button onclick="s1ToggleChannelView()" id="s1-view-toggle-btn" class="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+            <span class="material-symbols-outlined text-sm">grid_view</span> Chế độ chi tiết
+          </button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3" id="s1-channel-grid">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+
+      <!-- CHANNEL DETAIL DRAWER (hidden by default) -->
+      <div id="s1-channel-drawer" class="hidden mb-6 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.07)] overflow-hidden">
+        <div id="s1-drawer-content"></div>
+      </div>
+
+      <!-- BOTTOM ROW: OUTREACH LAB + REFERRAL ENGINE + PASSIVE RADAR -->
+      <div class="grid grid-cols-12 gap-6">
+
+        <!-- OUTREACH LAB -->
+        <div class="col-span-12 lg:col-span-5 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.06)] overflow-hidden">
+          <div class="px-7 pt-6 pb-4 border-b border-outline-variant/15">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-lg">edit_note</span>
+                <div>
+                  <h2 class="font-bold">Outreach Lab</h2>
+                  <p class="text-xs text-outline">Template tối ưu theo từng kênh + A/B test</p>
+                </div>
+              </div>
+              <div class="flex gap-1 bg-surface-container-low p-1 rounded-lg">
+                <button onclick="s1OutreachTab('linkedin')" id="oreach-tab-linkedin" class="px-3 py-1.5 text-xs font-semibold bg-surface-container-lowest text-[#0077B5] rounded-md shadow-sm">LinkedIn</button>
+                <button onclick="s1OutreachTab('email')" id="oreach-tab-email" class="px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md">Email</button>
+                <button onclick="s1OutreachTab('facebook')" id="oreach-tab-facebook" class="px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md">Facebook</button>
+                <button onclick="s1OutreachTab('zalo')" id="oreach-tab-zalo" class="px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md">Zalo</button>
               </div>
             </div>
           </div>
-          <div class="space-y-3">
-            <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-primary"></div><span class="text-on-surface-variant">Tìm kiếm trực tiếp</span></div><span class="font-semibold">42%</span></div>
-            <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-secondary"></div><span class="text-on-surface-variant">Referral nội bộ</span></div><span class="font-semibold">35%</span></div>
-            <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-surface-variant"></div><span class="text-on-surface-variant">Ứng tuyển chủ động</span></div><span class="font-semibold">23%</span></div>
+          <div class="p-7" id="s1-outreach-body">
+            <!-- rendered by JS -->
           </div>
         </div>
-        <!-- Passive Talent Radar -->
-        <div class="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="flex justify-between items-center mb-6">
+
+        <!-- REFERRAL ENGINE -->
+        <div class="col-span-12 lg:col-span-3 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.06)] p-6">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="p-2 bg-green-100 rounded-lg"><span class="material-symbols-outlined text-green-600">diversity_3</span></div>
             <div>
-              <h2 class="text-2xl font-semibold">Passive Talent Radar</h2>
-              <p class="text-sm text-on-surface-variant mt-1">Hồ sơ phù hợp cao đang không tìm việc chủ động</p>
+              <h2 class="font-bold">Referral Engine</h2>
+              <p class="text-xs text-outline">Kênh ROI cao nhất</p>
             </div>
-            <button class="text-primary hover:bg-primary/5 p-2 rounded-lg"><span class="material-symbols-outlined">filter_list</span></button>
           </div>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant/20 hover:bg-surface-container-high transition-colors cursor-pointer group">
-              <div class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container font-bold">NV</div>
-                <div><h3 class="font-semibold group-hover:text-primary transition-colors">Nguyễn Văn An</h3><p class="text-xs text-on-surface-variant">Senior Recruiter @ TechCorp · TP.HCM</p></div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="text-right"><p class="text-xs uppercase tracking-wider text-outline mb-1">Match</p><div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-primary" style="width:96%"></div></div><span class="text-sm font-bold text-primary">96%</span></div></div>
-                <button class="text-outline hover:text-primary"><span class="material-symbols-outlined">bookmark_add</span></button>
-              </div>
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="bg-green-50 p-3 rounded-xl border border-green-100 text-center">
+              <p class="text-2xl font-black text-green-700">12</p>
+              <p class="text-xs text-green-600 font-semibold">Active bounties</p>
             </div>
-            <div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant/20 hover:bg-surface-container-high transition-colors cursor-pointer group">
-              <div class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">TT</div>
-                <div><h3 class="font-semibold group-hover:text-primary transition-colors">Trần Thị Bích</h3><p class="text-xs text-on-surface-variant">HR Business Partner @ Startup · Hà Nội</p></div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="text-right"><p class="text-xs uppercase tracking-wider text-outline mb-1">Match</p><div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-secondary" style="width:89%"></div></div><span class="text-sm font-bold text-secondary">89%</span></div></div>
-                <button class="text-outline hover:text-primary"><span class="material-symbols-outlined">bookmark_add</span></button>
-              </div>
+            <div class="bg-primary/5 p-3 rounded-xl border border-primary/10 text-center">
+              <p class="text-2xl font-black text-primary">24tr</p>
+              <p class="text-xs text-primary font-semibold">Pending payout</p>
             </div>
-            <div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant/20 hover:bg-surface-container-high transition-colors cursor-pointer group">
-              <div class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold">PH</div>
-                <div><h3 class="font-semibold group-hover:text-primary transition-colors">Phạm Hoài Nam</h3><p class="text-xs text-on-surface-variant">Talent Acquisition Lead @ Corp · TP.HCM</p></div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="text-right"><p class="text-xs uppercase tracking-wider text-outline mb-1">Match</p><div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-tertiary" style="width:82%"></div></div><span class="text-sm font-bold text-tertiary">82%</span></div></div>
-                <button class="text-outline hover:text-primary"><span class="material-symbols-outlined">bookmark_add</span></button>
-              </div>
+          </div>
+          <!-- Bounty list -->
+          <div class="space-y-2 mb-5">
+            <div class="flex justify-between items-center text-sm p-2.5 rounded-lg bg-surface-container-low">
+              <span class="font-medium">Senior Engineer</span>
+              <span class="font-bold text-green-600">10tr</span>
             </div>
-            <div class="pt-3 text-center"><button class="text-sm font-semibold text-primary hover:underline">Xem tất cả 138 ứng viên phù hợp</button></div>
+            <div class="flex justify-between items-center text-sm p-2.5 rounded-lg bg-surface-container-low">
+              <span class="font-medium">TA Lead</span>
+              <span class="font-bold text-green-600">8tr</span>
+            </div>
+            <div class="flex justify-between items-center text-sm p-2.5 rounded-lg bg-surface-container-low">
+              <span class="font-medium">Product Manager</span>
+              <span class="font-bold text-green-600">12tr</span>
+            </div>
+          </div>
+          <!-- Recent activity -->
+          <div class="relative pl-4 border-l-2 border-green-100 space-y-3 mb-5">
+            <div class="relative">
+              <div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-green-500 border-2 border-white"></div>
+              <p class="text-xs"><span class="font-semibold">Minh Tú</span> giới thiệu <span class="font-semibold text-primary">Hoàng Anh</span></p>
+              <p class="text-[11px] text-outline mt-0.5">Senior Recruiter · 2 giờ trước</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-primary border-2 border-white"></div>
+              <p class="text-xs">Referral <span class="font-semibold">Lan Phương</span> → vòng <span class="font-semibold text-primary">Offer</span></p>
+              <p class="text-[11px] text-outline mt-0.5">HR Manager · hôm qua</p>
+            </div>
+          </div>
+          <button onclick="showToast('Đang mở form tạo chiến dịch Referral mới...')" class="w-full bg-green-600 text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-base">add</span>Tạo chiến dịch Referral
+          </button>
+        </div>
+
+        <!-- PASSIVE TALENT RADAR -->
+        <div class="col-span-12 lg:col-span-4 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.06)] overflow-hidden">
+          <div class="px-6 pt-6 pb-4 border-b border-outline-variant/15 flex justify-between items-center">
+            <div>
+              <h2 class="font-bold">Passive Talent Radar</h2>
+              <p class="text-xs text-outline mt-0.5">Hồ sơ phù hợp — không tìm việc chủ động</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold uppercase bg-secondary/10 text-secondary px-2 py-1 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-secondary rounded-full pulse inline-block"></span>138 hồ sơ</span>
+              <button onclick="showToast('Đang lọc Passive Talent...')" class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined text-lg">filter_list</span></button>
+            </div>
+          </div>
+          <div class="divide-y divide-outline-variant/10" id="s1-passive-list">
+            <!-- rendered by JS -->
+          </div>
+          <div class="px-6 py-4 bg-surface-container-low/40 text-center">
+            <button onclick="showToast('Đang tải thêm passive talent...')" class="text-sm font-semibold text-primary hover:underline">Xem thêm 129 hồ sơ →</button>
           </div>
         </div>
-        <!-- Referral Engine -->
-        <div class="col-span-12 lg:col-span-5 bg-gradient-to-br from-surface-container-lowest to-surface-container-low rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)] border border-outline-variant/10">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="p-2 bg-secondary/10 rounded-lg text-secondary"><span class="material-symbols-outlined">diversity_3</span></div>
-            <h2 class="text-2xl font-semibold">Referral Engine</h2>
-          </div>
-          <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20"><p class="text-xs uppercase tracking-wider text-outline mb-1">Active Bounties</p><p class="text-3xl font-bold">12</p></div>
-            <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20"><p class="text-xs uppercase tracking-wider text-outline mb-1">Pending Payouts</p><p class="text-3xl font-bold text-secondary">24tr</p></div>
-          </div>
-          <div class="mb-5">
-            <h3 class="text-sm font-semibold mb-3">Hoạt động gần đây</h3>
-            <div class="relative pl-4 border-l-2 border-surface-variant space-y-4">
-              <div class="relative"><div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-primary border-2 border-white"></div><p class="text-sm"><span class="font-semibold">Minh Tú</span> giới thiệu <span class="font-semibold text-primary">Hoàng Anh</span></p><p class="text-xs text-outline mt-0.5">Vị trí Senior Recruiter · 2 giờ trước</p></div>
-              <div class="relative"><div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-secondary border-2 border-white"></div><p class="text-sm">Referral của <span class="font-semibold">Lan Phương</span> đến vòng <span class="font-semibold text-secondary">Offer</span></p><p class="text-xs text-outline mt-0.5">Vị trí HR Manager · 1 ngày trước</p></div>
-            </div>
-          </div>
-          <button class="w-full bg-surface-container-highest text-primary py-3 rounded-xl text-sm font-semibold hover:bg-primary/10 transition-colors">Tạo chiến dịch referral mới</button>
-        </div>
+
       </div>
     </section>
 
@@ -907,173 +1048,247 @@ html.dark canvas,html.dark img,html.dark video,html.dark .no-invert { filter:inv
     <!-- ═══════════════════════════════════════════════
          HUB 3 — INTERVIEW
     ═══════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════
+         HUB 3 — INTERVIEW HUB (Full Experience Design)
+         Dual-perspective: Recruiter Tools ↔ Candidate Experience
+    ═══════════════════════════════════════════════ -->
     <section id="hub-3" class="hub-section p-8">
-      <div class="flex justify-between items-end mb-10">
-        <div>
-          <h1 class="text-5xl font-bold leading-tight tracking-tight">Interview Hub</h1>
-          <p class="text-on-surface-variant mt-2 text-lg">Lên lịch thông minh — Đánh giá chuẩn hóa — Tổng hợp panel AI.</p>
+
+      <!-- KPI Command Bar -->
+      <div class="grid grid-cols-5 gap-4 mb-7">
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Hôm nay</p>
+              <p class="text-3xl font-black text-on-surface">3</p>
+              <p class="text-xs text-on-surface-variant mt-1">phỏng vấn đã lên lịch</p></div>
+            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-xl">event</span>
+          </div>
         </div>
-        <div class="flex gap-3">
-          <button class="bg-surface-container-lowest text-primary border border-outline-variant/30 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-high transition-colors">Cấu hình rubric</button>
-          <button class="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:opacity-90 flex items-center gap-2"><span class="material-symbols-outlined text-sm">add</span> Lên lịch phỏng vấn</button>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Time-to-feedback</p>
+              <p class="text-3xl font-black text-on-surface">18h</p>
+              <p class="text-xs text-green-600 mt-1">▼ 6h vs. TB ngành</p></div>
+            <span class="material-symbols-outlined text-secondary bg-secondary/10 p-2 rounded-xl">timer</span>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Đồng thuận panel</p>
+              <p class="text-3xl font-black text-on-surface">84%</p>
+              <p class="text-xs text-on-surface-variant mt-1">calibration tốt</p></div>
+            <span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-xl">group_work</span>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Chuyển đổi offer</p>
+              <p class="text-3xl font-black text-on-surface">68%</p>
+              <p class="text-xs text-green-600 mt-1">▲ 5% vs. Q1</p></div>
+            <span class="material-symbols-outlined text-green-600 bg-green-50 p-2 rounded-xl">handshake</span>
+          </div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm border border-outline-variant/10">
+          <div class="flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Candidate NPS</p>
+              <p class="text-3xl font-black text-on-surface">4.6<span class="text-lg font-normal text-outline">/5</span></p>
+              <p class="text-xs text-on-surface-variant mt-1">28 phản hồi</p></div>
+            <span class="material-symbols-outlined text-amber-500 bg-amber-50 p-2 rounded-xl">star</span>
+          </div>
         </div>
       </div>
-      <div class="grid grid-cols-12 gap-6">
 
-        <!-- Smart Scheduling Calendar -->
-        <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="flex justify-between items-center mb-6">
-            <div>
-              <h2 class="text-xl font-bold">Lịch thông minh</h2>
-              <span class="text-xs font-bold uppercase tracking-wider text-primary mt-1 block">AI tối ưu khung giờ · 19/04/2026</span>
-            </div>
-            <div class="flex gap-1 bg-surface-container-low p-1 rounded-lg">
-              <button class="px-4 py-1.5 bg-surface-container-lowest text-primary rounded-md shadow-sm text-xs font-semibold">Hôm nay</button>
-              <button class="px-4 py-1.5 text-on-surface-variant hover:text-on-surface rounded-md text-xs font-medium">Tuần</button>
-              <button class="px-4 py-1.5 text-on-surface-variant hover:text-on-surface rounded-md text-xs font-medium">Tháng</button>
-            </div>
-          </div>
-          <!-- Time grid headers -->
-          <div class="grid grid-cols-6 gap-2 text-xs font-medium text-on-surface-variant mb-3 pl-14 uppercase tracking-wider">
-            <div>9:00</div><div>10:00</div><div>11:00</div><div>13:00</div><div>14:00</div><div>16:00</div>
-          </div>
-          <!-- Timeline rows -->
-          <div class="space-y-4 relative bg-surface-container-low/40 rounded-xl p-4">
-            <!-- Vertical grid lines -->
-            <div class="absolute inset-0 grid grid-cols-6 pl-14 pointer-events-none opacity-10">
-              <div class="border-l border-on-surface"></div><div class="border-l border-on-surface"></div>
-              <div class="border-l border-on-surface"></div><div class="border-l border-on-surface"></div>
-              <div class="border-l border-on-surface"></div><div class="border-l border-on-surface"></div>
-            </div>
-            <!-- Row 1 -->
-            <div class="flex items-center relative z-10">
-              <div class="w-14 text-xs text-on-surface-variant font-medium text-right pr-3 flex-shrink-0">Phòng A</div>
-              <div class="flex-1 relative h-14">
-                <div class="absolute left-[8%] w-[28%] h-full bg-primary/10 border-l-4 border-primary rounded-r-xl p-3 flex flex-col justify-center cursor-pointer hover:bg-primary/20 transition-colors">
-                  <div class="text-sm font-bold text-primary">Senior Recruiter</div>
-                  <div class="text-xs text-primary/70 flex items-center mt-0.5"><span class="material-symbols-outlined text-xs mr-1">person</span>Nguyễn Thị Mai · V1</div>
-                </div>
+      <!-- Main Grid: Pipeline | Active Panel | Candidate Experience -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+
+        <!-- ── Col 1-3: Interview Pipeline ── -->
+        <div class="col-span-3 space-y-4">
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 overflow-hidden">
+            <div class="p-4 border-b border-outline-variant/10">
+              <div class="flex items-center justify-between mb-3">
+                <h2 class="font-bold text-on-surface">Lịch phỏng vấn</h2>
+                <button onclick="ivOpenScheduler()" class="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:opacity-90 flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">add</span>Lên lịch
+                </button>
+              </div>
+              <div class="flex gap-1 bg-surface-container-low p-1 rounded-lg">
+                <button onclick="ivFilterSessions('today')" id="iv-filter-today" class="flex-1 py-1 text-xs font-semibold rounded-md bg-surface-container-lowest text-primary shadow-sm">Hôm nay</button>
+                <button onclick="ivFilterSessions('week')" id="iv-filter-week" class="flex-1 py-1 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface">Tuần</button>
+                <button onclick="ivFilterSessions('all')" id="iv-filter-all" class="flex-1 py-1 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface">Tất cả</button>
               </div>
             </div>
-            <!-- Row 2 -->
-            <div class="flex items-center relative z-10">
-              <div class="w-14 text-xs text-on-surface-variant font-medium text-right pr-3 flex-shrink-0">Online 1</div>
-              <div class="flex-1 relative h-14">
-                <div class="absolute left-[38%] w-[26%] h-full bg-secondary/10 border-l-4 border-secondary rounded-r-xl p-3 flex flex-col justify-center cursor-pointer hover:bg-secondary/20 transition-colors">
-                  <div class="text-sm font-bold text-secondary">HR Manager</div>
-                  <div class="text-xs text-secondary/70 flex items-center mt-0.5"><span class="material-symbols-outlined text-xs mr-1">groups</span>Phạm Đức Long · Panel 3</div>
-                </div>
-              </div>
-            </div>
-            <!-- Row 3 -->
-            <div class="flex items-center relative z-10">
-              <div class="w-14 text-xs text-on-surface-variant font-medium text-right pr-3 flex-shrink-0">Online 2</div>
-              <div class="flex-1 relative h-14">
-                <div class="absolute left-[68%] w-[22%] h-full bg-tertiary/10 border-l-4 border-tertiary rounded-r-xl p-3 flex flex-col justify-center cursor-pointer hover:bg-tertiary/20 transition-colors">
-                  <div class="text-sm font-bold text-tertiary">TA Lead</div>
-                  <div class="text-xs text-tertiary/70 flex items-center mt-0.5"><span class="material-symbols-outlined text-xs mr-1">chat</span>Vũ Thanh Hằng · Final</div>
-                </div>
-              </div>
-            </div>
+            <div id="iv-session-list" class="divide-y divide-outline-variant/10 max-h-[460px] overflow-y-auto"></div>
           </div>
-          <!-- No-show stat -->
-          <div class="flex gap-4 mt-6 pt-5 border-t border-surface-variant/50">
-            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><div class="w-3 h-3 rounded-full bg-primary"></div>Vòng 1</div>
-            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><div class="w-3 h-3 rounded-full bg-secondary"></div>Vòng 2</div>
-            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><div class="w-3 h-3 rounded-full bg-tertiary"></div>Vòng cuối</div>
-            <span class="ml-auto text-xs font-bold text-secondary bg-secondary/10 px-3 py-1 rounded-full">No-show giảm 40% nhờ nhắc tự động</span>
+          <!-- SLA Reminder Rules -->
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="material-symbols-outlined text-amber-600 text-base">notifications_active</span>
+              <span class="text-xs font-bold text-amber-800">SLA Nhắc nhở tự động</span>
+            </div>
+            <div class="space-y-1.5 text-xs text-amber-700">
+              <div class="flex justify-between"><span>Gửi mời ứng viên</span><span class="font-bold">-48h</span></div>
+              <div class="flex justify-between"><span>Nhắc + prep guide</span><span class="font-bold">-24h</span></div>
+              <div class="flex justify-between"><span>Nhắc + link join</span><span class="font-bold">-2h</span></div>
+              <div class="flex justify-between"><span>Deadline feedback panel</span><span class="font-bold">+24h</span></div>
+              <div class="flex justify-between"><span>Thông báo kết quả UV</span><span class="font-bold">+48h</span></div>
+            </div>
+            <div class="mt-3 pt-2 border-t border-amber-200 text-xs text-amber-700 font-semibold">No-show giảm 40% ▼ · NPS tăng 0.8 điểm ▲</div>
           </div>
         </div>
 
-        <!-- Right Column -->
-        <div class="col-span-12 lg:col-span-4 space-y-6">
-          <!-- Stats -->
-          <div class="grid grid-cols-2 gap-4">
-            <div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-              <p class="text-xs uppercase tracking-wider text-outline mb-2">Chuyển đổi</p>
-              <p class="text-3xl font-bold text-primary">68%</p>
-              <p class="text-xs text-green-600 mt-1">▲ PV → Offer</p>
-            </div>
-            <div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-              <p class="text-xs uppercase tracking-wider text-outline mb-2">Tuần này</p>
-              <p class="text-3xl font-bold">14</p>
-              <p class="text-xs text-outline mt-1">phỏng vấn</p>
-            </div>
-          </div>
-          <!-- Active Rubric — Talent Prism -->
-          <div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-lg font-bold">Rubric đang dùng</h3>
-                <span class="text-xs font-bold uppercase tracking-wider text-secondary mt-1 block">Recruiter Level 3</span>
+        <!-- ── Col 4-9: Active Interview Panel ── -->
+        <div class="col-span-6 bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 overflow-hidden flex flex-col">
+          <!-- Candidate header -->
+          <div id="iv-candidate-header" class="p-5 border-b border-outline-variant/10 bg-gradient-to-r from-primary/5 to-surface-container-lowest flex-shrink-0">
+            <div class="flex items-center gap-4">
+              <div id="iv-avatar" class="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center text-xl font-black flex-shrink-0">NM</div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h2 id="iv-cname" class="text-xl font-black">Nguyễn Thị Mai</h2>
+                  <span id="iv-cv-score" class="bg-secondary-container text-on-secondary-container text-xs font-bold px-2.5 py-1 rounded-full">CV 88%</span>
+                  <span id="iv-round-badge" class="bg-primary/10 text-primary text-xs font-bold px-2.5 py-1 rounded-full">Vòng 2 — Panel</span>
+                </div>
+                <p id="iv-crole" class="text-sm text-on-surface-variant mt-0.5">Senior Recruiter · LinkedIn</p>
               </div>
-              <span class="material-symbols-outlined text-tertiary">analytics</span>
-            </div>
-            <div class="relative h-28 flex items-center justify-center mt-2">
-              <div class="absolute w-20 h-20 rounded-full bg-secondary-container/50 border border-secondary/20 flex items-center justify-center -translate-x-5 -translate-y-2">
-                <span class="text-xs font-bold text-on-surface-variant">Chuyên môn</span>
+              <div class="text-right flex-shrink-0">
+                <div id="iv-time-display" class="text-2xl font-black text-primary">09:00</div>
+                <div id="iv-duration-display" class="text-xs text-on-surface-variant">60 phút · Online</div>
+                <button id="iv-join-btn" onclick="ivJoinMeeting()" class="mt-2 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg hover:opacity-90 flex items-center gap-1 ml-auto">
+                  <span class="material-symbols-outlined text-sm">video_call</span>Vào phòng họp
+                </button>
               </div>
-              <div class="absolute w-20 h-20 rounded-full bg-tertiary/10 border border-tertiary/20 flex items-center justify-center translate-x-5 -translate-y-2">
-                <span class="text-xs font-bold text-on-surface-variant">Văn hóa</span>
-              </div>
-              <div class="absolute w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center translate-y-5">
-                <span class="text-xs font-bold text-on-surface-variant">Lãnh đạo</span>
-              </div>
-              <div class="z-10 bg-surface-container-lowest shadow rounded-full px-3 py-1 border border-outline-variant/30 text-xs font-bold text-primary">88% phù hợp</div>
             </div>
           </div>
+          <!-- Phase tabs -->
+          <div class="flex border-b border-outline-variant/10 flex-shrink-0">
+            <button onclick="ivTab('prep')" id="iv-tab-prep" class="flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-primary/5">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">checklist</span>Chuẩn bị
+            </button>
+            <button onclick="ivTab('scorecard')" id="iv-tab-scorecard" class="flex-1 py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">edit_note</span>Scorecard
+            </button>
+            <button onclick="ivTab('debrief')" id="iv-tab-debrief" class="flex-1 py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">group_work</span>Debrief & Quyết định
+            </button>
+          </div>
+          <!-- Tab content -->
+          <div id="iv-tab-content" class="p-5 overflow-y-auto flex-1" style="max-height:460px"></div>
         </div>
 
-        <!-- Panel Synthesis -->
-        <div class="col-span-12 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="flex justify-between items-end mb-6">
-            <div>
-              <h3 class="text-xl font-bold">Tổng hợp Panel — Nguyễn Thị Mai</h3>
-              <span class="text-xs font-bold uppercase tracking-wider text-tertiary mt-1 block">Phản hồi tổng hợp từ AI</span>
+        <!-- ── Col 10-12: Candidate Experience (Empathy View) ── -->
+        <div class="col-span-3 space-y-4">
+          <!-- Journey tracker -->
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 p-5">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="material-symbols-outlined text-primary text-base">person_pin</span>
+              <h3 class="font-bold text-sm">Trải nghiệm ứng viên</h3>
+              <span class="ml-auto text-xs text-green-600 font-bold bg-green-50 px-2 py-0.5 rounded-full">● Live</span>
             </div>
-            <button class="text-primary text-sm font-semibold hover:underline">Xem đầy đủ scorecard</button>
+            <p class="text-xs text-on-surface-variant mb-4 leading-relaxed">Recruiter thấy chính xác ứng viên đang nhận được gì — tạo ra sự đồng cảm và trải nghiệm nhất quán.</p>
+            <div id="iv-candidate-journey" class="space-y-0.5"></div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Feedback 1 -->
-            <div class="bg-surface p-5 rounded-xl border border-outline-variant/10 hover:shadow-md transition-shadow">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">TM</div>
-                <div><div class="text-sm font-bold">Trần Minh Khoa</div><div class="text-xs text-outline">Technical Lead</div></div>
-                <div class="ml-auto bg-secondary-container text-on-secondary-container text-xs font-bold px-2 py-1 rounded-full">Strong Yes</div>
-              </div>
-              <p class="text-sm text-on-surface-variant leading-relaxed mb-3">Kỹ năng phân tích JD tốt, nắm vững quy trình end-to-end. Giao tiếp tự tin và rõ ràng.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Sourcing</span>
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Giao tiếp</span>
-              </div>
+          <!-- Portal preview -->
+          <div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl border border-primary/15 p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-primary text-base">preview</span>
+              <h3 class="font-bold text-sm text-primary">Gói ứng viên nhận được</h3>
             </div>
-            <!-- Feedback 2 -->
-            <div class="bg-surface p-5 rounded-xl border border-outline-variant/10 hover:shadow-md transition-shadow">
-              <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center font-bold text-secondary">LP</div>
-                <div><div class="text-sm font-bold">Lê Phương Anh</div><div class="text-xs text-outline">HRBP Manager</div></div>
-                <div class="ml-auto bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded-full">Yes</div>
-              </div>
-              <p class="text-sm text-on-surface-variant leading-relaxed mb-3">Phù hợp tốt với văn hóa công ty. Đặt câu hỏi sắc bén về lộ trình phát triển — thái độ tốt.</p>
-              <div class="flex flex-wrap gap-2">
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Văn hóa</span>
-                <span class="bg-surface-container-high text-on-surface text-xs font-bold px-2 py-0.5 rounded">Chủ động</span>
-              </div>
+            <div id="iv-portal-preview" class="space-y-2 text-xs mb-4"></div>
+            <div class="space-y-2">
+              <button onclick="ivSendAction('prep_guide')" class="w-full bg-primary text-white text-xs font-bold py-2 rounded-xl hover:opacity-90 flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">description</span>Gửi tài liệu chuẩn bị
+              </button>
+              <button onclick="ivSendAction('reminder')" class="w-full bg-surface-container-high text-on-surface text-xs font-bold py-2 rounded-xl hover:bg-surface-container-highest flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">notifications</span>Gửi nhắc nhở
+              </button>
+              <button onclick="ivSendAction('thankyou')" class="w-full bg-surface-container-high text-on-surface text-xs font-bold py-2 rounded-xl hover:bg-surface-container-highest flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">favorite</span>Cảm ơn sau phỏng vấn
+              </button>
+              <button onclick="ivSendAction('result')" class="w-full bg-surface-container-high text-on-surface text-xs font-bold py-2 rounded-xl hover:bg-surface-container-highest flex items-center justify-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">task_alt</span>Thông báo kết quả
+              </button>
             </div>
-            <!-- AI Summary -->
-            <div class="bg-gradient-to-br from-surface-container-high to-surface-container-low p-5 rounded-xl border border-outline-variant/20">
-              <div class="flex items-center gap-2 mb-4 text-primary">
-                <span class="material-symbols-outlined">auto_awesome</span>
-                <span class="text-sm font-bold">Nhận xét AI tổng hợp</span>
-              </div>
-              <h4 class="text-3xl font-black text-on-surface mb-1">88<span class="text-lg text-on-surface-variant font-normal">/100</span></h4>
-              <p class="text-sm text-on-surface-variant leading-relaxed">Panel đồng thuận cao. Ứng viên thể hiện năng lực kỹ thuật lẫn phù hợp văn hóa. Đề xuất tiến đến vòng cuối.</p>
-              <button class="mt-5 w-full bg-surface-container-lowest text-primary py-2 rounded-lg text-sm font-bold border border-outline-variant/20 hover:bg-white transition-colors">Tạo báo cáo đầy đủ</button>
-            </div>
+          </div>
+          <!-- Panel composition -->
+          <div class="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/10 p-5">
+            <h3 class="font-bold text-sm mb-3">Thành phần panel</h3>
+            <div id="iv-panel-list" class="space-y-2"></div>
           </div>
         </div>
 
       </div>
+
+      <!-- Intelligence Footer -->
+      <div class="grid grid-cols-3 gap-6">
+        <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10">
+          <h3 class="font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-primary text-base">filter_alt</span>Phễu chuyển đổi vòng</h3>
+          <div id="iv-funnel" class="space-y-3"></div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10">
+          <h3 class="font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-base">psychology</span>Câu hỏi dự đoán tốt nhất</h3>
+          <div class="space-y-3" id="iv-question-insight"></div>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/10">
+          <h3 class="font-bold mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-tertiary text-base">monitor_heart</span>Sức khỏe quy trình</h3>
+          <div class="space-y-3" id="iv-health"></div>
+        </div>
+      </div>
+
+      <!-- Scheduler Modal -->
+      <div id="iv-scheduler-modal" class="hidden fixed inset-0 bg-black/40 z-50 flex items-center justify-center backdrop-blur-sm" onclick="if(event.target===this)this.classList.add('hidden')">
+        <div class="bg-surface-container-lowest rounded-2xl shadow-2xl p-8 max-w-lg w-full mx-4">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-bold">Lên lịch phỏng vấn</h2>
+            <button onclick="document.getElementById('iv-scheduler-modal').classList.add('hidden')" class="text-outline hover:text-on-surface"><span class="material-symbols-outlined">close</span></button>
+          </div>
+          <div class="space-y-4">
+            <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Ứng viên</label>
+              <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                <option>Nguyễn Thị Mai — Senior Recruiter</option>
+                <option>Phạm Đức Long — HR Manager</option>
+                <option>Lê Thanh Tùng — TA Lead</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Vòng phỏng vấn</label>
+                <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                  <option>Vòng 1 — HR Screening</option>
+                  <option>Vòng 2 — Panel</option>
+                  <option>Vòng 3 — Final</option>
+                </select>
+              </div>
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Hình thức</label>
+                <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                  <option>Online (Google Meet)</option>
+                  <option>Onsite — Văn phòng</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Ngày & Giờ</label>
+                <input type="datetime-local" class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+              </div>
+              <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Thời lượng</label>
+                <select class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+                  <option>30 phút</option><option>45 phút</option><option selected>60 phút</option><option>90 phút</option>
+                </select>
+              </div>
+            </div>
+            <div><label class="text-xs font-bold uppercase tracking-wider text-outline mb-1.5 block">Panelist (email)</label>
+              <input type="text" placeholder="Thêm email panelist, cách nhau bằng dấu phẩy..." class="w-full border border-outline-variant/50 rounded-xl px-4 py-2.5 text-sm bg-surface-container-low">
+            </div>
+            <div class="bg-primary/5 rounded-xl p-3 text-xs text-primary border border-primary/15">
+              <span class="material-symbols-outlined text-sm align-middle mr-1">auto_awesome</span>
+              AI sẽ tự động tạo Google Meet link · Gửi mời tới ứng viên + panel · Lên lịch nhắc SLA
+            </div>
+            <div class="flex gap-3 pt-1">
+              <button onclick="ivScheduleConfirm()" class="flex-1 bg-primary text-white font-bold py-2.5 rounded-xl hover:opacity-90 text-sm">Xác nhận & Gửi mời</button>
+              <button onclick="document.getElementById('iv-scheduler-modal').classList.add('hidden')" class="px-5 bg-surface-container-high text-on-surface font-bold py-2.5 rounded-xl text-sm">Hủy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ═══════════════════════════════════════════════
@@ -2136,18 +2351,122 @@ const DEMOS = {
 };
 
 let scoreChart = null;
+let _lastUploadedFile = null; // lưu file thật để gửi n8n
 
 function cv2FileSelect(input) {
   if (!input.files || !input.files[0]) return;
   const f = input.files[0];
+  _lastUploadedFile = f;
   document.getElementById('cv2-upload-zone').classList.add('border-primary','bg-primary/5');
   document.getElementById('cv2-upload-zone').querySelector('p').textContent = f.name;
-  setTimeout(() => cv2Analyze('senior'), 300);
+  const cfg = n8nLoadConfig();
+  if (cfg.baseUrl && cfg.connected) {
+    cv2AnalyzeReal(f);
+  } else {
+    setTimeout(() => cv2Analyze('senior'), 300);
+  }
 }
 
 function cv2LoadDemo(type) {
+  _lastUploadedFile = null;
   document.getElementById('cv2-upload-zone').classList.add('border-primary','bg-primary/5');
   cv2Analyze(type);
+}
+
+/* Gửi file thật lên n8n → nhận kết quả AI thật */
+function cv2AnalyzeReal(file) {
+  const cfg = n8nLoadConfig();
+  const url = `${cfg.baseUrl}${cfg.flow1Path || '/webhook/phan-tich-cv'}`;
+
+  // Lấy JD từ textarea nếu có, hoặc dùng JD mặc định
+  const jdText = (document.getElementById('cv2-jd-input') && document.getElementById('cv2-jd-input').value.trim())
+    || 'Tuyển dụng vị trí HR/Recruiter phù hợp với kinh nghiệm và kỹ năng của ứng viên.';
+  const campaign = cfg.campaign || 'RecruitHub Q2';
+
+  cv2ShowLoading();
+
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+  formData.append('jd', jdText);
+  formData.append('campaign', campaign);
+
+  fetch(url, { method: 'POST', body: formData })
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(res => {
+      cv2HideLoading();
+      if (res.success === false) throw new Error(res.message || 'n8n error');
+      // Map n8n response → display format
+      const score = parseInt(res.match_percent) || 0;
+      const isTuyen = (res.status || '').toLowerCase().includes('tuy');
+      const vColor = score >= 75 ? '#006a6a' : score >= 50 ? '#C65911' : '#ba1a1a';
+      const verdict = score >= 75 ? 'PHẢI PHỎNG VẤN' : score >= 50 ? 'CẦN XEM XÉT' : 'KHÔNG PHÙ HỢP';
+      const vText = score >= 75 ? 'Ứng viên xuất sắc' : score >= 50 ? 'Tiềm năng — cần đánh giá thêm' : 'Lệch yêu cầu — không ưu tiên';
+      const displayData = {
+        name: res.name || file.name,
+        score,
+        verdict,
+        vColor,
+        vText,
+        vSub: isTuyen
+          ? `Phù hợp ${score}% — đề xuất phỏng vấn. Email: ${res.email || 'N/A'}`
+          : `Điểm ${score}% — chưa đủ yêu cầu. Email: ${res.email || 'N/A'}`,
+        criteria: [
+          { n: 'Phù hợp tổng thể', s: score },
+          { n: 'Kinh nghiệm chuyên môn', s: Math.min(100, Math.round(score * 1.05)) },
+          { n: 'Kỹ năng phù hợp JD', s: Math.max(0, Math.round(score * 0.95)) },
+          { n: 'Tiềm năng phát triển', s: Math.min(100, Math.round(score * 1.1)) },
+          { n: 'Phù hợp văn hóa', s: Math.max(0, Math.round(score * 0.9)) },
+        ],
+        skills: ['Xem CV đính kèm'],
+        matches: res.status === 'Tuyển' ? ['AI đánh giá: Đủ tiêu chuẩn tuyển'] : [],
+        flags: res.status === 'Loại' ? ['AI đánh giá: Chưa đủ yêu cầu'] : [],
+        summary: res.note || 'Không có nhận xét chi tiết.'
+      };
+      cv2ShowResult(displayData);
+      showToast(`✓ AI phân tích xong: ${res.name} — ${score}% — ${res.status}`);
+      // Cập nhật queue nếu có
+      QUEUE_DATA.push({
+        id: QUEUE_DATA.length + 10,
+        init: (res.name || 'UV').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(),
+        name: res.name || file.name,
+        title: `CV thật · ${campaign}`,
+        status: 'done',
+        score,
+        verdict,
+        vColor,
+        initBg: score >= 75 ? 'bg-secondary/20 text-secondary' : 'bg-amber-100 text-amber-700'
+      });
+      renderQueue();
+    })
+    .catch(err => {
+      cv2HideLoading();
+      showToast(`Lỗi phân tích: ${err.message}. Đang dùng chế độ demo.`);
+      cv2Analyze('senior');
+    });
+}
+
+function cv2ShowLoading() {
+  document.getElementById('cv2-empty').classList.add('hidden');
+  document.getElementById('cv2-result').classList.add('hidden');
+  const loading = document.getElementById('cv2-loading');
+  loading.classList.remove('hidden');
+  loading.style.display = 'flex';
+  const steps = ['Đang gửi CV lên n8n...', 'AI đang đọc hồ sơ...', 'Chấm điểm phù hợp JD...', 'Tổng hợp kết quả...'];
+  let i = 0;
+  window._cv2StepInterval = setInterval(() => {
+    const el = document.getElementById('cv2-loading-text');
+    if (el && i < steps.length) el.textContent = steps[i++];
+  }, 1800);
+}
+
+function cv2HideLoading() {
+  clearInterval(window._cv2StepInterval);
+  const loading = document.getElementById('cv2-loading');
+  loading.classList.add('hidden');
+  loading.style.display = 'none';
 }
 
 function cv2Analyze(type) {
@@ -2685,64 +3004,1266 @@ function showToast(msg) {
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2600);
 }
 
-/* ═══════════════════════════════════
-   H1 AI BOOLEAN SEARCH
-═══════════════════════════════════ */
-const H1_CANDIDATES = [
-  { init:'NV', name:'Nguyễn Văn Hùng', title:'Senior Recruiter · TechViet', loc:'TP.HCM', match:96, skills:['LinkedIn Recruiter','ATS','STAR','Boolean Search'], color:'bg-primary/10 text-primary' },
-  { init:'TT', name:'Trần Thị Minh Châu', title:'Talent Acquisition Lead · FintechX', loc:'TP.HCM', match:91, skills:['Executive Search','Employer Branding','HR Analytics'], color:'bg-secondary/10 text-secondary' },
-  { init:'PD', name:'Phạm Đình Khương', title:'HR Business Partner · Corp ABC', loc:'Hà Nội', match:87, skills:['HRBP','Data-driven HR','OKRs'], color:'bg-tertiary/10 text-tertiary' },
-  { init:'LH', name:'Lê Hoàng Anh', title:'Senior Recruiter · StartupHub', loc:'TP.HCM', match:83, skills:['Tech Hiring','Headhunting','DEI'], color:'bg-amber-100 text-amber-700' },
+/* ═══════════════════════════════════════════════════════
+   SOURCING HUB — FULL ENGINE
+════════════════════════════════════════════════════════ */
+
+/* ── CHANNEL DEFINITIONS ── */
+const S1_CHANNELS = [
+  {
+    id:'linkedin', name:'LinkedIn', icon:'work', color:'#0077B5', bg:'#E8F4FD', textColor:'#005F8E',
+    desc:'Passive talent cấp cao · Boolean Search · InMail',
+    conversion:'4.9%', candidates:'2.4M VN', bestFor:'Mid-Senior · Tech · Management',
+    avgTime:'3-5 ngày phản hồi', tip:'Dùng Sales Navigator filter: Company size + Title seniority + Activity trong 30 ngày',
+    queryTemplate: q => {
+      const parts = q.toLowerCase();
+      const titles = parts.includes('senior') ? '"Senior" OR "Lead" OR "Manager"' : '"Recruiter" OR "HR" OR "Talent"';
+      const loc = parts.includes('hà nội') ? '"Hanoi" OR "Ha Noi"' : '"Ho Chi Minh" OR "HCMC" OR "TP.HCM"';
+      return `(${titles}) AND (${extractSkillBoolean(q)}) AND (${loc}) NOT "Intern" NOT "Fresher"`;
+    },
+    steps:[
+      { icon:'search', text:'Vào LinkedIn Recruiter → New Search' },
+      { icon:'tune', text:'Paste Boolean query vào ô Title/Keywords' },
+      { icon:'filter_list', text:'Filter: Vietnam · Active 30 ngày · Open to Work OFF (passive)' },
+      { icon:'send', text:'InMail template: ngắn ≤150 chữ, cá nhân hóa theo profile' },
+      { icon:'schedule', text:'Follow-up sau 5 ngày nếu không phản hồi' },
+    ],
+    mockResults:[
+      { init:'NV', name:'Nguyễn Văn Hùng', role:'Senior Recruiter · TechViet', loc:'TP.HCM', match:96, tags:['LinkedIn Recruiter','ATS','Boolean'], color:'bg-[#0077B5]/10 text-[#0077B5]', badge:'Open to Opportunities' },
+      { init:'TT', name:'Trần Thị Minh Châu', role:'TA Lead · FintechX', loc:'TP.HCM', match:91, tags:['Exec Search','EB','Analytics'], color:'bg-[#0077B5]/10 text-[#0077B5]', badge:'Passive' },
+      { init:'PD', name:'Phạm Đình Khương', role:'HRBP · Corp ABC', loc:'Hà Nội', match:84, tags:['HRBP','OKRs','HRIS'], color:'bg-[#0077B5]/10 text-[#0077B5]', badge:'Passive' },
+    ]
+  },
+  {
+    id:'topcv', name:'TopCV', icon:'description', color:'#FF6B35', bg:'#FFF0EB', textColor:'#C44D1B',
+    desc:'Ứng viên chủ động · Database 5M · Filter mạnh',
+    conversion:'2.1%', candidates:'5M VN', bestFor:'Junior-Mid · Mọi ngành · Mass hiring',
+    avgTime:'1-2 ngày · Phản hồi nhanh', tip:'Filter: Cập nhật CV trong 7 ngày + Mức lương kỳ vọng + Kinh nghiệm cụ thể để giảm noise',
+    queryTemplate: q => `${extractKeywords(q).join(' ')} -fresher`,
+    steps:[
+      { icon:'manage_search', text:'TopCV Employer → Tìm kiếm CV → Bộ lọc nâng cao' },
+      { icon:'calendar_today', text:'Filter "Cập nhật trong 7 ngày" → CV còn active' },
+      { icon:'payments', text:'Set salary range phù hợp → loại bỏ lệch kỳ vọng' },
+      { icon:'location_on', text:'Filter địa điểm + sẵn sàng đi làm ngay/sau X tuần' },
+      { icon:'mail', text:'Gửi JD qua system hoặc gọi trực tiếp (số trong CV)' },
+    ],
+    mockResults:[
+      { init:'LH', name:'Lê Hoàng Anh', role:'Recruiter · StartupHub', loc:'TP.HCM', match:83, tags:['Tech Hiring','Headhunting','DEI'], color:'bg-orange-100 text-orange-700', badge:'Chủ động tìm việc' },
+      { init:'VT', name:'Võ Thị Thu Hà', role:'HR Generalist · FPT', loc:'TP.HCM', match:74, tags:['C&B','Onboarding','HRIS'], color:'bg-orange-100 text-orange-700', badge:'Cập nhật 3 ngày trước' },
+      { init:'BQ', name:'Bùi Quang Minh', role:'Recruitment Specialist', loc:'Hà Nội', match:68, tags:['IT Recruitment','Sourcing'], color:'bg-orange-100 text-orange-700', badge:'Cập nhật hôm nay' },
+    ]
+  },
+  {
+    id:'vietnamworks', name:'VietnamWorks', icon:'public', color:'#E31837', bg:'#FEE8EB', textColor:'#B01229',
+    desc:'Lớn nhất VN · 5.5M hồ sơ · Đa ngành',
+    conversion:'1.8%', candidates:'5.5M VN', bestFor:'Mọi cấp · Đa ngành · Khối lượng lớn',
+    avgTime:'2-3 ngày', tip:'Dùng "Talent Search" kết hợp Boolean; Filter "Hồ sơ mới trong 14 ngày" để tránh CV stale',
+    queryTemplate: q => extractKeywords(q).slice(0,4).join(' AND '),
+    steps:[
+      { icon:'search', text:'VietnamWorks Employer → Talent Search' },
+      { icon:'tune', text:'Keywords: từ khóa chính + Boolean AND/OR/NOT' },
+      { icon:'date_range', text:'Filter hồ sơ mới nhất ≤14 ngày · Mức lương phù hợp' },
+      { icon:'star', text:'Ưu tiên hồ sơ có "Featured" hoặc hoàn chỉnh ≥80%' },
+      { icon:'phone', text:'Gọi điện trực tiếp hiệu quả hơn email đối với VN market' },
+    ],
+    mockResults:[
+      { init:'HN', name:'Hoàng Ngọc Lan', role:'Senior HR Specialist', loc:'TP.HCM', match:79, tags:['Tuyển dụng','C&B','HRIS'], color:'bg-red-100 text-red-700', badge:'Hồ sơ mới 2 ngày' },
+      { init:'DT', name:'Đặng Thị Hương', role:'HR Manager · Retail Corp', loc:'TP.HCM', match:72, tags:['Mass Hiring','L&D','Policy'], color:'bg-red-100 text-red-700', badge:'Cập nhật 5 ngày' },
+    ]
+  },
+  {
+    id:'github', name:'GitHub/Tech', icon:'code', color:'#6E40C9', bg:'#F0EBFF', textColor:'#4C2A9C',
+    desc:'Kỹ sư passive · Code portfolio thật · Không CV giả',
+    conversion:'6.1%', candidates:'Tech only', bestFor:'Engineer · DevOps · Data Scientist',
+    avgTime:'5-7 ngày · Cần approach khéo', tip:'Search GitHub theo language + location + repo stars. Tiếp cận qua project/contribution — không spam InMail kiểu sales',
+    queryTemplate: q => {
+      const lang = q.toLowerCase().includes('python')?'python':q.toLowerCase().includes('node')?'javascript':q.toLowerCase().includes('java ')&&!q.toLowerCase().includes('javascript')?'java':'';
+      return `location:Vietnam ${lang ? 'language:'+lang : ''} followers:>50`;
+    },
+    steps:[
+      { icon:'search', text:'GitHub.com/search → People tab → Filter location:Vietnam' },
+      { icon:'code', text:'Filter theo language, repos stars, contribution activity' },
+      { icon:'visibility', text:'Xem profile: pinned repos, bio, recent commits' },
+      { icon:'alternate_email', text:'Contact qua email trong profile HOẶC Twitter/LinkedIn được link' },
+      { icon:'volunteer_activism', text:'Tiếp cận: khen ngợi project cụ thể → mới giới thiệu cơ hội' },
+    ],
+    mockResults:[
+      { init:'KV', name:'Kiều Văn Đức', role:'Backend Engineer · GitHub 847★', loc:'TP.HCM', match:94, tags:['Node.js','PostgreSQL','Docker'], color:'bg-purple-100 text-purple-700', badge:'247 contributions/year' },
+      { init:'NT', name:'Nguyễn Tuấn Khải', role:'Full-stack · 12 public repos', loc:'Hà Nội', match:87, tags:['React','Python','AWS'], color:'bg-purple-100 text-purple-700', badge:'Active contributor' },
+    ]
+  },
+  {
+    id:'facebook', name:'Facebook Group', icon:'groups', color:'#1877F2', bg:'#E8F0FE', textColor:'#1254B7',
+    desc:'Community HR/Tech VN · Passive pool ẩn',
+    conversion:'1.4%', candidates:'Community', bestFor:'Junior-Mid · Fresher · Niche role',
+    avgTime:'Instant - 24h', tip:'Group HR Vietnam, IT Jobs HCM, Cộng đồng HR Việt Nam. Post JD vào giờ vàng: 11:30-12:00 và 18:00-20:00. Tag người liên quan.',
+    queryTemplate: q => `"${extractKeywords(q).slice(0,2).join('" OR "')}" site:facebook.com/groups`,
+    steps:[
+      { icon:'group', text:'Join: "HR Vietnam", "IT Job HCM", "Cộng đồng HR Việt Nam"' },
+      { icon:'schedule', text:'Post JD vào 11:30-12:00 hoặc 18:00-20:00 (giờ vàng)' },
+      { icon:'photo_camera', text:'Thiết kế JD dạng ảnh đẹp → viral tốt hơn text thuần' },
+      { icon:'tag', text:'Tag moderator + người liên quan → tăng reach tự nhiên' },
+      { icon:'comment', text:'Trả lời comment ngay trong 1 giờ → ứng viên không chờ' },
+    ],
+    mockResults:[
+      { init:'ML', name:'Mai Linh Phương', role:'HR Executive · 3 năm', loc:'TP.HCM', match:71, tags:['Recruitment','Onboarding'], color:'bg-blue-100 text-blue-700', badge:'Tự giới thiệu trong group' },
+      { init:'TH', name:'Trần Hữu Phúc', role:'Junior Recruiter', loc:'TP.HCM', match:64, tags:['Sourcing','LinkedIn'], color:'bg-blue-100 text-blue-700', badge:'Comment vào JD post' },
+    ]
+  },
+  {
+    id:'referral', name:'Referral', icon:'diversity_3', color:'#16A34A', bg:'#F0FDF4', textColor:'#14532D',
+    desc:'Chất lượng cao nhất · ROI 8.2% · Trust network',
+    conversion:'8.2%', candidates:'Internal network', bestFor:'Mọi vị trí · Đặc biệt Senior+',
+    avgTime:'Nhanh hơn 40% so với open market', tip:'Bounty rõ ràng + nhắc nhở định kỳ = referral engine không bao giờ cạn. Kết hợp gamification (leaderboard) để tăng participation.',
+    queryTemplate: q => `Nhờ team giới thiệu: ${extractKeywords(q).slice(0,3).join(', ')}`,
+    steps:[
+      { icon:'campaign', text:'Announce JD nội bộ: email + Slack/Teams + meeting' },
+      { icon:'payments', text:'Bounty rõ ràng: X triệu khi pass probation (không phải khi offer)' },
+      { icon:'leaderboard', text:'Leaderboard top giới thiệu → gamification tăng 3x participation' },
+      { icon:'notifications_active', text:'Nhắc mỗi 2 tuần nếu chưa đủ pipeline' },
+      { icon:'celebration', text:'Celebrate khi referral được onboard → văn hóa giới thiệu' },
+    ],
+    mockResults:[
+      { init:'HA', name:'Hoàng Anh Khoa', role:'Senior Engineer · referral bởi Minh Tú', loc:'TP.HCM', match:97, tags:['React','Node.js','System Design'], color:'bg-green-100 text-green-700', badge:'Referral bởi teammate' },
+      { init:'LP', name:'Lê Phú Quý', role:'Product Designer · referral bởi Lan', loc:'TP.HCM', match:88, tags:['Figma','UX Research','Design System'], color:'bg-green-100 text-green-700', badge:'Đang phỏng vấn' },
+    ]
+  },
+  {
+    id:'headhunt', name:'Headhunting', icon:'person_search', color:'#7C3AED', bg:'#F5F3FF', textColor:'#5B21B6',
+    desc:'Senior & C-level · Tiếp cận chủ động · Không qua JD',
+    conversion:'12%', candidates:'Targeted', bestFor:'C-level · Director · Niche expert',
+    avgTime:'2-4 tuần · Cần kiên nhẫn', tip:'Research kỹ trước: đọc LinkedIn activity, bài viết, talk của ứng viên → tiếp cận cá nhân hóa theo đúng pain point của họ.',
+    queryTemplate: q => `"${extractKeywords(q)[0]}" filetype:pdf site:linkedin.com/in`,
+    steps:[
+      { icon:'person_search', text:'Map talent: ai đang làm vai trò tương tự tại competitor?' },
+      { icon:'article', text:'Research kỹ: đọc bài viết, talk, LinkedIn activity của target' },
+      { icon:'phone', text:'Cold call > LinkedIn message cho C-level (giao tiếp trực tiếp)' },
+      { icon:'restaurant', text:'Coffee meeting: không pitch JD ngay → xây relationship trước' },
+      { icon:'timeline', text:'Nurture 3-6 tháng nếu chưa sẵn sàng → long-term pipeline' },
+    ],
+    mockResults:[
+      { init:'CL', name:'Cao Lê Minh', role:'VP Engineering · Top Unicorn', loc:'TP.HCM', match:98, tags:['Engineering Leadership','Scale','Architecture'], color:'bg-purple-100 text-purple-700', badge:'Target headhunt' },
+    ]
+  },
 ];
 
-function h1DoSearch() {
-  const q = document.querySelector('#hub-1 textarea').value.trim();
-  if (!q) { showToast('Vui lòng nhập mô tả ứng viên trước!'); return; }
-  const inner = document.getElementById('h1-results-inner');
-  const wrap = document.getElementById('h1-search-results');
-  inner.innerHTML = '<div class="flex items-center gap-3 py-3 text-sm text-outline"><div class="w-5 h-5 border-2 border-outline border-t-primary rounded-full spinner flex-shrink-0"></div><span id="h1-step-text">Đang phân tích yêu cầu...</span></div>';
-  wrap.classList.add('show');
-  const steps = ['Đang phân tích yêu cầu...', 'Tạo Boolean query...', 'Quét 2.4M hồ sơ...', 'Xếp hạng ứng viên phù hợp...'];
-  let i = 0;
-  const si = setInterval(() => { const el = document.getElementById('h1-step-text'); if (el && i < steps.length) el.textContent = steps[i++]; }, 600);
-  setTimeout(() => {
-    clearInterval(si);
-    const boolQ = `("Senior Recruiter" OR "Talent Acquisition") AND ("5+ years" OR "6 years") AND ("LinkedIn Recruiter" OR "ATS") AND "TP.HCM"`;
-    inner.innerHTML = `
-      <div class="mb-4 p-3 bg-primary/5 border-l-4 border-primary rounded-lg">
-        <p class="text-xs font-bold text-primary uppercase tracking-wider mb-1">Boolean Query được tạo</p>
-        <p class="text-xs font-mono text-on-surface-variant leading-relaxed">${boolQ}</p>
-      </div>
+/* ── OUTREACH TEMPLATES ── */
+const S1_OUTREACH = {
+  linkedin:{
+    subject:'Cơ hội phù hợp với định hướng của bạn',
+    body:`Chào [Tên],
+
+Tôi thấy background của bạn tại [Công ty hiện tại] rất ấn tượng, đặc biệt [1 điểm cụ thể từ profile].
+
+Bên tôi đang tìm [Vị trí] với cơ hội [1 điểm hấp dẫn]. Tôi nghĩ đây có thể là bước tiếp theo thú vị cho bạn.
+
+Bạn có 15 phút để trao đổi thêm không?
+
+Trân trọng,
+[Tên Recruiter]`,
+    tips:['Cá nhân hóa dòng đầu tiên theo profile thật','Giữ dưới 150 từ — ít người đọc InMail dài','Hỏi câu hỏi mở ở cuối thay vì "Bạn có quan tâm không?"','Gửi thứ 3 hoặc thứ 4, 9-11h sáng — tỉ lệ mở cao nhất'],
+    stats:{ open:'38%', reply:'12%', grade:'A+' }
+  },
+  email:{
+    subject:'[Cơ hội] [Vị trí] tại [Công ty] — Phù hợp với profile của bạn',
+    body:`Chào [Tên],
+
+Tôi là [Tên], Recruiter tại [Công ty]. Tôi tìm thấy profile của bạn qua [Nguồn] và thấy kinh nghiệm [X năm] trong [Lĩnh vực] rất phù hợp với vị trí chúng tôi đang tuyển.
+
+VỊ TRÍ: [Job Title]
+ĐỊA ĐIỂM: [Nơi làm việc / Remote]
+MỨC LƯƠNG: [Range lương]
+
+Nếu bạn quan tâm, tôi rất vui được gửi thêm thông tin hoặc sắp xếp một buổi nói chuyện ngắn.
+
+Trân trọng,
+[Tên] | [SĐT]`,
+    tips:['Subject line: rõ ràng, có tên vị trí và công ty','Nêu lương range ngay → giảm 60% email rác qua lại','Gửi thứ 2-4, 8-9h sáng hoặc 4-5h chiều','Follow-up email sau 3 ngày nếu không reply'],
+    stats:{ open:'24%', reply:'8%', grade:'B+' }
+  },
+  facebook:{
+    subject:'Post JD vào Group (không cần subject)',
+    body:`🔥 [CÔNG TY] ĐANG TÌM [VỊ TRÍ] — TP.HCM
+
+📍 Địa điểm: [Quận/Thành phố]
+💰 Lương: [Range]
+⏰ Hình thức: Toàn thời gian / Hybrid
+
+YÊU CẦU CHÍNH:
+✅ [Yêu cầu 1]
+✅ [Yêu cầu 2]
+✅ [Yêu cầu 3]
+
+ĐÃI NGỘ:
+🎁 [Benefit 1]
+🎁 [Benefit 2]
+
+📩 Apply: [Link] hoặc nhắn tin cho tôi trực tiếp
+#tuyendung #[vị trí] #[thành phố]`,
+    tips:['Emoji vừa phải — tăng visibility trong feed','Hashtag cuối: 3-5 tag liên quan vị trí + địa điểm','Giờ vàng: 11:30-12:00 và 18:00-20:00','Trả lời comment trong vòng 1 giờ để duy trì rank bài post'],
+    stats:{ open:'N/A', reply:'Reach: 500-2000', grade:'B' }
+  },
+  zalo:{
+    subject:'Tin nhắn Zalo (ngắn gọn)',
+    body:`Chào [Tên] ạ!
+
+Mình là [Tên], đang tuyển vị trí [Vị trí] tại [Công ty], lương [Range].
+
+Bạn có quan tâm hoặc biết ai phù hợp không ạ? Mình có thể gửi thêm thông tin nếu bạn muốn.
+
+Cảm ơn bạn! 🙏`,
+    tips:['Zalo: ngắn gọn, thân thiện, không formal quá','Gửi vào 8-9h hoặc 12-13h (giờ nghỉ trưa)','Không gửi file/ảnh ngay — chỉ text để tránh spam filter','Nếu đã biết nhau: refer tên người quen chung để tạo trust'],
+    stats:{ open:'65%', reply:'22%', grade:'A' }
+  }
+};
+
+/* ── PASSIVE TALENT DATA ── */
+const S1_PASSIVE = [
+  { init:'NV', name:'Nguyễn Văn An', role:'Senior Recruiter · TechCorp', loc:'TP.HCM', match:96, color:'#0047bb', bg:'#dbe1ff', signal:'Xem nhiều JD Recruiter tuần này', signalIcon:'visibility' },
+  { init:'TT', name:'Trần Thị Bích', role:'HRBP · Scale-up Startup', loc:'Hà Nội', match:89, color:'#006a6a', bg:'#ccf0ee', signal:'Cập nhật LinkedIn profile 3 ngày trước', signalIcon:'edit' },
+  { init:'PH', name:'Phạm Hoài Nam', role:'TA Lead · Enterprise Corp', loc:'TP.HCM', match:82, color:'#45179a', bg:'#e9ddff', signal:'Follow 5 công ty mới trong 7 ngày', signalIcon:'follow_the_signs' },
+  { init:'ML', name:'Mai Lan Anh', role:'HR Manager · Retail', loc:'TP.HCM', match:76, color:'#C65911', bg:'#FEF3E7', signal:'Comment vào bài viết về career change', signalIcon:'comment' },
+  { init:'KD', name:'Kiều Đức Thành', role:'Senior Recruiter · Agency', loc:'TP.HCM', match:74, color:'#0047bb', bg:'#dbe1ff', signal:'Open to Work (ẩn) phát hiện qua AI', signalIcon:'psychology' },
+];
+
+/* ── STATE ── */
+let s1ActiveChannels = new Set(['linkedin','topcv','referral','github']);
+let s1DetailChannel = null;
+let s1OutreachCurrentTab = 'linkedin';
+let s1DetailMode = false;
+
+/* ── INIT ── */
+function s1Init() {
+  s1RenderChannelPills();
+  s1RenderChannelGrid();
+  s1OutreachTab('linkedin');
+  s1RenderPassive();
+}
+
+/* ── CHANNEL PILLS (trong search box) ── */
+function s1RenderChannelPills() {
+  const el = document.getElementById('s1-channel-pills');
+  if (!el) return;
+  el.innerHTML = S1_CHANNELS.map(ch => `
+    <button onclick="s1ToggleChannel('${ch.id}')" id="pill-${ch.id}"
+      class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all"
+      style="${s1ActiveChannels.has(ch.id)
+        ? `background:${ch.color};color:#fff;border-color:${ch.color};`
+        : `background:${ch.bg};color:${ch.textColor};border-color:${ch.color}40;`}">
+      <span class="material-symbols-outlined text-sm">${ch.icon}</span>${ch.name}
+      ${s1ActiveChannels.has(ch.id)
+        ? '<span class="material-symbols-outlined text-sm" style="font-variation-settings:\'FILL\' 1">check_circle</span>'
+        : ''}
+    </button>`).join('');
+}
+
+function s1ToggleChannel(id) {
+  if (s1ActiveChannels.has(id)) {
+    if (s1ActiveChannels.size === 1) { showToast('Phải chọn ít nhất 1 kênh'); return; }
+    s1ActiveChannels.delete(id);
+  } else {
+    s1ActiveChannels.add(id);
+  }
+  s1RenderChannelPills();
+}
+
+/* ── CHANNEL GRID ── */
+function s1RenderChannelGrid() {
+  const el = document.getElementById('s1-channel-grid');
+  if (!el) return;
+  el.innerHTML = S1_CHANNELS.map(ch => `
+    <div onclick="s1OpenChannelDetail('${ch.id}')"
+      class="rounded-xl p-4 cursor-pointer hover:shadow-md transition-all border-2 group relative"
+      style="background:${ch.bg};border-color:${ch.color}30;"
+      id="ch-card-${ch.id}">
       <div class="flex items-center justify-between mb-3">
-        <p class="text-sm font-bold text-on-surface">Tìm thấy <span class="text-primary">138 ứng viên</span> phù hợp</p>
-        <button onclick="showToast('Đã lưu tất cả 138 ứng viên vào pipeline')" class="text-xs font-semibold text-primary hover:underline">Thêm tất cả vào pipeline</button>
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:${ch.color}20">
+          <span class="material-symbols-outlined text-xl" style="color:${ch.color};font-variation-settings:'FILL' 1">${ch.icon}</span>
+        </div>
+        <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full" style="background:${ch.color};color:#fff">${ch.conversion}</span>
       </div>
-      ${H1_CANDIDATES.map(c => `
-        <div class="h1-candidate group" onclick="showToast('Đã thêm ${c.name} vào shortlist')">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full ${c.color} flex items-center justify-center font-bold text-sm flex-shrink-0">${c.init}</div>
-            <div>
-              <p class="font-semibold text-sm text-on-surface group-hover:text-primary transition-colors">${c.name}</p>
-              <p class="text-xs text-outline">${c.title} · ${c.loc}</p>
-              <div class="flex flex-wrap gap-1 mt-1.5">${c.skills.map(s=>`<span class="text-[10px] bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded font-medium">${s}</span>`).join('')}</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-3 flex-shrink-0 ml-4">
-            <div class="text-right">
-              <p class="text-xs text-outline mb-1">Match</p>
-              <div class="flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:${c.match}%"></div></div>
-                <span class="text-sm font-bold text-primary">${c.match}%</span>
+      <p class="font-black text-sm mb-0.5" style="color:${ch.textColor}">${ch.name}</p>
+      <p class="text-[10px] text-outline leading-snug">${ch.desc.split('·')[0]}</p>
+      <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <span class="material-symbols-outlined text-sm" style="color:${ch.color}">open_in_new</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ── CHANNEL DETAIL DRAWER ── */
+function s1OpenChannelDetail(id) {
+  const ch = S1_CHANNELS.find(c => c.id === id);
+  if (!ch) return;
+  s1DetailChannel = id;
+  const drawer = document.getElementById('s1-channel-drawer');
+  const content = document.getElementById('s1-drawer-content');
+
+  // highlight card
+  S1_CHANNELS.forEach(c => {
+    const card = document.getElementById('ch-card-' + c.id);
+    if (card) card.style.borderColor = c.id === id ? ch.color : ch.color.replace(/ff$/, '30') + '30';
+  });
+
+  content.innerHTML = `
+    <div class="flex items-center justify-between px-8 py-5 border-b border-outline-variant/15" style="background:${ch.bg}">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm" style="background:${ch.color}">
+          <span class="material-symbols-outlined text-2xl text-white" style="font-variation-settings:'FILL' 1">${ch.icon}</span>
+        </div>
+        <div>
+          <h3 class="text-xl font-black" style="color:${ch.textColor}">${ch.name}</h3>
+          <p class="text-xs text-outline mt-0.5">${ch.desc}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="text-center"><p class="text-2xl font-black" style="color:${ch.color}">${ch.conversion}</p><p class="text-[10px] text-outline uppercase tracking-wider">Conversion</p></div>
+        <div class="text-center"><p class="text-sm font-bold text-on-surface">${ch.candidates}</p><p class="text-[10px] text-outline uppercase tracking-wider">Pool</p></div>
+        <div class="text-center"><p class="text-sm font-bold text-on-surface">${ch.avgTime}</p><p class="text-[10px] text-outline uppercase tracking-wider">Avg Response</p></div>
+        <button onclick="s1CloseDrawer()" class="text-outline hover:text-on-surface p-2 rounded-lg hover:bg-white/50 transition-colors"><span class="material-symbols-outlined">close</span></button>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-0 divide-x divide-outline-variant/15">
+      <!-- Steps -->
+      <div class="p-6">
+        <p class="text-xs font-black uppercase tracking-wider text-outline mb-4">Quy trình tối ưu</p>
+        <div class="space-y-3">
+          ${ch.steps.map((s,i) => `
+            <div class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-xs font-bold" style="background:${ch.color}">${i+1}</div>
+              <div class="flex items-start gap-2 flex-1">
+                <span class="material-symbols-outlined text-sm flex-shrink-0 mt-0.5" style="color:${ch.color};font-variation-settings:'FILL' 1">${s.icon}</span>
+                <p class="text-sm text-on-surface-variant leading-snug">${s.text}</p>
               </div>
-            </div>
-            <button onclick="event.stopPropagation();showToast('${c.name} đã được bookmark')" class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined text-lg">bookmark_add</span></button>
+            </div>`).join('')}
+        </div>
+        <div class="mt-5 p-3 rounded-xl text-xs leading-relaxed" style="background:${ch.bg};color:${ch.textColor}">
+          <span class="font-black">💡 Pro tip:</span> ${ch.tip}
+        </div>
+      </div>
+      <!-- Boolean Query Generator -->
+      <div class="p-6">
+        <p class="text-xs font-black uppercase tracking-wider text-outline mb-4">Query tối ưu cho kênh này</p>
+        <div id="s1-drawer-query-${id}" class="bg-surface-container-low rounded-xl p-4 font-mono text-xs text-on-surface-variant leading-relaxed min-h-[80px] border border-outline-variant/20">
+          Nhập mô tả ở ô Search trên → query sẽ xuất hiện ở đây
+        </div>
+        <div class="mt-3 flex gap-2">
+          <button onclick="s1CopyQuery('${id}')" class="flex-1 py-2 rounded-lg text-xs font-bold border transition-colors hover:opacity-80" style="border-color:${ch.color};color:${ch.textColor}">
+            <span class="material-symbols-outlined text-sm align-middle mr-1">content_copy</span>Copy query
+          </button>
+          <button onclick="s1SearchThisChannel('${id}')" class="flex-1 py-2 rounded-lg text-xs font-bold text-white transition-colors hover:opacity-90" style="background:${ch.color}">
+            <span class="material-symbols-outlined text-sm align-middle mr-1">bolt</span>Search ngay
+          </button>
+        </div>
+        <p class="text-[10px] text-outline mt-3"><strong>Tốt nhất cho:</strong> ${ch.bestFor}</p>
+      </div>
+      <!-- Mock results for this channel -->
+      <div class="p-6">
+        <p class="text-xs font-black uppercase tracking-wider text-outline mb-4">Ứng viên tiêu biểu từ kênh</p>
+        <div class="space-y-3">
+          ${ch.mockResults.map(r => `
+            <div class="flex items-center justify-between p-3 rounded-xl border border-outline-variant/20 hover:border-[${ch.color}] hover:bg-[${ch.bg}] transition-all cursor-pointer group" onclick="showToast('Đã thêm ${r.name} vào shortlist')">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${r.color}">${r.init}</div>
+                <div>
+                  <p class="font-semibold text-sm group-hover:text-primary transition-colors">${r.name}</p>
+                  <p class="text-xs text-outline">${r.role}</p>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full font-medium" style="background:${ch.color}18;color:${ch.color}">${r.badge}</span>
+                </div>
+              </div>
+              <div class="text-right flex-shrink-0 ml-2">
+                <p class="text-sm font-black" style="color:${ch.color}">${r.match}%</p>
+                <p class="text-[10px] text-outline">match</p>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  drawer.classList.remove('hidden');
+  drawer.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  // Nếu đã có query → fill vào drawer
+  const q = document.getElementById('s1-query');
+  if (q && q.value.trim()) s1UpdateDrawerQuery(id, q.value.trim());
+}
+
+function s1CloseDrawer() {
+  document.getElementById('s1-channel-drawer').classList.add('hidden');
+  s1DetailChannel = null;
+  S1_CHANNELS.forEach(c => {
+    const card = document.getElementById('ch-card-' + c.id);
+    if (card) card.style.borderColor = c.color + '30';
+  });
+}
+
+function s1UpdateDrawerQuery(id, userQuery) {
+  const ch = S1_CHANNELS.find(c => c.id === id);
+  if (!ch) return;
+  const el = document.getElementById('s1-drawer-query-' + id);
+  if (el) el.textContent = ch.queryTemplate(userQuery);
+}
+
+function s1CopyQuery(id) {
+  const el = document.getElementById('s1-drawer-query-' + id);
+  if (!el || el.textContent.includes('Nhập mô tả')) { showToast('Nhập mô tả ở ô Search trước!'); return; }
+  navigator.clipboard.writeText(el.textContent).then(() => showToast('Đã copy query!'));
+}
+
+function s1SearchThisChannel(id) {
+  s1ActiveChannels = new Set([id]);
+  s1RenderChannelPills();
+  s1MultiSearch();
+}
+
+/* ── MULTI-SOURCE SEARCH ── */
+function s1SetQuery(text) {
+  const el = document.getElementById('s1-query');
+  if (el) { el.value = text; el.focus(); }
+}
+
+function extractKeywords(q) {
+  const stopwords = new Set(['có','và','với','cho','tại','năm','kinh','nghiệm','thành','thạo','hoặc','trong','đang','tìm','cần','yêu','cầu']);
+  return q.split(/[\s,]+/).filter(w => w.length > 3 && !stopwords.has(w.toLowerCase())).slice(0, 8);
+}
+
+function extractSkillBoolean(q) {
+  const skills = extractKeywords(q).slice(0, 4);
+  return skills.length ? skills.map(s => `"${s}"`).join(' OR ') : '"HR" OR "Recruiter"';
+}
+
+function s1MultiSearch() {
+  const q = document.getElementById('s1-query').value.trim();
+  if (!q) { showToast('Vui lòng nhập mô tả ứng viên!'); return; }
+  if (s1ActiveChannels.size === 0) { showToast('Chọn ít nhất 1 kênh!'); return; }
+
+  document.getElementById('s1-results-empty').classList.add('hidden');
+  const content = document.getElementById('s1-results-content');
+  content.classList.remove('hidden');
+
+  // Nếu drawer đang mở, update query
+  if (s1DetailChannel) s1UpdateDrawerQuery(s1DetailChannel, q);
+
+  const channels = S1_CHANNELS.filter(c => s1ActiveChannels.has(c.id));
+
+  // Render loading state for each channel
+  content.innerHTML = `
+    <div class="mb-4 flex items-center justify-between">
+      <p class="text-sm font-bold text-on-surface">Đang tìm trên <span class="text-primary">${channels.length} kênh</span> đồng thời...</p>
+      <button onclick="s1ClearResults()" class="text-xs text-outline hover:text-primary">Xóa kết quả</button>
+    </div>
+    ${channels.map(ch => `
+      <div id="s1-ch-result-${ch.id}" class="mb-4 rounded-xl overflow-hidden border border-outline-variant/20">
+        <div class="flex items-center gap-3 px-4 py-3" style="background:${ch.bg}">
+          <span class="material-symbols-outlined text-lg" style="color:${ch.color};font-variation-settings:'FILL' 1">${ch.icon}</span>
+          <span class="font-bold text-sm" style="color:${ch.textColor}">${ch.name}</span>
+          <div class="ml-auto flex items-center gap-2">
+            <div class="w-4 h-4 border-2 rounded-full spinner" style="border-color:${ch.color}40;border-top-color:${ch.color}"></div>
+            <span class="text-xs text-outline" id="s1-ch-status-${ch.id}">Đang tạo query...</span>
           </div>
         </div>
-      `).join('')}
-      <div class="text-center pt-2"><button onclick="showToast('Đang tải thêm ứng viên...')" class="text-sm font-semibold text-primary hover:underline">Xem thêm 134 ứng viên →</button></div>
-    `;
-  }, 2600);
+        <div id="s1-ch-body-${ch.id}" class="px-4 py-3 bg-white text-xs text-outline italic">Chờ kết quả...</div>
+      </div>`).join('')}`;
+
+  // Simulate staggered results for each channel
+  channels.forEach((ch, idx) => {
+    const delay = 800 + idx * 600 + Math.random() * 400;
+    setTimeout(() => {
+      const statusEl = document.getElementById('s1-ch-status-' + ch.id);
+      if (statusEl) statusEl.textContent = 'Tạo query tối ưu...';
+    }, delay * 0.3);
+
+    setTimeout(() => {
+      const statusEl = document.getElementById('s1-ch-status-' + ch.id);
+      if (statusEl) statusEl.textContent = 'Đang quét...';
+    }, delay * 0.7);
+
+    setTimeout(() => {
+      const bodyEl = document.getElementById('s1-ch-body-' + ch.id);
+      const headerEl = document.getElementById('s1-ch-result-' + ch.id).querySelector('.flex');
+      const query = ch.queryTemplate(q);
+      const totalFound = 20 + Math.floor(Math.random() * 180);
+
+      if (headerEl) {
+        headerEl.innerHTML = `
+          <span class="material-symbols-outlined text-lg" style="color:${ch.color};font-variation-settings:'FILL' 1">${ch.icon}</span>
+          <span class="font-bold text-sm" style="color:${ch.textColor}">${ch.name}</span>
+          <div class="ml-2 bg-white px-2 py-0.5 rounded-full text-xs font-mono text-outline max-w-[40%] truncate border border-outline-variant/20" title="${query}">${query}</div>
+          <div class="ml-auto flex items-center gap-3">
+            <span class="text-xs font-bold" style="color:${ch.color}">${totalFound} ứng viên</span>
+            <button onclick="s1OpenChannelDetail('${ch.id}')" class="text-xs font-semibold hover:underline" style="color:${ch.textColor}">Xem chiến lược</button>
+          </div>`;
+      }
+
+      if (bodyEl) {
+        bodyEl.innerHTML = `<div class="divide-y divide-outline-variant/10">
+          ${ch.mockResults.map(r => `
+            <div class="flex items-center justify-between py-3 group cursor-pointer hover:bg-surface-container-low/50 transition-colors -mx-4 px-4" onclick="showToast('Đã thêm ${r.name} vào pipeline')">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${r.color}">${r.init}</div>
+                <div>
+                  <p class="font-semibold text-sm text-on-surface group-hover:text-primary transition-colors">${r.name}</p>
+                  <p class="text-xs text-outline">${r.role} · ${r.loc}</p>
+                  <div class="flex gap-1 mt-1 flex-wrap">${r.tags.map(t => `<span class="text-[10px] bg-surface-container-high px-2 py-0.5 rounded">${t}</span>`).join('')}</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 flex-shrink-0">
+                <div class="text-right">
+                  <div class="flex items-center gap-1.5"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${r.match}%;background:${ch.color}"></div></div><span class="text-sm font-black" style="color:${ch.color}">${r.match}%</span></div>
+                  <p class="text-[10px] text-outline mt-0.5">${r.badge}</p>
+                </div>
+                <button onclick="event.stopPropagation();showToast('${r.name} đã shortlist')" class="text-outline hover:text-primary p-1 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-lg">bookmark_add</span></button>
+              </div>
+            </div>`).join('')}
+          <div class="py-2 flex items-center justify-between">
+            <p class="text-xs text-outline">+${totalFound - ch.mockResults.length} ứng viên khác</p>
+            <button onclick="showToast('Đang mở toàn bộ kết quả ${ch.name}...')" class="text-xs font-semibold hover:underline" style="color:${ch.color}">Xem tất cả →</button>
+          </div>
+        </div>`;
+        bodyEl.classList.remove('italic');
+      }
+    }, delay);
+  });
+
+  // Summary after all done
+  setTimeout(() => {
+    const totalCandidates = channels.reduce((sum, ch) => sum + ch.mockResults.length + 20 + Math.floor(Math.random() * 80), 0);
+    const summary = document.createElement('div');
+    summary.className = 'mt-4 p-4 rounded-xl flex items-center justify-between bg-primary/5 border border-primary/15';
+    summary.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings:'FILL' 1">check_circle</span>
+        <div>
+          <p class="font-bold text-sm text-on-surface">Tìm xong — <span class="text-primary">${totalCandidates}+ ứng viên</span> từ ${channels.length} kênh</p>
+          <p class="text-xs text-outline mt-0.5">AI đề xuất ưu tiên: <strong>Referral</strong> (ROI cao nhất) → <strong>GitHub</strong> → <strong>LinkedIn</strong></p>
+        </div>
+      </div>
+      <button onclick="showToast('Đã thêm tất cả vào pipeline')" class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity">Thêm tất cả vào pipeline</button>`;
+    content.appendChild(summary);
+  }, 800 + channels.length * 600 + 500);
 }
+
+function s1ClearResults() {
+  document.getElementById('s1-results-empty').classList.remove('hidden');
+  document.getElementById('s1-results-content').classList.add('hidden');
+  document.getElementById('s1-results-content').innerHTML = '';
+}
+
+/* ── RUN ALL CHANNELS ── */
+function s1RunAllChannels() {
+  s1ActiveChannels = new Set(S1_CHANNELS.map(c => c.id));
+  s1RenderChannelPills();
+  const q = document.getElementById('s1-query').value.trim();
+  if (!q) {
+    s1SetQuery('Senior Recruiter IT 5+ năm, thành thạo LinkedIn Recruiter và ATS, TP.HCM');
+  }
+  showToast('Đang khởi động sourcing trên tất cả 7 kênh...');
+  setTimeout(s1MultiSearch, 400);
+}
+
+/* ── OUTREACH LAB ── */
+function s1OutreachTab(tab) {
+  s1OutreachCurrentTab = tab;
+  ['linkedin','email','facebook','zalo'].forEach(t => {
+    const btn = document.getElementById('oreach-tab-' + t);
+    if (!btn) return;
+    if (t === tab) {
+      btn.className = 'px-3 py-1.5 text-xs font-semibold bg-surface-container-lowest rounded-md shadow-sm';
+      btn.style.color = S1_OUTREACH[t] ? '#00328a' : '#333';
+    } else {
+      btn.className = 'px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md';
+      btn.style.color = '';
+    }
+  });
+
+  const tpl = S1_OUTREACH[tab];
+  const body = document.getElementById('s1-outreach-body');
+  if (!body || !tpl) return;
+  body.innerHTML = `
+    <div class="flex items-center gap-4 mb-4">
+      <div class="flex gap-2">
+        <span class="text-xs px-2.5 py-1 rounded-full font-bold" style="background:#e8f5e9;color:#2e7d32">Open Rate: ${tpl.stats.open}</span>
+        <span class="text-xs px-2.5 py-1 rounded-full font-bold" style="background:#e3f2fd;color:#1565c0">Reply: ${tpl.stats.reply}</span>
+        <span class="text-xs px-2.5 py-1 rounded-full font-bold" style="background:#f3e5f5;color:#6a1b9a">Hiệu quả: ${tpl.stats.grade}</span>
+      </div>
+    </div>
+    ${tab !== 'facebook' ? `<div class="mb-3"><p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Subject / Tiêu đề</p><div class="bg-surface-container-low rounded-lg px-3 py-2 text-sm font-medium text-on-surface border border-outline-variant/20">${tpl.subject}</div></div>` : ''}
+    <div class="mb-4">
+      <p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Nội dung template</p>
+      <textarea class="w-full bg-surface-container border border-outline-variant/20 rounded-xl p-3 text-xs text-on-surface leading-relaxed resize-none focus:border-primary focus:ring-0 transition-colors font-mono" rows="10">${tpl.body}</textarea>
+    </div>
+    <div class="mb-4">
+      <p class="text-xs font-bold text-outline uppercase tracking-wider mb-2">Tips tối ưu</p>
+      <div class="space-y-1.5">
+        ${tpl.tips.map(tip => `<div class="flex items-start gap-2 text-xs text-on-surface-variant"><span class="material-symbols-outlined text-green-500 text-sm flex-shrink-0 mt-0.5" style="font-variation-settings:'FILL' 1">check_circle</span>${tip}</div>`).join('')}
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="s1CopyTemplate('${tab}')" class="flex-1 bg-surface-container-high text-primary border border-outline-variant/20 py-2.5 rounded-xl text-xs font-bold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">content_copy</span>Copy template
+      </button>
+      <button onclick="showToast('Đang mở A/B test mode...')" class="flex-1 bg-tertiary text-white py-2.5 rounded-xl text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">science</span>A/B Test
+      </button>
+    </div>`;
+}
+
+function s1CopyTemplate(tab) {
+  const tpl = S1_OUTREACH[tab];
+  if (!tpl) return;
+  const text = `${tab !== 'facebook' ? 'Subject: ' + tpl.subject + '\n\n' : ''}${tpl.body}`;
+  navigator.clipboard.writeText(text).then(() => showToast('Đã copy template ' + tab + '!'));
+}
+
+/* ── PASSIVE RADAR ── */
+function s1RenderPassive() {
+  const el = document.getElementById('s1-passive-list');
+  if (!el) return;
+  el.innerHTML = S1_PASSIVE.map(p => `
+    <div class="flex items-center justify-between px-6 py-4 hover:bg-surface-container-low/50 transition-colors cursor-pointer group" onclick="showToast('Đã mở profile ${p.name}')">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${p.bg};color:${p.color}">${p.init}</div>
+        <div>
+          <p class="font-semibold text-sm group-hover:text-primary transition-colors">${p.name}</p>
+          <p class="text-xs text-outline">${p.role} · ${p.loc}</p>
+          <div class="flex items-center gap-1 mt-1">
+            <span class="material-symbols-outlined text-[11px]" style="color:${p.color};font-variation-settings:'FILL' 1">${p.signalIcon}</span>
+            <span class="text-[10px] font-medium" style="color:${p.color}">${p.signal}</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <div class="text-right">
+          <div class="flex items-center gap-1.5"><div class="w-14 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${p.match}%;background:${p.color}"></div></div><span class="text-sm font-black" style="color:${p.color}">${p.match}%</span></div>
+        </div>
+        <button onclick="event.stopPropagation();showToast('Đã thêm ${p.name} vào outreach queue')" class="text-outline hover:text-primary p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-lg">send</span>
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+/* ── CAMPAIGN MODAL ── */
+function s1OpenCampaignModal() {
+  showToast('Campaign Manager đang được xây dựng — sẽ ra mắt trong sprint tiếp theo');
+}
+
+/* ── TOGGLE DETAIL VIEW ── */
+function s1ToggleChannelView() {
+  s1DetailMode = !s1DetailMode;
+  const btn = document.getElementById('s1-view-toggle-btn');
+  if (btn) btn.innerHTML = s1DetailMode
+    ? '<span class="material-symbols-outlined text-sm">grid_view</span> Chế độ compact'
+    : '<span class="material-symbols-outlined text-sm">grid_view</span> Chế độ chi tiết';
+  // toggle grid layout
+  const grid = document.getElementById('s1-channel-grid');
+  if (grid) grid.className = s1DetailMode
+    ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'
+    : 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3';
+}
+
+/* Auto-init sourcing hub when navigating to it */
+const _origShowHub = showHub;
+showHub = function(n) {
+  _origShowHub(n);
+  if (n === 1) s1Init();
+};
+
+// Init if already on hub-1
+if (document.getElementById('hub-1').classList.contains('active')) s1Init();
+
+/* ═══════════════════════════════════════════════════
+   HUB 3 — INTERVIEW HUB ENGINE
+   Dual-perspective: Recruiter Tools ↔ Candidate UX
+═══════════════════════════════════════════════════ */
+
+const IV_SESSIONS = [
+  {
+    id:'iv001', time:'09:00', timeEnd:'10:00', duration:60,
+    candidate:{ name:'Nguyễn Thị Mai', role:'Senior Recruiter', avatar:'NM', cvScore:88, source:'LinkedIn' },
+    round:2, roundName:'Vòng 2 — Panel', roundType:'panel',
+    status:'active', mode:'online', link:'meet.google.com/rhu-axbc-nmf',
+    panel:[
+      { name:'Trần Minh Khoa', role:'Technical Lead', avatar:'TK', submitted:true,  verdict:'strong_yes', score:4.2, note:'Kỹ năng sourcing đa kênh tốt, phân tích JD sắc bén. Kinh nghiệm end-to-end rõ ràng.' },
+      { name:'Lê Phương Anh',  role:'HRBP Manager',  avatar:'LA', submitted:true,  verdict:'yes',        score:4.5, note:'Phù hợp văn hóa tốt. Hỏi sắc về lộ trình — thái độ ownership cao.' },
+      { name:'Vũ Thanh Hằng',  role:'TA Lead',       avatar:'VH', submitted:false, verdict:null,         score:null, note:'' },
+    ],
+    scores:{ expertise:4, culture:5, leadership:3, communication:5, problem_solving:4 },
+    journeyDone:['invited','confirmed','prep_sent','in_interview'],
+  },
+  {
+    id:'iv002', time:'14:00', timeEnd:'14:45', duration:45,
+    candidate:{ name:'Phạm Đức Long', role:'HR Manager', avatar:'PL', cvScore:76, source:'TopCV' },
+    round:1, roundName:'Vòng 1 — HR Screening', roundType:'screening',
+    status:'upcoming', mode:'online', link:'meet.google.com/xyz-pldg-uvw',
+    panel:[
+      { name:'Vũ Thanh Hằng', role:'TA Lead', avatar:'VH', submitted:false, verdict:null, score:null, note:'' },
+    ],
+    scores:{ motivation:0, communication:0, culture:0, expectations:0 },
+    journeyDone:['invited','confirmed','prep_sent'],
+  },
+  {
+    id:'iv003', time:'16:00', timeEnd:'17:30', duration:90,
+    candidate:{ name:'Lê Thanh Tùng', role:'TA Lead', avatar:'LT', cvScore:92, source:'Referral' },
+    round:3, roundName:'Vòng 3 — Final', roundType:'final',
+    status:'upcoming', mode:'onsite', link:'',
+    panel:[
+      { name:'Nguyễn Anh Tuấn', role:'CEO',        avatar:'NA', submitted:false, verdict:null, score:null, note:'' },
+      { name:'Lê Phương Anh',   role:'HRBP Manager', avatar:'LA', submitted:false, verdict:null, score:null, note:'' },
+    ],
+    scores:{ vision:0, leadership:0, culture:0, communication:0 },
+    journeyDone:['invited','confirmed'],
+  },
+];
+
+const IV_RUBRIC = {
+  screening:[
+    { key:'motivation',    label:'Động lực & Định hướng',   icon:'psychology',       weight:25 },
+    { key:'communication', label:'Giao tiếp & Kết nối',     icon:'record_voice_over', weight:25 },
+    { key:'culture',       label:'Phù hợp văn hóa',         icon:'handshake',         weight:25 },
+    { key:'expectations',  label:'Kỳ vọng lương & lộ trình',icon:'trending_up',       weight:25 },
+  ],
+  panel:[
+    { key:'expertise',       label:'Chuyên môn kỹ thuật',    icon:'engineering',       weight:35 },
+    { key:'problem_solving', label:'Tư duy giải quyết vấn đề',icon:'lightbulb',        weight:20 },
+    { key:'communication',   label:'Giao tiếp & Thuyết phục', icon:'record_voice_over', weight:20 },
+    { key:'culture',         label:'Phù hợp văn hóa',         icon:'handshake',         weight:15 },
+    { key:'leadership',      label:'Tư duy lãnh đạo',         icon:'manage_accounts',   weight:10 },
+  ],
+  final:[
+    { key:'vision',        label:'Tầm nhìn & Chiến lược',     icon:'explore',           weight:30 },
+    { key:'leadership',    label:'Năng lực lãnh đạo',          icon:'manage_accounts',   weight:30 },
+    { key:'culture',       label:'Cultural fit cấp cao',       icon:'handshake',          weight:25 },
+    { key:'communication', label:'Ảnh hưởng & Thuyết phục',   icon:'record_voice_over',  weight:15 },
+  ],
+};
+
+const IV_QUESTIONS = {
+  screening:[
+    { dim:'motivation',    q:'Điều gì thu hút bạn đến cơ hội này ngay thời điểm hiện tại?',       predict:85, type:'Open' },
+    { dim:'culture',       q:'Mô tả môi trường làm việc mà bạn phát huy tốt nhất?',               predict:80, type:'Cultural' },
+    { dim:'communication', q:'Kể về thành tích bạn tự hào nhất trong 2 năm gần nhất?',            predict:88, type:'STAR' },
+    { dim:'expectations',  q:'Kỳ vọng mức lương và lộ trình 2-3 năm tới của bạn?',               predict:75, type:'Practical' },
+  ],
+  panel:[
+    { dim:'expertise',       q:'Mô tả quy trình sourcing end-to-end bạn đã làm tốt nhất?',        predict:92, type:'STAR' },
+    { dim:'communication',   q:'Làm sao bạn thuyết phục hiring manager khi không đồng ý về UV?',  predict:90, type:'Situational' },
+    { dim:'expertise',       q:'Bạn xây dựng boolean search như thế nào cho vị trí kỹ thuật khó?',predict:88, type:'Technical' },
+    { dim:'problem_solving', q:'Khi pipeline trống 2 tuần trước deadline, bạn làm gì ngay lập tức?',predict:85, type:'Situational' },
+    { dim:'leadership',      q:'Bạn đã từng mentor junior recruiter chưa? Cách tiếp cận?',        predict:82, type:'Behavioral' },
+    { dim:'culture',         q:'Mô tả lần bạn không đồng ý với quyết định của team nhưng vẫn thực hiện?',predict:78, type:'Cultural' },
+  ],
+  final:[
+    { dim:'vision',        q:'Bạn muốn xây dựng bộ phận TA như thế nào trong 2 năm tới?',        predict:94, type:'Strategic' },
+    { dim:'leadership',    q:'Kể về lần bạn phải đưa ra quyết định khó với ít thông tin?',       predict:90, type:'STAR' },
+    { dim:'culture',       q:'Điều gì khiến bạn chọn công ty này thay vì offer cạnh tranh hơn?', predict:87, type:'Cultural' },
+    { dim:'communication', q:'Bạn sẽ truyền cảm hứng cho team như thế nào trong 90 ngày đầu?',  predict:84, type:'Behavioral' },
+  ],
+};
+
+const IV_JOURNEY_STEPS = [
+  { key:'invited',          label:'Nhận mời phỏng vấn',        icon:'mail',            desc:'Email mời kèm thông tin vòng, panel, hình thức' },
+  { key:'confirmed',        label:'Xác nhận lịch',             icon:'event_available', desc:'Ứng viên click confirm — lịch được lock' },
+  { key:'prep_sent',        label:'Nhận tài liệu chuẩn bị',   icon:'description',     desc:'Prep guide: panel bio, agenda, culture deck' },
+  { key:'in_interview',     label:'Đang phỏng vấn',            icon:'video_call',      desc:'Session live — 2 chiều đánh giá diễn ra' },
+  { key:'feedback_pending', label:'Chờ kết quả',               icon:'hourglass_empty', desc:'Panel nộp feedback → AI tổng hợp' },
+  { key:'decision',         label:'Nhận kết quả',              icon:'task_alt',        desc:'Thông báo rõ ràng + lý do + bước tiếp theo' },
+];
+
+let ivActiveId = 'iv001';
+let ivCurrentTab = 'prep';
+let ivLiveScores = {};
+let ivLiveVerdict = null;
+
+function ivInit() {
+  ivRenderSessionList();
+  ivSelectSession(ivActiveId);
+  ivRenderFunnel();
+  ivRenderInsights();
+}
+
+function ivRenderSessionList() {
+  const list = document.getElementById('iv-session-list');
+  if (!list) return;
+  const statusDot = { active:'bg-green-500', upcoming:'bg-primary', done:'bg-outline', cancelled:'bg-red-400' };
+  list.innerHTML = IV_SESSIONS.map(s => `
+    <div onclick="ivSelectSession('${s.id}')"
+         class="p-4 cursor-pointer hover:bg-surface-container-low transition-colors ${s.id===ivActiveId?'bg-primary/5 border-l-4 border-primary':''}">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-sm flex-shrink-0">${s.candidate.avatar}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-bold truncate">${s.candidate.name}</span>
+            <span class="w-2 h-2 rounded-full flex-shrink-0 ${statusDot[s.status]}"></span>
+          </div>
+          <div class="text-xs text-on-surface-variant truncate">${s.roundName}</div>
+        </div>
+        <div class="text-right flex-shrink-0">
+          <div class="text-sm font-bold text-primary">${s.time}</div>
+          <div class="text-xs text-outline">${s.duration}p</div>
+        </div>
+      </div>
+      ${s.status==='active'?'<div class="mt-2 flex items-center gap-1 text-xs text-green-600 font-bold"><span class="material-symbols-outlined text-xs">radio_button_checked</span>Đang diễn ra live</div>':''}
+    </div>`).join('');
+}
+
+function ivSelectSession(id) {
+  ivActiveId = id;
+  const s = IV_SESSIONS.find(x=>x.id===id);
+  if (!s) return;
+  // Header
+  document.getElementById('iv-avatar').textContent = s.candidate.avatar;
+  document.getElementById('iv-cname').textContent = s.candidate.name;
+  document.getElementById('iv-crole').textContent = s.candidate.role + ' · ' + s.candidate.source;
+  document.getElementById('iv-cv-score').textContent = 'CV '+s.candidate.cvScore+'%';
+  document.getElementById('iv-round-badge').textContent = s.roundName;
+  document.getElementById('iv-time-display').textContent = s.time;
+  document.getElementById('iv-duration-display').textContent = s.duration+' phút · '+(s.mode==='online'?'Online':'Onsite');
+  const joinBtn = document.getElementById('iv-join-btn');
+  if (joinBtn) joinBtn.style.display = s.mode==='online'?'flex':'none';
+  // Live scores reset
+  ivLiveScores = { ...s.scores };
+  ivLiveVerdict = null;
+  // Render panels
+  ivRenderCandidateJourney(s);
+  ivRenderPortalPreview(s);
+  ivRenderPanelList(s);
+  ivRenderSessionList();
+  ivTab(ivCurrentTab);
+}
+
+function ivTab(tab) {
+  ivCurrentTab = tab;
+  ['prep','scorecard','debrief'].forEach(t => {
+    const btn = document.getElementById('iv-tab-'+t);
+    if (!btn) return;
+    if (t===tab) {
+      btn.className = 'flex-1 py-3 text-sm font-bold text-primary border-b-2 border-primary bg-primary/5';
+    } else {
+      btn.className = 'flex-1 py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent';
+    }
+  });
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  const el = document.getElementById('iv-tab-content');
+  if (!el||!s) return;
+  if (tab==='prep')      el.innerHTML = ivBuildPrepTab(s);
+  if (tab==='scorecard') el.innerHTML = ivBuildScorecardTab(s);
+  if (tab==='debrief')   el.innerHTML = ivBuildDebriefTab(s);
+}
+
+function ivBuildPrepTab(s) {
+  const qs = IV_QUESTIONS[s.roundType]||IV_QUESTIONS.panel;
+  const agendas = {
+    screening:`<div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Giới thiệu & kết nối</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Ứng viên self-intro</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">20'</span><span>Câu hỏi sàng lọc chính</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Q&A từ ứng viên</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Next steps & timeline rõ ràng</span></div>`,
+    panel:    `<div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Giới thiệu panel & mục tiêu vòng</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Ứng viên tóm tắt background</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">30'</span><span>Câu hỏi chuyên môn & situational</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Câu hỏi văn hóa & tư duy lãnh đạo</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">5'</span><span>Q&A sắc bén từ ứng viên</span></div>`,
+    final:    `<div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Rapport & cultural tone-setting</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">30'</span><span>Tầm nhìn chiến lược & 90-day plan</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">25'</span><span>Case lãnh đạo & quyết định khó</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">15'</span><span>Q&A sâu — ứng viên evaluate công ty</span></div>
+               <div class="flex gap-3"><span class="text-primary font-bold w-8 flex-shrink-0">10'</span><span>Offer expectation preview & next step</span></div>`,
+  };
+  const objectives = {
+    screening:'Sàng lọc sơ bộ — động lực, phù hợp văn hóa, kỳ vọng, thông tin cơ bản',
+    panel:'Đánh giá sâu chuyên môn, tư duy giải quyết vấn đề, calibration qua nhiều góc nhìn',
+    final:'Quyết định cuối — tầm nhìn, lãnh đạo, cultural add, commitment hai chiều',
+  };
+  return `
+    <div class="bg-surface-container-low rounded-xl p-4 mb-4 flex items-center gap-4">
+      <span class="material-symbols-outlined text-primary text-2xl">flag</span>
+      <div class="flex-1">
+        <div class="text-xs font-bold uppercase tracking-wider text-outline mb-0.5">Mục tiêu vòng này</div>
+        <div class="text-sm font-semibold">${objectives[s.roundType]||objectives.panel}</div>
+      </div>
+      <div class="text-right text-xs text-outline">${s.duration}' · ${s.panel.length} panelist</div>
+    </div>
+
+    <div class="mb-4">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary text-base">auto_awesome</span>
+        <h4 class="font-bold text-sm">Câu hỏi AI gợi ý</h4>
+        <span class="text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full font-bold">${qs.length} câu · xếp theo predictive score</span>
+      </div>
+      <div class="space-y-2">
+        ${qs.map(q=>`
+          <div class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/10 hover:border-primary/30 transition-colors cursor-pointer group"
+               title="Predictive power: ${q.predict}%">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs font-bold bg-surface-container-high px-2 py-0.5 rounded text-on-surface-variant">${q.type}</span>
+                  <span class="text-xs text-primary font-bold">↑${q.predict}% predict hire</span>
+                </div>
+                <p class="text-sm text-on-surface leading-relaxed">${q.q}</p>
+              </div>
+              <button onclick="showToast('Đã copy câu hỏi ✓')" class="opacity-0 group-hover:opacity-100 transition-opacity text-xs text-primary font-bold bg-primary/10 px-2 py-1 rounded-lg flex-shrink-0">
+                <span class="material-symbols-outlined text-xs">content_copy</span>
+              </button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="bg-surface-container-low rounded-xl p-4">
+      <h4 class="font-bold text-sm mb-3">Agenda đề xuất (${s.duration} phút)</h4>
+      <div class="space-y-2 text-sm text-on-surface-variant">${agendas[s.roundType]||agendas.panel}</div>
+    </div>`;
+}
+
+function ivBuildScorecardTab(s) {
+  const rubric = IV_RUBRIC[s.roundType]||IV_RUBRIC.panel;
+  const weighted = rubric.reduce((sum,c)=>{
+    const sc = ivLiveScores[c.key]||0;
+    return sum + (sc*c.weight/100);
+  },0);
+  const total = Math.round(weighted*20);
+  const scoreColor = total>=80?'text-green-600':total>=60?'text-primary':'text-amber-600';
+  return `
+    <div class="flex items-center justify-between mb-4 pb-4 border-b border-outline-variant/10">
+      <div>
+        <p class="text-xs text-outline mb-1">Điểm tổng hợp (weighted)</p>
+        <p class="text-4xl font-black ${scoreColor}">${total}<span class="text-lg font-normal text-outline">/100</span></p>
+        <p class="text-xs text-on-surface-variant mt-1">${total>=80?'Xuất sắc — Strong hire':total>=60?'Tốt — Recommend hire':total>=40?'Cân nhắc':'Không phù hợp'}</p>
+      </div>
+      <button onclick="ivSubmitScorecard()" class="bg-primary text-white font-bold px-5 py-2.5 rounded-xl hover:opacity-90 text-sm flex items-center gap-2">
+        <span class="material-symbols-outlined text-sm">send</span>Nộp feedback
+      </button>
+    </div>
+
+    <div class="space-y-3 mb-4">
+      ${rubric.map(c=>`
+        <div class="bg-surface-container-low rounded-xl p-4">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-base">${c.icon}</span>
+              <span class="font-semibold text-sm">${c.label}</span>
+              <span class="text-xs text-outline">(${c.weight}%)</span>
+            </div>
+            <span class="text-sm font-black text-primary">${ivLiveScores[c.key]||0}/5</span>
+          </div>
+          <div class="flex gap-2 mb-2">
+            ${[1,2,3,4,5].map(n=>`
+              <button onclick="ivSetScore('${c.key}',${n})"
+                      class="flex-1 py-2 rounded-lg text-sm font-bold transition-all ${(ivLiveScores[c.key]||0)>=n?'bg-primary text-white shadow':'bg-surface-container-high text-on-surface-variant hover:bg-primary/20'}">
+                ${n}
+              </button>`).join('')}
+          </div>
+          <div class="flex justify-between text-xs text-outline px-1"><span>Yếu</span><span>Đạt</span><span>Xuất sắc</span></div>
+        </div>`).join('')}
+    </div>
+
+    <div class="bg-surface-container-low rounded-xl p-4 mb-4">
+      <label class="text-xs font-bold uppercase tracking-wider text-outline mb-2 block">Ghi chú chi tiết</label>
+      <textarea id="iv-notes" rows="3" placeholder="Nhận xét cụ thể: ví dụ điển hình ứng viên đưa ra, điểm mạnh, điểm cần phát triển..."
+                class="w-full text-sm bg-transparent resize-none outline-none text-on-surface placeholder-outline/50 leading-relaxed"></textarea>
+    </div>
+
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="text-xs font-bold text-outline">Verdict của bạn:</span>
+      ${[
+        {v:'strong_yes',label:'Strong Yes',bg:'bg-green-100 text-green-700 border-green-300'},
+        {v:'yes',label:'Yes',bg:'bg-blue-100 text-blue-700 border-blue-300'},
+        {v:'maybe',label:'Maybe',bg:'bg-amber-100 text-amber-700 border-amber-300'},
+        {v:'no',label:'No',bg:'bg-red-100 text-red-700 border-red-300'},
+      ].map(item=>`
+        <button onclick="ivSetVerdict('${item.v}')" id="iv-verdict-${item.v}"
+                class="text-xs font-bold px-3 py-1.5 rounded-full border ${item.bg} transition-opacity hover:opacity-80">
+          ${item.label}
+        </button>`).join('')}
+    </div>`;
+}
+
+function ivBuildDebriefTab(s) {
+  const submitted = s.panel.filter(p=>p.submitted);
+  const total = s.panel.length;
+  const allIn = submitted.length===total;
+  const avgScore = submitted.length ? submitted.reduce((a,p)=>a+(p.score||0),0)/submitted.length : 0;
+  const verdictMap = {strong_yes:0,yes:0,maybe:0,no:0};
+  submitted.forEach(p=>{ if(verdictMap[p.verdict]!==undefined) verdictMap[p.verdict]++; });
+  const consensus = submitted.length<2?'Chờ thêm feedback':
+    (verdictMap.strong_yes+verdictMap.yes===submitted.length)?'Đồng thuận Hire':
+    (verdictMap.no===submitted.length)?'Đồng thuận Reject':'Ý kiến phân kỳ — cần calibrate';
+  const consensusColor = consensus.includes('Hire')?'text-green-600':consensus.includes('Reject')?'text-red-500':'text-amber-600';
+
+  return `
+    <div class="mb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="font-bold text-sm">Phản hồi panel (${submitted.length}/${total})</h4>
+        ${!allIn
+          ?`<span class="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-full font-bold">⏳ Chờ ${total-submitted.length} người nộp</span>`
+          :`<span class="text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full font-bold">✓ Đủ feedback</span>`}
+      </div>
+      <div class="space-y-3">
+        ${s.panel.map(p=>`
+          <div class="bg-surface-container-low rounded-xl p-4 ${!p.submitted?'opacity-55':''}">
+            <div class="flex items-center gap-3 ${p.submitted&&p.note?'mb-3':''}">
+              <div class="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xs flex-shrink-0">${p.avatar}</div>
+              <div class="flex-1">
+                <div class="text-sm font-bold">${p.name}</div>
+                <div class="text-xs text-outline">${p.role}</div>
+              </div>
+              ${p.submitted
+                ?`<span class="text-xs font-bold px-2.5 py-1 rounded-full ${p.verdict==='strong_yes'?'bg-green-100 text-green-700':p.verdict==='yes'?'bg-blue-100 text-blue-700':p.verdict==='maybe'?'bg-amber-100 text-amber-700':'bg-red-100 text-red-700'}">${p.verdict==='strong_yes'?'Strong Yes':p.verdict==='yes'?'Yes':p.verdict==='maybe'?'Maybe':'No'}</span>
+                   <span class="text-lg font-black text-primary ml-1">${p.score?.toFixed(1)}</span>`
+                :`<span class="text-xs text-outline italic">Chưa nộp</span>`}
+            </div>
+            ${p.submitted&&p.note?`<p class="text-xs text-on-surface-variant italic border-l-2 border-primary/30 pl-3 leading-relaxed">${p.note}</p>`:''}
+          </div>`).join('')}
+      </div>
+    </div>
+
+    ${allIn?`
+      <div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-5 border border-primary/15 mb-4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="material-symbols-outlined text-primary">auto_awesome</span>
+          <h4 class="font-bold text-sm">AI Tổng hợp panel</h4>
+          <span class="ml-auto text-xs font-bold ${consensusColor}">${consensus}</span>
+        </div>
+        <div class="flex items-end gap-4 mb-3">
+          <div class="text-5xl font-black text-primary">${Math.round(avgScore*20)}<span class="text-xl font-normal text-outline">/100</span></div>
+          <div class="pb-1">
+            <div class="text-xs text-outline">Avg score: ${avgScore.toFixed(1)}/5 · ${submitted.length} panelists</div>
+            <div class="flex gap-1 mt-1">
+              ${submitted.map(p=>`<span class="w-3 h-3 rounded-full ${p.verdict==='strong_yes'?'bg-green-500':p.verdict==='yes'?'bg-blue-500':p.verdict==='maybe'?'bg-amber-400':'bg-red-400'}" title="${p.name}: ${p.verdict}"></span>`).join('')}
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed">
+          Panel ${verdictMap.strong_yes>0?'mạnh mẽ đồng thuận':'có sự đồng thuận'} về ứng viên.
+          Điểm mạnh nổi bật: ${avgScore>=4?'chuyên môn vững và phù hợp văn hóa rõ ràng':'tiềm năng phát triển tốt'}.
+          ${verdictMap.maybe+verdictMap.no>0?'Lưu ý: có điểm phân kỳ cần calibrate trong debrief call.':''}
+          Khuyến nghị: <strong>${avgScore>=4?'Tiến đến vòng tiếp / Offer':avgScore>=3?'Giữ lại, cân nhắc thêm':'Kết thúc quy trình với phản hồi tốt'}</strong>.
+        </p>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <button onclick="ivDecide('advance')" class="bg-green-600 text-white font-bold py-3 rounded-xl text-xs hover:opacity-90">
+          <span class="material-symbols-outlined text-base block mb-1">arrow_forward</span>Tiến vòng tiếp / Offer
+        </button>
+        <button onclick="ivDecide('hold')" class="bg-amber-500 text-white font-bold py-3 rounded-xl text-xs hover:opacity-90">
+          <span class="material-symbols-outlined text-base block mb-1">pause_circle</span>Giữ lại, xem xét
+        </button>
+        <button onclick="ivDecide('reject')" class="bg-surface-container-high text-on-surface font-bold py-3 rounded-xl text-xs hover:bg-surface-container-highest">
+          <span class="material-symbols-outlined text-base block mb-1">close</span>Không tiếp tục
+        </button>
+      </div>`
+    :`<div class="bg-surface-container-low rounded-xl p-6 text-center text-on-surface-variant">
+        <span class="material-symbols-outlined text-4xl text-outline block mb-2">hourglass_empty</span>
+        <p class="text-sm">Chờ <strong>${total-submitted.length}</strong> panelist còn lại nộp feedback</p>
+        <p class="text-xs text-outline mt-1">AI tổng hợp sẽ hiện ngay khi đủ phản hồi</p>
+      </div>`}`;
+}
+
+function ivRenderCandidateJourney(s) {
+  const el = document.getElementById('iv-candidate-journey');
+  if (!el) return;
+  el.innerHTML = IV_JOURNEY_STEPS.map((step, i) => {
+    const done = s.journeyDone.includes(step.key);
+    const active = !done && i===s.journeyDone.length;
+    return `
+      <div class="flex items-start gap-3 py-2">
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-7 h-7 rounded-full flex items-center justify-center ${done?'bg-green-100':active?'bg-primary/10':'bg-surface-container-high'}">
+            <span class="material-symbols-outlined text-sm ${done?'text-green-600':active?'text-primary':'text-outline'}">
+              ${done?'check_circle':step.icon}
+            </span>
+          </div>
+          ${i<IV_JOURNEY_STEPS.length-1?`<div class="w-px flex-1 min-h-[12px] mt-1 ${done?'bg-green-300':'bg-outline-variant/30'}"></div>`:''}
+        </div>
+        <div class="flex-1 pb-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold ${done?'text-on-surface':active?'text-primary':'text-outline'}">${step.label}</span>
+            ${active?'<span class="w-2 h-2 rounded-full bg-primary animate-pulse flex-shrink-0"></span>':''}
+          </div>
+          <p class="text-xs text-outline leading-relaxed">${step.desc}</p>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function ivRenderPortalPreview(s) {
+  const el = document.getElementById('iv-portal-preview');
+  if (!el) return;
+  const prepSent = s.journeyDone.includes('prep_sent');
+  el.innerHTML = `
+    <div class="bg-white rounded-xl border border-outline-variant/20 p-3 space-y-1.5">
+      <div class="text-xs font-bold text-primary mb-2">Ứng viên đã nhận:</div>
+      ${[
+        {label:`Email mời + confirm link`, done:s.journeyDone.includes('invited')},
+        {label:`Panel bios (${s.panel.length} người)`, done:prepSent},
+        {label:`Agenda chi tiết (${s.duration} phút)`, done:prepSent},
+        {label:`Culture & values overview`, done:prepSent},
+        {label:s.mode==='online'?`Google Meet link`:`Địa chỉ + hướng dẫn đến`, done:s.journeyDone.includes('confirmed')},
+      ].map(item=>`
+        <div class="flex items-center gap-1.5 text-xs ${item.done?'text-on-surface-variant':'text-outline/50'}">
+          <span class="material-symbols-outlined text-xs ${item.done?'text-green-600':'text-outline'}">${item.done?'check_circle':'radio_button_unchecked'}</span>
+          ${item.label}
+        </div>`).join('')}
+    </div>
+    <p class="text-xs text-outline text-center">Ứng viên xem portal này qua email — cập nhật real-time</p>`;
+}
+
+function ivRenderPanelList(s) {
+  const el = document.getElementById('iv-panel-list');
+  if (!el) return;
+  const vc = {strong_yes:'text-green-600',yes:'text-blue-600',maybe:'text-amber-600',no:'text-red-500'};
+  const vl = {strong_yes:'Strong Yes',yes:'Yes',maybe:'Maybe',no:'No'};
+  el.innerHTML = s.panel.map(p=>`
+    <div class="flex items-center gap-2 py-2 border-b border-outline-variant/10 last:border-0">
+      <div class="w-8 h-8 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold text-xs flex-shrink-0">${p.avatar}</div>
+      <div class="flex-1 min-w-0">
+        <div class="text-xs font-bold truncate">${p.name}</div>
+        <div class="text-xs text-outline truncate">${p.role}</div>
+      </div>
+      ${p.submitted?`<span class="text-xs font-bold ${vc[p.verdict]}">${vl[p.verdict]}</span>`:`<span class="text-xs text-outline italic">Pending</span>`}
+    </div>`).join('');
+}
+
+function ivSetScore(key, val) {
+  ivLiveScores[key] = val;
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  if (s) { s.scores={...ivLiveScores}; document.getElementById('iv-tab-content').innerHTML=ivBuildScorecardTab(s); }
+}
+
+function ivSetVerdict(v) {
+  ivLiveVerdict = v;
+  ['strong_yes','yes','maybe','no'].forEach(x=>{
+    const btn = document.getElementById('iv-verdict-'+x);
+    if (btn) btn.style.opacity = x===v?'1':'0.45';
+  });
+}
+
+function ivSubmitScorecard() {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  if (!s) return;
+  const pending = s.panel.find(p=>!p.submitted);
+  if (pending) {
+    pending.submitted=true;
+    pending.verdict = ivLiveVerdict||'yes';
+    pending.score = Math.max(1, Object.values(ivLiveScores).reduce((a,b)=>a+b,0) / (Object.keys(ivLiveScores).length||1));
+    pending.note = document.getElementById('iv-notes')?.value||'Giao tiếp tốt, thể hiện tư duy hệ thống rõ ràng.';
+    s.journeyDone = [...new Set([...s.journeyDone,'feedback_pending'])];
+  }
+  ivRenderCandidateJourney(s);
+  ivRenderPanelList(s);
+  showToast('Feedback đã nộp ✓ AI đang tổng hợp...');
+  ivTab('debrief');
+}
+
+function ivDecide(action) {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  const labels = {advance:'Chuyển vòng tiếp / Offer letter',hold:'Giữ lại để xem xét thêm',reject:'Kết thúc quy trình'};
+  showToast(`Quyết định: ${labels[action]} ✓`);
+  if (s&&action!=='reject') { s.journeyDone=[...new Set([...s.journeyDone,'decision'])]; ivRenderCandidateJourney(s); }
+}
+
+function ivSendAction(type) {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  const msgs = {
+    prep_guide:'Đã gửi tài liệu chuẩn bị: panel bios, agenda, culture deck ✓',
+    reminder:'Đã gửi nhắc nhở kèm link phỏng vấn ✓',
+    thankyou:'Đã gửi lời cảm ơn cá nhân hóa sau phỏng vấn ✓',
+    result:'Đã gửi thông báo kết quả với lý do rõ ràng ✓',
+  };
+  showToast(msgs[type]||'Đã gửi ✓');
+  if (s&&type==='prep_guide'&&!s.journeyDone.includes('prep_sent')) {
+    s.journeyDone.push('prep_sent');
+    ivRenderCandidateJourney(s);
+    ivRenderPortalPreview(s);
+  }
+}
+
+function ivJoinMeeting() {
+  const s = IV_SESSIONS.find(x=>x.id===ivActiveId);
+  if (s?.link) showToast('Mở Google Meet: '+s.link);
+}
+
+function ivOpenScheduler() {
+  document.getElementById('iv-scheduler-modal').classList.remove('hidden');
+}
+
+function ivScheduleConfirm() {
+  document.getElementById('iv-scheduler-modal').classList.add('hidden');
+  showToast('AI tìm khung giờ, tạo Meet link và gửi mời thành công ✓');
+}
+
+function ivFilterSessions(f) {
+  ['today','week','all'].forEach(x=>{
+    const btn=document.getElementById('iv-filter-'+x);
+    if(!btn) return;
+    btn.className = x===f
+      ?'flex-1 py-1 text-xs font-semibold rounded-md bg-surface-container-lowest text-primary shadow-sm'
+      :'flex-1 py-1 text-xs font-medium rounded-md text-on-surface-variant hover:text-on-surface';
+  });
+}
+
+function ivRenderFunnel() {
+  const el = document.getElementById('iv-funnel');
+  if (!el) return;
+  const stages=[
+    {label:'CV Passed',n:48,color:'bg-primary'},
+    {label:'HR Screen',n:32,color:'bg-secondary'},
+    {label:'Panel',n:18,color:'bg-tertiary'},
+    {label:'Final',n:9,color:'bg-green-500'},
+    {label:'Offer',n:6,color:'bg-amber-500'},
+  ];
+  el.innerHTML = stages.map((s,i)=>`
+    <div>
+      <div class="flex justify-between text-xs mb-1">
+        <span class="font-medium text-on-surface-variant">${s.label}</span>
+        <span class="font-bold">${s.n} <span class="text-outline font-normal">${i>0?'('+Math.round(s.n/stages[i-1].n*100)+'%)':''}</span></span>
+      </div>
+      <div class="h-2 bg-surface-container-low rounded-full overflow-hidden">
+        <div class="h-full ${s.color} rounded-full transition-all" style="width:${s.n/48*100}%"></div>
+      </div>
+    </div>`).join('');
+}
+
+function ivRenderInsights() {
+  const qi = document.getElementById('iv-question-insight');
+  if (qi) qi.innerHTML = [
+    {q:'Case sourcing end-to-end', predict:92},
+    {q:'Xử lý xung đột với HM',   predict:90},
+    {q:'Boolean search kỹ thuật', predict:88},
+    {q:'Pipeline trống gấp',      predict:85},
+    {q:'Mentor junior recruiter',  predict:82},
+  ].map(item=>`
+    <div class="flex items-center gap-2">
+      <div class="flex-1 text-xs text-on-surface-variant truncate">${item.q}</div>
+      <div class="text-xs font-black text-primary flex-shrink-0">${item.predict}%</div>
+      <div class="w-14 h-1.5 bg-surface-container-low rounded-full overflow-hidden flex-shrink-0">
+        <div class="h-full bg-primary rounded-full" style="width:${item.predict}%"></div>
+      </div>
+    </div>`).join('');
+
+  const health = document.getElementById('iv-health');
+  if (health) health.innerHTML = [
+    {label:'Feedback đúng SLA 24h', val:'87%',    color:'text-green-600', icon:'check_circle'},
+    {label:'Panel calibration drift',val:'±0.3',  color:'text-primary',   icon:'show_chart'},
+    {label:'Avg vòng đến offer',     val:'2.4',   color:'text-secondary', icon:'loop'},
+    {label:'No-show rate',           val:'4.2%',  color:'text-amber-600', icon:'person_off'},
+    {label:'Candidate NPS (30d)',    val:'4.6/5', color:'text-primary',   icon:'star'},
+    {label:'Time-to-offer (avg)',    val:'12 ngày',color:'text-tertiary', icon:'schedule'},
+  ].map(item=>`
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+        <span class="material-symbols-outlined text-sm ${item.color}">${item.icon}</span>${item.label}
+      </div>
+      <span class="text-xs font-black ${item.color}">${item.val}</span>
+    </div>`).join('');
+}
+
+// Chain showHub override for hub-3
+const _origShowHubIV = showHub;
+showHub = function(n) {
+  _origShowHubIV(n);
+  if (n===3) setTimeout(ivInit, 50);
+};
 
 /* ═══════════════════════════════════
    CV INTELLIGENCE — EXTENDED FEATURES
@@ -2954,6 +4475,200 @@ document.addEventListener('DOMContentLoaded', () => {
     if (f) { zone.querySelector('p').textContent = f.name; setTimeout(() => cv2Analyze('senior'), 300); }
   });
 });
+
+/* ═══════════════════════════════════
+   N8N INTEGRATION
+═══════════════════════════════════ */
+const N8N_LS_KEY = 'rh-n8n-config';
+
+function n8nLoadConfig() {
+  try { return JSON.parse(localStorage.getItem(N8N_LS_KEY) || '{}'); } catch { return {}; }
+}
+
+function n8nToggleConfig() {
+  const panel = document.getElementById('n8n-config-panel');
+  const isHidden = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden', !isHidden);
+  if (isHidden) {
+    const cfg = n8nLoadConfig();
+    if (cfg.baseUrl)    document.getElementById('n8n-base-url').value   = cfg.baseUrl;
+    if (cfg.flow1Path)  document.getElementById('n8n-flow1-path').value  = cfg.flow1Path;
+    if (cfg.flow2Path)  document.getElementById('n8n-flow2-path').value  = cfg.flow2Path;
+    if (cfg.campaign)   document.getElementById('n8n-campaign').value    = cfg.campaign;
+    if (cfg.recipients) document.getElementById('n8n-recipients').value  = cfg.recipients;
+    n8nRefreshStatusUI(cfg.connected);
+  }
+}
+
+function n8nRefreshStatusUI(connected) {
+  const dot  = document.getElementById('n8n-status-dot');
+  const text = document.getElementById('n8n-config-status-text');
+  if (connected) {
+    dot.classList.remove('bg-gray-400'); dot.classList.add('bg-green-500');
+    if (text) text.textContent = 'Đã kết nối';
+    if (text) text.className = 'text-xs font-semibold text-green-600 ml-2';
+  } else {
+    dot.classList.remove('bg-green-500'); dot.classList.add('bg-gray-400');
+    if (text) text.textContent = 'Chưa kết nối';
+    if (text) text.className = 'text-xs font-semibold text-outline ml-2';
+  }
+}
+
+function n8nSaveConfig() {
+  const cfg = {
+    baseUrl:    document.getElementById('n8n-base-url').value.trim().replace(/\/$/, ''),
+    flow1Path:  document.getElementById('n8n-flow1-path').value.trim(),
+    flow2Path:  document.getElementById('n8n-flow2-path').value.trim(),
+    campaign:   document.getElementById('n8n-campaign').value.trim(),
+    recipients: document.getElementById('n8n-recipients').value.trim(),
+    connected:  false
+  };
+  if (!cfg.baseUrl) { showToast('Vui lòng nhập Base URL của n8n!'); return; }
+  localStorage.setItem(N8N_LS_KEY, JSON.stringify(cfg));
+  showToast('Đã lưu cấu hình n8n. Nhấn Kiểm tra để xác nhận kết nối.');
+}
+
+function n8nTestConnection() {
+  const cfg = n8nLoadConfig();
+  const baseUrl = (document.getElementById('n8n-base-url').value.trim() || cfg.baseUrl || '').replace(/\/$/, '');
+  const path    = document.getElementById('n8n-flow1-path').value.trim() || cfg.flow1Path || '/webhook/phan-tich-cv';
+  if (!baseUrl) { showToast('Vui lòng nhập Base URL trước!'); return; }
+  const btn = document.querySelector('#n8n-config-panel button[onclick="n8nTestConnection()"]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full spinner inline-block mr-1"></span> Đang kiểm tra...'; }
+  fetch(`${baseUrl}${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ test: true, source: 'RecruitHub9' }) })
+    .then(r => {
+      const ok = r.ok || r.status === 200;
+      const cfg2 = n8nLoadConfig();
+      cfg2.connected = ok;
+      localStorage.setItem(N8N_LS_KEY, JSON.stringify(cfg2));
+      n8nRefreshStatusUI(ok);
+      showToast(ok ? '✓ Kết nối n8n thành công!' : `Kết nối thất bại (HTTP ${r.status})`);
+    })
+    .catch(() => {
+      showToast('Không thể kết nối. Kiểm tra URL hoặc CORS trong n8n.');
+      n8nRefreshStatusUI(false);
+    })
+    .finally(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined text-base">wifi_tethering</span> Kiểm tra'; }
+    });
+}
+
+function n8nClearConfig() {
+  localStorage.removeItem(N8N_LS_KEY);
+  document.getElementById('n8n-base-url').value   = '';
+  document.getElementById('n8n-flow1-path').value = '/webhook/phan-tich-cv';
+  document.getElementById('n8n-flow2-path').value = '/webhook/cv-send-mail';
+  document.getElementById('n8n-campaign').value   = '';
+  document.getElementById('n8n-recipients').value = '';
+  n8nRefreshStatusUI(false);
+  showToast('Đã xóa cấu hình n8n.');
+}
+
+function n8nSendReport() {
+  const cfg = n8nLoadConfig();
+  if (!cfg.baseUrl || !cfg.connected) {
+    showToast('Vui lòng cấu hình và kiểm tra kết nối n8n trước!');
+    n8nToggleConfig();
+    return;
+  }
+  if (!cfg.campaign) {
+    showToast('Vui lòng nhập tên Chiến dịch trong cấu hình n8n!');
+    n8nToggleConfig();
+    return;
+  }
+  if (!cfg.recipients) {
+    showToast('Vui lòng nhập Email nhận báo cáo trong cấu hình n8n!');
+    n8nToggleConfig();
+    return;
+  }
+  const btn = document.getElementById('n8n-send-report-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full spinner inline-block mr-1"></span> Đang gửi...'; }
+
+  // n8n Flow 2 chỉ cần campaign + recipients — nó tự đọc Google Sheets
+  const payload = {
+    campaign:   cfg.campaign.trim(),
+    recipients: cfg.recipients.trim()
+  };
+
+  fetch(`${cfg.baseUrl}${cfg.flow2Path || '/webhook/cv-send-mail'}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json().catch(() => ({}));
+    })
+    .then(() => {
+      showToast(`✓ Báo cáo chiến dịch "${cfg.campaign}" đã gửi tới ${cfg.recipients}!`);
+    })
+    .catch(err => {
+      showToast(`Lỗi gửi báo cáo: ${err.message}`);
+    })
+    .finally(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined text-sm">send</span> Gửi báo cáo Email'; }
+    });
+}
+
+/* ═══════════════════════════════════
+   GLOBAL SEARCH
+═══════════════════════════════════ */
+const SEARCH_INDEX = [
+  { label:'Sourcing Hub',       hub:1, keywords:['sourcing','tuyển dụng','boolean','linkedin','referral','passive','talent'] },
+  { label:'CV Intelligence',    hub:2, keywords:['cv','hồ sơ','phân tích','scoring','batch','upload','jd','tiêu chí'] },
+  { label:'Interview Hub',      hub:3, keywords:['phỏng vấn','interview','lịch','rubric','panel','scheduling'] },
+  { label:'Offer & Onboarding', hub:4, keywords:['offer','onboarding','hợp đồng','checklist','buddy','e-sign','ký'] },
+  { label:'People Hub',         hub:5, keywords:['people','nhân viên','hồ sơ','wellness','goals','kpi','360'] },
+  { label:'Learning Hub',       hub:6, keywords:['học','learning','khóa học','chứng chỉ','sandbox','luyện tập','streak'] },
+  { label:'Performance Hub',    hub:7, keywords:['performance','đánh giá','năng lực','feedback','kpi','bias','q2'] },
+  { label:'Growth Hub',         hub:8, keywords:['growth','career','idp','succession','mentor','thăng tiến','lộ trình'] },
+  { label:'Analytics Hub',      hub:9, keywords:['analytics','báo cáo','funnel','biểu đồ','dự báo','chi phí','dei'] },
+  { label:'Tổng quan luồng',    hub:0, keywords:['overview','tổng quan','luồng','kịch bản','flow','scenario'] },
+];
+
+(function initGlobalSearch() {
+  const input = document.querySelector('header input[type="text"]');
+  if (!input) return;
+
+  // Build dropdown
+  const dropdown = document.createElement('div');
+  dropdown.className = 'absolute top-full left-0 mt-1 w-full bg-white rounded-xl shadow-xl border border-surface-variant z-[200] overflow-hidden hidden';
+  dropdown.style.minWidth = '280px';
+  input.parentElement.style.position = 'relative';
+  input.parentElement.appendChild(dropdown);
+
+  function renderDropdown(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) { dropdown.classList.add('hidden'); return; }
+    const hits = SEARCH_INDEX.filter(item =>
+      item.label.toLowerCase().includes(q) ||
+      item.keywords.some(k => k.includes(q))
+    );
+    if (!hits.length) {
+      dropdown.innerHTML = '<div class="px-4 py-3 text-sm text-outline">Không tìm thấy kết quả</div>';
+    } else {
+      dropdown.innerHTML = hits.map(h => `
+        <div class="flex items-center gap-3 px-4 py-3 hover:bg-surface-container-high cursor-pointer text-sm transition-colors"
+             onclick="showHub(${h.hub}); this.closest('div.absolute').classList.add('hidden'); document.querySelector('header input[type=\\'text\\']').value='';">
+          <span class="material-symbols-outlined text-primary text-base">arrow_forward</span>
+          <span class="font-semibold text-on-surface">${h.label}</span>
+        </div>`).join('');
+    }
+    dropdown.classList.remove('hidden');
+  }
+
+  input.addEventListener('input', e => renderDropdown(e.target.value));
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { dropdown.classList.add('hidden'); input.value = ''; }
+    if (e.key === 'Enter') {
+      const first = dropdown.querySelector('[onclick]');
+      if (first) first.click();
+    }
+  });
+  document.addEventListener('click', e => {
+    if (!input.parentElement.contains(e.target)) dropdown.classList.add('hidden');
+  });
+})();
 </script>
 </body>
 </html>
