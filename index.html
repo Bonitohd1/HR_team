@@ -5,7 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>RecruitHub 9 — Talent Ecosystem</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script>
@@ -2954,6 +2954,180 @@ document.addEventListener('DOMContentLoaded', () => {
     if (f) { zone.querySelector('p').textContent = f.name; setTimeout(() => cv2Analyze('senior'), 300); }
   });
 });
+
+/* ═══════════════════════════════════
+   N8N INTEGRATION
+═══════════════════════════════════ */
+const N8N_LS_KEY = 'rh-n8n-config';
+
+function n8nLoadConfig() {
+  try { return JSON.parse(localStorage.getItem(N8N_LS_KEY) || '{}'); } catch { return {}; }
+}
+
+function n8nToggleConfig() {
+  const panel = document.getElementById('n8n-config-panel');
+  const isHidden = panel.classList.contains('hidden');
+  panel.classList.toggle('hidden', !isHidden);
+  if (isHidden) {
+    const cfg = n8nLoadConfig();
+    if (cfg.baseUrl)    document.getElementById('n8n-base-url').value   = cfg.baseUrl;
+    if (cfg.flow1Path)  document.getElementById('n8n-flow1-path').value  = cfg.flow1Path;
+    if (cfg.flow2Path)  document.getElementById('n8n-flow2-path').value  = cfg.flow2Path;
+    if (cfg.campaign)   document.getElementById('n8n-campaign').value    = cfg.campaign;
+    if (cfg.recipients) document.getElementById('n8n-recipients').value  = cfg.recipients;
+    n8nRefreshStatusUI(cfg.connected);
+  }
+}
+
+function n8nRefreshStatusUI(connected) {
+  const dot  = document.getElementById('n8n-status-dot');
+  const text = document.getElementById('n8n-config-status-text');
+  if (connected) {
+    dot.classList.remove('bg-gray-400'); dot.classList.add('bg-green-500');
+    if (text) text.textContent = 'Đã kết nối';
+    if (text) text.className = 'text-xs font-semibold text-green-600 ml-2';
+  } else {
+    dot.classList.remove('bg-green-500'); dot.classList.add('bg-gray-400');
+    if (text) text.textContent = 'Chưa kết nối';
+    if (text) text.className = 'text-xs font-semibold text-outline ml-2';
+  }
+}
+
+function n8nSaveConfig() {
+  const cfg = {
+    baseUrl:    document.getElementById('n8n-base-url').value.trim().replace(/\/$/, ''),
+    flow1Path:  document.getElementById('n8n-flow1-path').value.trim(),
+    flow2Path:  document.getElementById('n8n-flow2-path').value.trim(),
+    campaign:   document.getElementById('n8n-campaign').value.trim(),
+    recipients: document.getElementById('n8n-recipients').value.trim(),
+    connected:  false
+  };
+  if (!cfg.baseUrl) { showToast('Vui lòng nhập Base URL của n8n!'); return; }
+  localStorage.setItem(N8N_LS_KEY, JSON.stringify(cfg));
+  showToast('Đã lưu cấu hình n8n. Nhấn Kiểm tra để xác nhận kết nối.');
+}
+
+function n8nTestConnection() {
+  const cfg = n8nLoadConfig();
+  const baseUrl = (document.getElementById('n8n-base-url').value.trim() || cfg.baseUrl || '').replace(/\/$/, '');
+  const path    = document.getElementById('n8n-flow1-path').value.trim() || cfg.flow1Path || '/webhook/phan-tich-cv';
+  if (!baseUrl) { showToast('Vui lòng nhập Base URL trước!'); return; }
+  const btn = document.querySelector('#n8n-config-panel button[onclick="n8nTestConnection()"]');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full spinner inline-block mr-1"></span> Đang kiểm tra...'; }
+  fetch(`${baseUrl}${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ test: true, source: 'RecruitHub9' }) })
+    .then(r => {
+      const ok = r.ok || r.status === 200;
+      const cfg2 = n8nLoadConfig();
+      cfg2.connected = ok;
+      localStorage.setItem(N8N_LS_KEY, JSON.stringify(cfg2));
+      n8nRefreshStatusUI(ok);
+      showToast(ok ? '✓ Kết nối n8n thành công!' : `Kết nối thất bại (HTTP ${r.status})`);
+    })
+    .catch(() => {
+      showToast('Không thể kết nối. Kiểm tra URL hoặc CORS trong n8n.');
+      n8nRefreshStatusUI(false);
+    })
+    .finally(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined text-base">wifi_tethering</span> Kiểm tra'; }
+    });
+}
+
+function n8nClearConfig() {
+  localStorage.removeItem(N8N_LS_KEY);
+  document.getElementById('n8n-base-url').value   = '';
+  document.getElementById('n8n-flow1-path').value = '/webhook/phan-tich-cv';
+  document.getElementById('n8n-flow2-path').value = '/webhook/cv-send-mail';
+  document.getElementById('n8n-campaign').value   = '';
+  document.getElementById('n8n-recipients').value = '';
+  n8nRefreshStatusUI(false);
+  showToast('Đã xóa cấu hình n8n.');
+}
+
+function n8nSendReport() {
+  const cfg = n8nLoadConfig();
+  if (!cfg.baseUrl || !cfg.connected) {
+    showToast('Vui lòng cấu hình và kiểm tra kết nối n8n trước!');
+    n8nToggleConfig();
+    return;
+  }
+  const btn = document.getElementById('n8n-send-report-btn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full spinner inline-block mr-1"></span> Đang gửi...'; }
+  const reportData = {
+    campaign:   cfg.campaign   || 'Báo cáo CV Batch',
+    recipients: cfg.recipients || '',
+    timestamp:  new Date().toISOString(),
+    summary: {
+      total: 7, done: 4, analyzing: 2, waiting: 1,
+      results: QUEUE_DATA.filter(c => c.status === 'done').map(c => ({ name: c.name, score: c.score, verdict: c.verdict }))
+    }
+  };
+  fetch(`${cfg.baseUrl}${cfg.flow2Path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(reportData) })
+    .then(r => { showToast(r.ok ? '✓ Báo cáo đã gửi qua email thành công!' : `Gửi thất bại (HTTP ${r.status})`); })
+    .catch(() => { showToast('Lỗi kết nối khi gửi báo cáo. Kiểm tra cấu hình n8n.'); })
+    .finally(() => {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined text-sm">send</span> Gửi báo cáo Email'; }
+    });
+}
+
+/* ═══════════════════════════════════
+   GLOBAL SEARCH
+═══════════════════════════════════ */
+const SEARCH_INDEX = [
+  { label:'Sourcing Hub',       hub:1, keywords:['sourcing','tuyển dụng','boolean','linkedin','referral','passive','talent'] },
+  { label:'CV Intelligence',    hub:2, keywords:['cv','hồ sơ','phân tích','scoring','batch','upload','jd','tiêu chí'] },
+  { label:'Interview Hub',      hub:3, keywords:['phỏng vấn','interview','lịch','rubric','panel','scheduling'] },
+  { label:'Offer & Onboarding', hub:4, keywords:['offer','onboarding','hợp đồng','checklist','buddy','e-sign','ký'] },
+  { label:'People Hub',         hub:5, keywords:['people','nhân viên','hồ sơ','wellness','goals','kpi','360'] },
+  { label:'Learning Hub',       hub:6, keywords:['học','learning','khóa học','chứng chỉ','sandbox','luyện tập','streak'] },
+  { label:'Performance Hub',    hub:7, keywords:['performance','đánh giá','năng lực','feedback','kpi','bias','q2'] },
+  { label:'Growth Hub',         hub:8, keywords:['growth','career','idp','succession','mentor','thăng tiến','lộ trình'] },
+  { label:'Analytics Hub',      hub:9, keywords:['analytics','báo cáo','funnel','biểu đồ','dự báo','chi phí','dei'] },
+  { label:'Tổng quan luồng',    hub:0, keywords:['overview','tổng quan','luồng','kịch bản','flow','scenario'] },
+];
+
+(function initGlobalSearch() {
+  const input = document.querySelector('header input[type="text"]');
+  if (!input) return;
+
+  // Build dropdown
+  const dropdown = document.createElement('div');
+  dropdown.className = 'absolute top-full left-0 mt-1 w-full bg-white rounded-xl shadow-xl border border-surface-variant z-[200] overflow-hidden hidden';
+  dropdown.style.minWidth = '280px';
+  input.parentElement.style.position = 'relative';
+  input.parentElement.appendChild(dropdown);
+
+  function renderDropdown(query) {
+    const q = query.toLowerCase().trim();
+    if (!q) { dropdown.classList.add('hidden'); return; }
+    const hits = SEARCH_INDEX.filter(item =>
+      item.label.toLowerCase().includes(q) ||
+      item.keywords.some(k => k.includes(q))
+    );
+    if (!hits.length) {
+      dropdown.innerHTML = '<div class="px-4 py-3 text-sm text-outline">Không tìm thấy kết quả</div>';
+    } else {
+      dropdown.innerHTML = hits.map(h => `
+        <div class="flex items-center gap-3 px-4 py-3 hover:bg-surface-container-high cursor-pointer text-sm transition-colors"
+             onclick="showHub(${h.hub}); this.closest('div.absolute').classList.add('hidden'); document.querySelector('header input[type=\\'text\\']').value='';">
+          <span class="material-symbols-outlined text-primary text-base">arrow_forward</span>
+          <span class="font-semibold text-on-surface">${h.label}</span>
+        </div>`).join('');
+    }
+    dropdown.classList.remove('hidden');
+  }
+
+  input.addEventListener('input', e => renderDropdown(e.target.value));
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { dropdown.classList.add('hidden'); input.value = ''; }
+    if (e.key === 'Enter') {
+      const first = dropdown.querySelector('[onclick]');
+      if (first) first.click();
+    }
+  });
+  document.addEventListener('click', e => {
+    if (!input.parentElement.contains(e.target)) dropdown.classList.add('hidden');
+  });
+})();
 </script>
 </body>
 </html>
