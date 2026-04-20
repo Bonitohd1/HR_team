@@ -523,135 +523,276 @@ html.dark canvas,html.dark img,html.dark video,html.dark .no-invert { filter:inv
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         HUB 1 — SOURCING
+         HUB 1 — SOURCING HUB (FULL REBUILD)
     ═══════════════════════════════════════════════ -->
     <section id="hub-1" class="hub-section active p-8">
-      <div class="flex justify-between items-end mb-10">
+
+      <!-- HEADER -->
+      <div class="flex justify-between items-start mb-8">
         <div>
+          <p class="text-xs font-bold tracking-widest uppercase text-primary mb-2">Sourcing Intelligence</p>
           <h1 class="text-5xl font-bold text-on-surface leading-tight tracking-tight">Sourcing Hub</h1>
-          <p class="text-on-surface-variant mt-2 text-lg">AI-powered candidate attraction and channel intelligence.</p>
+          <p class="text-on-surface-variant mt-2 text-lg">Tìm ứng viên đúng nguồn — tối ưu từng kênh — pipeline không bao giờ cạn.</p>
         </div>
-        <div class="flex gap-3">
-          <button class="bg-surface-container-lowest text-primary border border-outline-variant/30 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-high transition-colors">Manage Channels</button>
-          <button class="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity">+ New Campaign</button>
+        <div class="flex gap-3 items-center">
+          <button onclick="s1OpenCampaignModal()" class="bg-surface-container-lowest text-primary border border-outline-variant/30 px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-surface-container-high transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">campaign</span> Chiến dịch
+          </button>
+          <button onclick="s1RunAllChannels()" class="bg-primary text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">rocket_launch</span> Sourcing toàn kênh
+          </button>
         </div>
       </div>
-      <div class="grid grid-cols-12 gap-6">
-        <!-- AI Boolean Search -->
-        <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-xl p-8 relative overflow-hidden shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-secondary-container/20 rounded-full blur-3xl -mr-10 -mt-10 pointer-events-none"></div>
-          <div class="flex items-center gap-3 mb-6">
-            <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">auto_awesome</span>
-            <h2 class="text-2xl font-semibold">AI Boolean Search</h2>
-          </div>
-          <div class="bg-surface-container-high p-4 rounded-xl border-l-4 border-primary mb-5">
-            <p class="text-sm text-on-surface-variant font-mono">Mô tả ứng viên lý tưởng bằng ngôn ngữ tự nhiên...</p>
-          </div>
-          <div class="relative mb-5">
-            <textarea class="w-full h-28 bg-surface-container-lowest border-2 border-surface-variant rounded-xl p-4 text-sm focus:border-primary focus:ring-0 resize-none transition-colors" placeholder="Vd: Tìm Senior Recruiter có 5+ năm kinh nghiệm tuyển Tech tại TP.HCM, thành thạo LinkedIn Recruiter và ATS..."></textarea>
-            <button onclick="h1DoSearch()" class="absolute bottom-4 right-4 bg-primary text-white p-2 rounded-lg hover:bg-primary/80 transition-colors">
-              <span class="material-symbols-outlined text-sm">send</span>
-            </button>
-          </div>
-          <div class="flex items-center justify-between">
-            <div class="flex gap-2 flex-wrap">
-              <span class="text-xs uppercase tracking-wider font-semibold bg-surface-variant/50 text-on-surface px-3 py-1 rounded-full">Gợi ý</span>
-              <span onclick="document.querySelector('#hub-1 textarea').value='Senior Recruiter IT có 5+ năm kinh nghiệm tại TP.HCM, thành thạo LinkedIn Recruiter'" class="text-xs uppercase tracking-wider font-semibold text-primary px-3 py-1 cursor-pointer hover:underline">Senior Recruiter IT</span>
-              <span onclick="document.querySelector('#hub-1 textarea').value='HR Business Partner cho công ty 500+ nhân sự, kinh nghiệm HRBP, thành thạo data-driven HR'" class="text-xs uppercase tracking-wider font-semibold text-primary px-3 py-1 cursor-pointer hover:underline">HR Business Partner</span>
+
+      <!-- KPI COMMAND BAR -->
+      <div class="grid grid-cols-5 gap-4 mb-7">
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-primary">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Pipeline tuần này</p>
+          <p class="text-3xl font-black text-primary" id="s1-kpi-pipeline">247</p>
+          <p class="text-xs text-green-600 mt-1 font-semibold">▲ 18% vs tuần trước</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-secondary">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Kênh đang hoạt động</p>
+          <p class="text-3xl font-black text-secondary">6 / 7</p>
+          <p class="text-xs text-outline mt-1">1 kênh cần cấu hình</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-tertiary">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Kênh hiệu quả nhất</p>
+          <p class="text-lg font-black text-tertiary">LinkedIn</p>
+          <p class="text-xs text-green-600 mt-1 font-semibold">Tỉ lệ chuyển đổi 4.9%</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-orange-400">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Shortlist chờ PV</p>
+          <p class="text-3xl font-black">34</p>
+          <p class="text-xs text-orange-500 mt-1 font-semibold">8 ưu tiên cao</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm border-t-4 border-green-500">
+          <p class="text-xs font-bold uppercase tracking-wider text-outline mb-1">Referral active</p>
+          <p class="text-3xl font-black text-green-600">12</p>
+          <p class="text-xs text-green-600 mt-1 font-semibold">24tr pending payout</p>
+        </div>
+      </div>
+
+      <!-- MAIN: MULTI-SOURCE SEARCH + CHANNEL PANEL -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+
+        <!-- LEFT: MULTI-SOURCE SEARCH ENGINE -->
+        <div class="col-span-12 lg:col-span-8 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.07)] overflow-hidden">
+          <!-- Search header -->
+          <div class="px-7 pt-7 pb-5 border-b border-outline-variant/15">
+            <div class="flex items-center gap-3 mb-4">
+              <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg text-xl">manage_search</span>
+              <div>
+                <h2 class="text-xl font-bold">Multi-Source Search</h2>
+                <p class="text-xs text-outline mt-0.5">Tìm 1 lần — AI sinh query tối ưu cho từng kênh đồng thời</p>
+              </div>
             </div>
-            <button class="text-sm font-semibold text-primary flex items-center gap-1"><span class="material-symbols-outlined text-sm">tune</span> Bộ lọc nâng cao</button>
+            <!-- Natural language input -->
+            <div class="relative">
+              <textarea id="s1-query" rows="3" class="w-full bg-surface-container border-2 border-surface-variant rounded-xl px-4 py-3 pr-14 text-sm focus:border-primary focus:ring-0 resize-none transition-colors" placeholder="Mô tả ứng viên lý tưởng... Vd: Senior Recruiter 5+ năm, tuyển Tech/IT, TP.HCM, thành thạo Boolean & ATS"></textarea>
+              <button onclick="s1MultiSearch()" class="absolute bottom-3 right-3 bg-primary text-white px-3 py-2 rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1 text-sm font-semibold">
+                <span class="material-symbols-outlined text-base">bolt</span>Search
+              </button>
+            </div>
+            <!-- Chips gợi ý -->
+            <div class="flex gap-2 mt-3 flex-wrap">
+              <span class="text-xs text-outline font-semibold">Gợi ý nhanh:</span>
+              <button onclick="s1SetQuery('Senior Recruiter IT 5+ năm, thành thạo LinkedIn Recruiter và ATS, TP.HCM')" class="text-xs bg-primary/8 text-primary px-3 py-1 rounded-full hover:bg-primary/15 transition-colors font-medium">Senior Recruiter IT</button>
+              <button onclick="s1SetQuery('HR Business Partner 4+ năm, kinh nghiệm HRBP data-driven, quản lý 500+ nhân sự')" class="text-xs bg-secondary/10 text-secondary px-3 py-1 rounded-full hover:bg-secondary/20 transition-colors font-medium">HR Business Partner</button>
+              <button onclick="s1SetQuery('Talent Acquisition Lead quản lý team 5 người, kinh nghiệm mass hiring và executive search')" class="text-xs bg-tertiary/10 text-tertiary px-3 py-1 rounded-full hover:bg-tertiary/20 transition-colors font-medium">TA Lead</button>
+              <button onclick="s1SetQuery('Software Engineer Backend 3+ năm Node.js/Python, kinh nghiệm startup, TP.HCM hoặc remote')" class="text-xs bg-orange-100 text-orange-700 px-3 py-1 rounded-full hover:bg-orange-200 transition-colors font-medium">Backend Engineer</button>
+            </div>
+            <!-- Channel selector -->
+            <div class="flex gap-2 mt-4 flex-wrap" id="s1-channel-pills">
+              <!-- rendered by JS -->
+            </div>
           </div>
-          <!-- AI Search Results -->
-          <div id="h1-search-results">
-            <div class="border-t border-surface-variant pt-4 mt-2">
-              <div id="h1-results-inner"></div>
+
+          <!-- Search Results Area -->
+          <div id="s1-results-area" class="px-7 py-5">
+            <!-- Default state -->
+            <div id="s1-results-empty" class="flex flex-col items-center justify-center py-12 text-center">
+              <span class="material-symbols-outlined text-6xl text-primary/15 mb-3">travel_explore</span>
+              <p class="font-semibold text-on-surface-variant">Nhập mô tả ứng viên và nhấn Search</p>
+              <p class="text-sm text-outline mt-1">AI sẽ sinh Boolean query tối ưu và tìm song song trên tất cả kênh được chọn</p>
+            </div>
+            <!-- Results populated by JS -->
+            <div id="s1-results-content" class="hidden"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: CHANNEL PERFORMANCE + QUICK STATS -->
+        <div class="col-span-12 lg:col-span-4 flex flex-col gap-5">
+          <!-- Source-to-Hire ratio -->
+          <div class="bg-surface-container-lowest rounded-2xl p-6 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="font-bold">Source-to-Hire Q2</h3>
+              <span class="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-full">Live</span>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#0077B5] inline-block"></span>LinkedIn</span><span>4.9% · 1:9</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-[#0077B5] rounded-full" style="width:88%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>Referral</span><span>8.2% · 1:5</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-green-500 rounded-full" style="width:100%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-orange-400 inline-block"></span>TopCV</span><span>2.1% · 1:18</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-orange-400 rounded-full" style="width:38%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-400 inline-block"></span>VietnamWorks</span><span>1.8% · 1:22</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-blue-400 rounded-full" style="width:30%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-tertiary inline-block"></span>GitHub/Tech</span><span>6.1% · 1:7</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-tertiary rounded-full" style="width:75%"></div></div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-semibold mb-1"><span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>Facebook Group</span><span>1.4% · 1:28</span></div>
+                <div class="h-2 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-blue-600 rounded-full" style="width:22%"></div></div>
+              </div>
+            </div>
+            <p class="text-xs text-outline mt-4 text-center">Referral & GitHub/Tech có ROI cao nhất — ưu tiên đầu tư</p>
+          </div>
+
+          <!-- AI Insight -->
+          <div class="bg-gradient-to-br from-primary to-primary/80 text-white rounded-2xl p-6 shadow-[0_8px_32px_rgba(0,50,138,0.2)]">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">lightbulb</span>
+              <span class="font-bold text-sm">AI Insight tuần này</span>
+            </div>
+            <p class="text-sm text-white/90 leading-relaxed mb-4">Referral conversion <strong>gấp 1.7x</strong> so với Q1. Đề xuất tăng bounty lên 8tr cho vị trí Tech để kích hoạt thêm 15 giới thiệu tiềm năng.</p>
+            <div class="flex gap-2">
+              <button onclick="showToast('Đã tăng Referral Bounty Tech lên 8tr')" class="flex-1 bg-white/20 hover:bg-white/30 text-white text-xs font-bold py-2 rounded-lg transition-colors">Áp dụng ngay</button>
+              <button onclick="showToast('Đã lưu insight để xem xét')" class="flex-1 bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 rounded-lg transition-colors">Xem sau</button>
             </div>
           </div>
         </div>
-        <!-- Source-to-Hire -->
-        <div class="col-span-12 lg:col-span-4 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)] flex flex-col justify-between">
+      </div>
+
+      <!-- CHANNEL INTELLIGENCE GRID -->
+      <div class="mb-6">
+        <div class="flex justify-between items-center mb-4">
           <div>
-            <h2 class="text-2xl font-semibold mb-1">Source-to-Hire</h2>
-            <p class="text-xs uppercase tracking-wider text-outline mb-5">Chuyển đổi Q3</p>
+            <h2 class="text-xl font-bold">Channel Intelligence</h2>
+            <p class="text-sm text-outline">Chiến lược tối ưu riêng cho từng kênh — click để xem hướng dẫn & công cụ</p>
           </div>
-          <div class="flex flex-col items-center justify-center">
-            <div class="w-40 h-40 rounded-full border-[14px] border-surface-variant relative flex items-center justify-center mb-4">
-              <div class="absolute inset-0 rounded-full border-[14px] border-primary" style="clip-path:polygon(50% 50%,50% 0,100% 0,100% 50%,100% 100%,50% 100%,50% 50%);transform:rotate(-45deg)"></div>
-              <div class="absolute inset-0 rounded-full border-[14px] border-secondary" style="clip-path:polygon(50% 50%,50% 100%,0 100%,0 50%,50% 50%);transform:rotate(45deg)"></div>
-              <div class="text-center z-10 bg-surface-container-lowest w-24 h-24 rounded-full flex flex-col items-center justify-center">
-                <span class="text-3xl font-bold text-on-surface">1:12</span>
-                <span class="text-xs uppercase tracking-wider text-outline">Avg Ratio</span>
+          <button onclick="s1ToggleChannelView()" id="s1-view-toggle-btn" class="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+            <span class="material-symbols-outlined text-sm">grid_view</span> Chế độ chi tiết
+          </button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3" id="s1-channel-grid">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+
+      <!-- CHANNEL DETAIL DRAWER (hidden by default) -->
+      <div id="s1-channel-drawer" class="hidden mb-6 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.07)] overflow-hidden">
+        <div id="s1-drawer-content"></div>
+      </div>
+
+      <!-- BOTTOM ROW: OUTREACH LAB + REFERRAL ENGINE + PASSIVE RADAR -->
+      <div class="grid grid-cols-12 gap-6">
+
+        <!-- OUTREACH LAB -->
+        <div class="col-span-12 lg:col-span-5 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.06)] overflow-hidden">
+          <div class="px-7 pt-6 pb-4 border-b border-outline-variant/15">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-lg">edit_note</span>
+                <div>
+                  <h2 class="font-bold">Outreach Lab</h2>
+                  <p class="text-xs text-outline">Template tối ưu theo từng kênh + A/B test</p>
+                </div>
+              </div>
+              <div class="flex gap-1 bg-surface-container-low p-1 rounded-lg">
+                <button onclick="s1OutreachTab('linkedin')" id="oreach-tab-linkedin" class="px-3 py-1.5 text-xs font-semibold bg-surface-container-lowest text-[#0077B5] rounded-md shadow-sm">LinkedIn</button>
+                <button onclick="s1OutreachTab('email')" id="oreach-tab-email" class="px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md">Email</button>
+                <button onclick="s1OutreachTab('facebook')" id="oreach-tab-facebook" class="px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md">Facebook</button>
+                <button onclick="s1OutreachTab('zalo')" id="oreach-tab-zalo" class="px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md">Zalo</button>
               </div>
             </div>
           </div>
-          <div class="space-y-3">
-            <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-primary"></div><span class="text-on-surface-variant">Tìm kiếm trực tiếp</span></div><span class="font-semibold">42%</span></div>
-            <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-secondary"></div><span class="text-on-surface-variant">Referral nội bộ</span></div><span class="font-semibold">35%</span></div>
-            <div class="flex justify-between items-center text-sm"><div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-surface-variant"></div><span class="text-on-surface-variant">Ứng tuyển chủ động</span></div><span class="font-semibold">23%</span></div>
+          <div class="p-7" id="s1-outreach-body">
+            <!-- rendered by JS -->
           </div>
         </div>
-        <!-- Passive Talent Radar -->
-        <div class="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)]">
-          <div class="flex justify-between items-center mb-6">
+
+        <!-- REFERRAL ENGINE -->
+        <div class="col-span-12 lg:col-span-3 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.06)] p-6">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="p-2 bg-green-100 rounded-lg"><span class="material-symbols-outlined text-green-600">diversity_3</span></div>
             <div>
-              <h2 class="text-2xl font-semibold">Passive Talent Radar</h2>
-              <p class="text-sm text-on-surface-variant mt-1">Hồ sơ phù hợp cao đang không tìm việc chủ động</p>
+              <h2 class="font-bold">Referral Engine</h2>
+              <p class="text-xs text-outline">Kênh ROI cao nhất</p>
             </div>
-            <button class="text-primary hover:bg-primary/5 p-2 rounded-lg"><span class="material-symbols-outlined">filter_list</span></button>
           </div>
-          <div class="space-y-3">
-            <div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant/20 hover:bg-surface-container-high transition-colors cursor-pointer group">
-              <div class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container font-bold">NV</div>
-                <div><h3 class="font-semibold group-hover:text-primary transition-colors">Nguyễn Văn An</h3><p class="text-xs text-on-surface-variant">Senior Recruiter @ TechCorp · TP.HCM</p></div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="text-right"><p class="text-xs uppercase tracking-wider text-outline mb-1">Match</p><div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-primary" style="width:96%"></div></div><span class="text-sm font-bold text-primary">96%</span></div></div>
-                <button class="text-outline hover:text-primary"><span class="material-symbols-outlined">bookmark_add</span></button>
-              </div>
+          <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="bg-green-50 p-3 rounded-xl border border-green-100 text-center">
+              <p class="text-2xl font-black text-green-700">12</p>
+              <p class="text-xs text-green-600 font-semibold">Active bounties</p>
             </div>
-            <div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant/20 hover:bg-surface-container-high transition-colors cursor-pointer group">
-              <div class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">TT</div>
-                <div><h3 class="font-semibold group-hover:text-primary transition-colors">Trần Thị Bích</h3><p class="text-xs text-on-surface-variant">HR Business Partner @ Startup · Hà Nội</p></div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="text-right"><p class="text-xs uppercase tracking-wider text-outline mb-1">Match</p><div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-secondary" style="width:89%"></div></div><span class="text-sm font-bold text-secondary">89%</span></div></div>
-                <button class="text-outline hover:text-primary"><span class="material-symbols-outlined">bookmark_add</span></button>
-              </div>
+            <div class="bg-primary/5 p-3 rounded-xl border border-primary/10 text-center">
+              <p class="text-2xl font-black text-primary">24tr</p>
+              <p class="text-xs text-primary font-semibold">Pending payout</p>
             </div>
-            <div class="flex items-center justify-between p-4 rounded-xl border border-outline-variant/20 hover:bg-surface-container-high transition-colors cursor-pointer group">
-              <div class="flex items-center gap-4">
-                <div class="w-11 h-11 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold">PH</div>
-                <div><h3 class="font-semibold group-hover:text-primary transition-colors">Phạm Hoài Nam</h3><p class="text-xs text-on-surface-variant">Talent Acquisition Lead @ Corp · TP.HCM</p></div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="text-right"><p class="text-xs uppercase tracking-wider text-outline mb-1">Match</p><div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-tertiary" style="width:82%"></div></div><span class="text-sm font-bold text-tertiary">82%</span></div></div>
-                <button class="text-outline hover:text-primary"><span class="material-symbols-outlined">bookmark_add</span></button>
-              </div>
+          </div>
+          <!-- Bounty list -->
+          <div class="space-y-2 mb-5">
+            <div class="flex justify-between items-center text-sm p-2.5 rounded-lg bg-surface-container-low">
+              <span class="font-medium">Senior Engineer</span>
+              <span class="font-bold text-green-600">10tr</span>
             </div>
-            <div class="pt-3 text-center"><button class="text-sm font-semibold text-primary hover:underline">Xem tất cả 138 ứng viên phù hợp</button></div>
+            <div class="flex justify-between items-center text-sm p-2.5 rounded-lg bg-surface-container-low">
+              <span class="font-medium">TA Lead</span>
+              <span class="font-bold text-green-600">8tr</span>
+            </div>
+            <div class="flex justify-between items-center text-sm p-2.5 rounded-lg bg-surface-container-low">
+              <span class="font-medium">Product Manager</span>
+              <span class="font-bold text-green-600">12tr</span>
+            </div>
+          </div>
+          <!-- Recent activity -->
+          <div class="relative pl-4 border-l-2 border-green-100 space-y-3 mb-5">
+            <div class="relative">
+              <div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-green-500 border-2 border-white"></div>
+              <p class="text-xs"><span class="font-semibold">Minh Tú</span> giới thiệu <span class="font-semibold text-primary">Hoàng Anh</span></p>
+              <p class="text-[11px] text-outline mt-0.5">Senior Recruiter · 2 giờ trước</p>
+            </div>
+            <div class="relative">
+              <div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-primary border-2 border-white"></div>
+              <p class="text-xs">Referral <span class="font-semibold">Lan Phương</span> → vòng <span class="font-semibold text-primary">Offer</span></p>
+              <p class="text-[11px] text-outline mt-0.5">HR Manager · hôm qua</p>
+            </div>
+          </div>
+          <button onclick="showToast('Đang mở form tạo chiến dịch Referral mới...')" class="w-full bg-green-600 text-white py-2.5 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-base">add</span>Tạo chiến dịch Referral
+          </button>
+        </div>
+
+        <!-- PASSIVE TALENT RADAR -->
+        <div class="col-span-12 lg:col-span-4 bg-surface-container-lowest rounded-2xl shadow-[0_8px_32px_rgba(20,27,44,0.06)] overflow-hidden">
+          <div class="px-6 pt-6 pb-4 border-b border-outline-variant/15 flex justify-between items-center">
+            <div>
+              <h2 class="font-bold">Passive Talent Radar</h2>
+              <p class="text-xs text-outline mt-0.5">Hồ sơ phù hợp — không tìm việc chủ động</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold uppercase bg-secondary/10 text-secondary px-2 py-1 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-secondary rounded-full pulse inline-block"></span>138 hồ sơ</span>
+              <button onclick="showToast('Đang lọc Passive Talent...')" class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined text-lg">filter_list</span></button>
+            </div>
+          </div>
+          <div class="divide-y divide-outline-variant/10" id="s1-passive-list">
+            <!-- rendered by JS -->
+          </div>
+          <div class="px-6 py-4 bg-surface-container-low/40 text-center">
+            <button onclick="showToast('Đang tải thêm passive talent...')" class="text-sm font-semibold text-primary hover:underline">Xem thêm 129 hồ sơ →</button>
           </div>
         </div>
-        <!-- Referral Engine -->
-        <div class="col-span-12 lg:col-span-5 bg-gradient-to-br from-surface-container-lowest to-surface-container-low rounded-xl p-8 shadow-[0_8px_32px_rgba(20,27,44,0.06)] border border-outline-variant/10">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="p-2 bg-secondary/10 rounded-lg text-secondary"><span class="material-symbols-outlined">diversity_3</span></div>
-            <h2 class="text-2xl font-semibold">Referral Engine</h2>
-          </div>
-          <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20"><p class="text-xs uppercase tracking-wider text-outline mb-1">Active Bounties</p><p class="text-3xl font-bold">12</p></div>
-            <div class="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20"><p class="text-xs uppercase tracking-wider text-outline mb-1">Pending Payouts</p><p class="text-3xl font-bold text-secondary">24tr</p></div>
-          </div>
-          <div class="mb-5">
-            <h3 class="text-sm font-semibold mb-3">Hoạt động gần đây</h3>
-            <div class="relative pl-4 border-l-2 border-surface-variant space-y-4">
-              <div class="relative"><div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-primary border-2 border-white"></div><p class="text-sm"><span class="font-semibold">Minh Tú</span> giới thiệu <span class="font-semibold text-primary">Hoàng Anh</span></p><p class="text-xs text-outline mt-0.5">Vị trí Senior Recruiter · 2 giờ trước</p></div>
-              <div class="relative"><div class="absolute -left-[21px] top-1 w-3 h-3 rounded-full bg-secondary border-2 border-white"></div><p class="text-sm">Referral của <span class="font-semibold">Lan Phương</span> đến vòng <span class="font-semibold text-secondary">Offer</span></p><p class="text-xs text-outline mt-0.5">Vị trí HR Manager · 1 ngày trước</p></div>
-            </div>
-          </div>
-          <button class="w-full bg-surface-container-highest text-primary py-3 rounded-xl text-sm font-semibold hover:bg-primary/10 transition-colors">Tạo chiến dịch referral mới</button>
-        </div>
+
       </div>
     </section>
 
@@ -2789,64 +2930,672 @@ function showToast(msg) {
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2600);
 }
 
-/* ═══════════════════════════════════
-   H1 AI BOOLEAN SEARCH
-═══════════════════════════════════ */
-const H1_CANDIDATES = [
-  { init:'NV', name:'Nguyễn Văn Hùng', title:'Senior Recruiter · TechViet', loc:'TP.HCM', match:96, skills:['LinkedIn Recruiter','ATS','STAR','Boolean Search'], color:'bg-primary/10 text-primary' },
-  { init:'TT', name:'Trần Thị Minh Châu', title:'Talent Acquisition Lead · FintechX', loc:'TP.HCM', match:91, skills:['Executive Search','Employer Branding','HR Analytics'], color:'bg-secondary/10 text-secondary' },
-  { init:'PD', name:'Phạm Đình Khương', title:'HR Business Partner · Corp ABC', loc:'Hà Nội', match:87, skills:['HRBP','Data-driven HR','OKRs'], color:'bg-tertiary/10 text-tertiary' },
-  { init:'LH', name:'Lê Hoàng Anh', title:'Senior Recruiter · StartupHub', loc:'TP.HCM', match:83, skills:['Tech Hiring','Headhunting','DEI'], color:'bg-amber-100 text-amber-700' },
+/* ═══════════════════════════════════════════════════════
+   SOURCING HUB — FULL ENGINE
+════════════════════════════════════════════════════════ */
+
+/* ── CHANNEL DEFINITIONS ── */
+const S1_CHANNELS = [
+  {
+    id:'linkedin', name:'LinkedIn', icon:'work', color:'#0077B5', bg:'#E8F4FD', textColor:'#005F8E',
+    desc:'Passive talent cấp cao · Boolean Search · InMail',
+    conversion:'4.9%', candidates:'2.4M VN', bestFor:'Mid-Senior · Tech · Management',
+    avgTime:'3-5 ngày phản hồi', tip:'Dùng Sales Navigator filter: Company size + Title seniority + Activity trong 30 ngày',
+    queryTemplate: q => {
+      const parts = q.toLowerCase();
+      const titles = parts.includes('senior') ? '"Senior" OR "Lead" OR "Manager"' : '"Recruiter" OR "HR" OR "Talent"';
+      const loc = parts.includes('hà nội') ? '"Hanoi" OR "Ha Noi"' : '"Ho Chi Minh" OR "HCMC" OR "TP.HCM"';
+      return `(${titles}) AND (${extractSkillBoolean(q)}) AND (${loc}) NOT "Intern" NOT "Fresher"`;
+    },
+    steps:[
+      { icon:'search', text:'Vào LinkedIn Recruiter → New Search' },
+      { icon:'tune', text:'Paste Boolean query vào ô Title/Keywords' },
+      { icon:'filter_list', text:'Filter: Vietnam · Active 30 ngày · Open to Work OFF (passive)' },
+      { icon:'send', text:'InMail template: ngắn ≤150 chữ, cá nhân hóa theo profile' },
+      { icon:'schedule', text:'Follow-up sau 5 ngày nếu không phản hồi' },
+    ],
+    mockResults:[
+      { init:'NV', name:'Nguyễn Văn Hùng', role:'Senior Recruiter · TechViet', loc:'TP.HCM', match:96, tags:['LinkedIn Recruiter','ATS','Boolean'], color:'bg-[#0077B5]/10 text-[#0077B5]', badge:'Open to Opportunities' },
+      { init:'TT', name:'Trần Thị Minh Châu', role:'TA Lead · FintechX', loc:'TP.HCM', match:91, tags:['Exec Search','EB','Analytics'], color:'bg-[#0077B5]/10 text-[#0077B5]', badge:'Passive' },
+      { init:'PD', name:'Phạm Đình Khương', role:'HRBP · Corp ABC', loc:'Hà Nội', match:84, tags:['HRBP','OKRs','HRIS'], color:'bg-[#0077B5]/10 text-[#0077B5]', badge:'Passive' },
+    ]
+  },
+  {
+    id:'topcv', name:'TopCV', icon:'description', color:'#FF6B35', bg:'#FFF0EB', textColor:'#C44D1B',
+    desc:'Ứng viên chủ động · Database 5M · Filter mạnh',
+    conversion:'2.1%', candidates:'5M VN', bestFor:'Junior-Mid · Mọi ngành · Mass hiring',
+    avgTime:'1-2 ngày · Phản hồi nhanh', tip:'Filter: Cập nhật CV trong 7 ngày + Mức lương kỳ vọng + Kinh nghiệm cụ thể để giảm noise',
+    queryTemplate: q => `${extractKeywords(q).join(' ')} -fresher`,
+    steps:[
+      { icon:'manage_search', text:'TopCV Employer → Tìm kiếm CV → Bộ lọc nâng cao' },
+      { icon:'calendar_today', text:'Filter "Cập nhật trong 7 ngày" → CV còn active' },
+      { icon:'payments', text:'Set salary range phù hợp → loại bỏ lệch kỳ vọng' },
+      { icon:'location_on', text:'Filter địa điểm + sẵn sàng đi làm ngay/sau X tuần' },
+      { icon:'mail', text:'Gửi JD qua system hoặc gọi trực tiếp (số trong CV)' },
+    ],
+    mockResults:[
+      { init:'LH', name:'Lê Hoàng Anh', role:'Recruiter · StartupHub', loc:'TP.HCM', match:83, tags:['Tech Hiring','Headhunting','DEI'], color:'bg-orange-100 text-orange-700', badge:'Chủ động tìm việc' },
+      { init:'VT', name:'Võ Thị Thu Hà', role:'HR Generalist · FPT', loc:'TP.HCM', match:74, tags:['C&B','Onboarding','HRIS'], color:'bg-orange-100 text-orange-700', badge:'Cập nhật 3 ngày trước' },
+      { init:'BQ', name:'Bùi Quang Minh', role:'Recruitment Specialist', loc:'Hà Nội', match:68, tags:['IT Recruitment','Sourcing'], color:'bg-orange-100 text-orange-700', badge:'Cập nhật hôm nay' },
+    ]
+  },
+  {
+    id:'vietnamworks', name:'VietnamWorks', icon:'public', color:'#E31837', bg:'#FEE8EB', textColor:'#B01229',
+    desc:'Lớn nhất VN · 5.5M hồ sơ · Đa ngành',
+    conversion:'1.8%', candidates:'5.5M VN', bestFor:'Mọi cấp · Đa ngành · Khối lượng lớn',
+    avgTime:'2-3 ngày', tip:'Dùng "Talent Search" kết hợp Boolean; Filter "Hồ sơ mới trong 14 ngày" để tránh CV stale',
+    queryTemplate: q => extractKeywords(q).slice(0,4).join(' AND '),
+    steps:[
+      { icon:'search', text:'VietnamWorks Employer → Talent Search' },
+      { icon:'tune', text:'Keywords: từ khóa chính + Boolean AND/OR/NOT' },
+      { icon:'date_range', text:'Filter hồ sơ mới nhất ≤14 ngày · Mức lương phù hợp' },
+      { icon:'star', text:'Ưu tiên hồ sơ có "Featured" hoặc hoàn chỉnh ≥80%' },
+      { icon:'phone', text:'Gọi điện trực tiếp hiệu quả hơn email đối với VN market' },
+    ],
+    mockResults:[
+      { init:'HN', name:'Hoàng Ngọc Lan', role:'Senior HR Specialist', loc:'TP.HCM', match:79, tags:['Tuyển dụng','C&B','HRIS'], color:'bg-red-100 text-red-700', badge:'Hồ sơ mới 2 ngày' },
+      { init:'DT', name:'Đặng Thị Hương', role:'HR Manager · Retail Corp', loc:'TP.HCM', match:72, tags:['Mass Hiring','L&D','Policy'], color:'bg-red-100 text-red-700', badge:'Cập nhật 5 ngày' },
+    ]
+  },
+  {
+    id:'github', name:'GitHub/Tech', icon:'code', color:'#6E40C9', bg:'#F0EBFF', textColor:'#4C2A9C',
+    desc:'Kỹ sư passive · Code portfolio thật · Không CV giả',
+    conversion:'6.1%', candidates:'Tech only', bestFor:'Engineer · DevOps · Data Scientist',
+    avgTime:'5-7 ngày · Cần approach khéo', tip:'Search GitHub theo language + location + repo stars. Tiếp cận qua project/contribution — không spam InMail kiểu sales',
+    queryTemplate: q => {
+      const lang = q.toLowerCase().includes('python')?'python':q.toLowerCase().includes('node')?'javascript':q.toLowerCase().includes('java ')&&!q.toLowerCase().includes('javascript')?'java':'';
+      return `location:Vietnam ${lang ? 'language:'+lang : ''} followers:>50`;
+    },
+    steps:[
+      { icon:'search', text:'GitHub.com/search → People tab → Filter location:Vietnam' },
+      { icon:'code', text:'Filter theo language, repos stars, contribution activity' },
+      { icon:'visibility', text:'Xem profile: pinned repos, bio, recent commits' },
+      { icon:'alternate_email', text:'Contact qua email trong profile HOẶC Twitter/LinkedIn được link' },
+      { icon:'volunteer_activism', text:'Tiếp cận: khen ngợi project cụ thể → mới giới thiệu cơ hội' },
+    ],
+    mockResults:[
+      { init:'KV', name:'Kiều Văn Đức', role:'Backend Engineer · GitHub 847★', loc:'TP.HCM', match:94, tags:['Node.js','PostgreSQL','Docker'], color:'bg-purple-100 text-purple-700', badge:'247 contributions/year' },
+      { init:'NT', name:'Nguyễn Tuấn Khải', role:'Full-stack · 12 public repos', loc:'Hà Nội', match:87, tags:['React','Python','AWS'], color:'bg-purple-100 text-purple-700', badge:'Active contributor' },
+    ]
+  },
+  {
+    id:'facebook', name:'Facebook Group', icon:'groups', color:'#1877F2', bg:'#E8F0FE', textColor:'#1254B7',
+    desc:'Community HR/Tech VN · Passive pool ẩn',
+    conversion:'1.4%', candidates:'Community', bestFor:'Junior-Mid · Fresher · Niche role',
+    avgTime:'Instant - 24h', tip:'Group HR Vietnam, IT Jobs HCM, Cộng đồng HR Việt Nam. Post JD vào giờ vàng: 11:30-12:00 và 18:00-20:00. Tag người liên quan.',
+    queryTemplate: q => `"${extractKeywords(q).slice(0,2).join('" OR "')}" site:facebook.com/groups`,
+    steps:[
+      { icon:'group', text:'Join: "HR Vietnam", "IT Job HCM", "Cộng đồng HR Việt Nam"' },
+      { icon:'schedule', text:'Post JD vào 11:30-12:00 hoặc 18:00-20:00 (giờ vàng)' },
+      { icon:'photo_camera', text:'Thiết kế JD dạng ảnh đẹp → viral tốt hơn text thuần' },
+      { icon:'tag', text:'Tag moderator + người liên quan → tăng reach tự nhiên' },
+      { icon:'comment', text:'Trả lời comment ngay trong 1 giờ → ứng viên không chờ' },
+    ],
+    mockResults:[
+      { init:'ML', name:'Mai Linh Phương', role:'HR Executive · 3 năm', loc:'TP.HCM', match:71, tags:['Recruitment','Onboarding'], color:'bg-blue-100 text-blue-700', badge:'Tự giới thiệu trong group' },
+      { init:'TH', name:'Trần Hữu Phúc', role:'Junior Recruiter', loc:'TP.HCM', match:64, tags:['Sourcing','LinkedIn'], color:'bg-blue-100 text-blue-700', badge:'Comment vào JD post' },
+    ]
+  },
+  {
+    id:'referral', name:'Referral', icon:'diversity_3', color:'#16A34A', bg:'#F0FDF4', textColor:'#14532D',
+    desc:'Chất lượng cao nhất · ROI 8.2% · Trust network',
+    conversion:'8.2%', candidates:'Internal network', bestFor:'Mọi vị trí · Đặc biệt Senior+',
+    avgTime:'Nhanh hơn 40% so với open market', tip:'Bounty rõ ràng + nhắc nhở định kỳ = referral engine không bao giờ cạn. Kết hợp gamification (leaderboard) để tăng participation.',
+    queryTemplate: q => `Nhờ team giới thiệu: ${extractKeywords(q).slice(0,3).join(', ')}`,
+    steps:[
+      { icon:'campaign', text:'Announce JD nội bộ: email + Slack/Teams + meeting' },
+      { icon:'payments', text:'Bounty rõ ràng: X triệu khi pass probation (không phải khi offer)' },
+      { icon:'leaderboard', text:'Leaderboard top giới thiệu → gamification tăng 3x participation' },
+      { icon:'notifications_active', text:'Nhắc mỗi 2 tuần nếu chưa đủ pipeline' },
+      { icon:'celebration', text:'Celebrate khi referral được onboard → văn hóa giới thiệu' },
+    ],
+    mockResults:[
+      { init:'HA', name:'Hoàng Anh Khoa', role:'Senior Engineer · referral bởi Minh Tú', loc:'TP.HCM', match:97, tags:['React','Node.js','System Design'], color:'bg-green-100 text-green-700', badge:'Referral bởi teammate' },
+      { init:'LP', name:'Lê Phú Quý', role:'Product Designer · referral bởi Lan', loc:'TP.HCM', match:88, tags:['Figma','UX Research','Design System'], color:'bg-green-100 text-green-700', badge:'Đang phỏng vấn' },
+    ]
+  },
+  {
+    id:'headhunt', name:'Headhunting', icon:'person_search', color:'#7C3AED', bg:'#F5F3FF', textColor:'#5B21B6',
+    desc:'Senior & C-level · Tiếp cận chủ động · Không qua JD',
+    conversion:'12%', candidates:'Targeted', bestFor:'C-level · Director · Niche expert',
+    avgTime:'2-4 tuần · Cần kiên nhẫn', tip:'Research kỹ trước: đọc LinkedIn activity, bài viết, talk của ứng viên → tiếp cận cá nhân hóa theo đúng pain point của họ.',
+    queryTemplate: q => `"${extractKeywords(q)[0]}" filetype:pdf site:linkedin.com/in`,
+    steps:[
+      { icon:'person_search', text:'Map talent: ai đang làm vai trò tương tự tại competitor?' },
+      { icon:'article', text:'Research kỹ: đọc bài viết, talk, LinkedIn activity của target' },
+      { icon:'phone', text:'Cold call > LinkedIn message cho C-level (giao tiếp trực tiếp)' },
+      { icon:'restaurant', text:'Coffee meeting: không pitch JD ngay → xây relationship trước' },
+      { icon:'timeline', text:'Nurture 3-6 tháng nếu chưa sẵn sàng → long-term pipeline' },
+    ],
+    mockResults:[
+      { init:'CL', name:'Cao Lê Minh', role:'VP Engineering · Top Unicorn', loc:'TP.HCM', match:98, tags:['Engineering Leadership','Scale','Architecture'], color:'bg-purple-100 text-purple-700', badge:'Target headhunt' },
+    ]
+  },
 ];
 
-function h1DoSearch() {
-  const q = document.querySelector('#hub-1 textarea').value.trim();
-  if (!q) { showToast('Vui lòng nhập mô tả ứng viên trước!'); return; }
-  const inner = document.getElementById('h1-results-inner');
-  const wrap = document.getElementById('h1-search-results');
-  inner.innerHTML = '<div class="flex items-center gap-3 py-3 text-sm text-outline"><div class="w-5 h-5 border-2 border-outline border-t-primary rounded-full spinner flex-shrink-0"></div><span id="h1-step-text">Đang phân tích yêu cầu...</span></div>';
-  wrap.classList.add('show');
-  const steps = ['Đang phân tích yêu cầu...', 'Tạo Boolean query...', 'Quét 2.4M hồ sơ...', 'Xếp hạng ứng viên phù hợp...'];
-  let i = 0;
-  const si = setInterval(() => { const el = document.getElementById('h1-step-text'); if (el && i < steps.length) el.textContent = steps[i++]; }, 600);
-  setTimeout(() => {
-    clearInterval(si);
-    const boolQ = `("Senior Recruiter" OR "Talent Acquisition") AND ("5+ years" OR "6 years") AND ("LinkedIn Recruiter" OR "ATS") AND "TP.HCM"`;
-    inner.innerHTML = `
-      <div class="mb-4 p-3 bg-primary/5 border-l-4 border-primary rounded-lg">
-        <p class="text-xs font-bold text-primary uppercase tracking-wider mb-1">Boolean Query được tạo</p>
-        <p class="text-xs font-mono text-on-surface-variant leading-relaxed">${boolQ}</p>
-      </div>
+/* ── OUTREACH TEMPLATES ── */
+const S1_OUTREACH = {
+  linkedin:{
+    subject:'Cơ hội phù hợp với định hướng của bạn',
+    body:`Chào [Tên],
+
+Tôi thấy background của bạn tại [Công ty hiện tại] rất ấn tượng, đặc biệt [1 điểm cụ thể từ profile].
+
+Bên tôi đang tìm [Vị trí] với cơ hội [1 điểm hấp dẫn]. Tôi nghĩ đây có thể là bước tiếp theo thú vị cho bạn.
+
+Bạn có 15 phút để trao đổi thêm không?
+
+Trân trọng,
+[Tên Recruiter]`,
+    tips:['Cá nhân hóa dòng đầu tiên theo profile thật','Giữ dưới 150 từ — ít người đọc InMail dài','Hỏi câu hỏi mở ở cuối thay vì "Bạn có quan tâm không?"','Gửi thứ 3 hoặc thứ 4, 9-11h sáng — tỉ lệ mở cao nhất'],
+    stats:{ open:'38%', reply:'12%', grade:'A+' }
+  },
+  email:{
+    subject:'[Cơ hội] [Vị trí] tại [Công ty] — Phù hợp với profile của bạn',
+    body:`Chào [Tên],
+
+Tôi là [Tên], Recruiter tại [Công ty]. Tôi tìm thấy profile của bạn qua [Nguồn] và thấy kinh nghiệm [X năm] trong [Lĩnh vực] rất phù hợp với vị trí chúng tôi đang tuyển.
+
+VỊ TRÍ: [Job Title]
+ĐỊA ĐIỂM: [Nơi làm việc / Remote]
+MỨC LƯƠNG: [Range lương]
+
+Nếu bạn quan tâm, tôi rất vui được gửi thêm thông tin hoặc sắp xếp một buổi nói chuyện ngắn.
+
+Trân trọng,
+[Tên] | [SĐT]`,
+    tips:['Subject line: rõ ràng, có tên vị trí và công ty','Nêu lương range ngay → giảm 60% email rác qua lại','Gửi thứ 2-4, 8-9h sáng hoặc 4-5h chiều','Follow-up email sau 3 ngày nếu không reply'],
+    stats:{ open:'24%', reply:'8%', grade:'B+' }
+  },
+  facebook:{
+    subject:'Post JD vào Group (không cần subject)',
+    body:`🔥 [CÔNG TY] ĐANG TÌM [VỊ TRÍ] — TP.HCM
+
+📍 Địa điểm: [Quận/Thành phố]
+💰 Lương: [Range]
+⏰ Hình thức: Toàn thời gian / Hybrid
+
+YÊU CẦU CHÍNH:
+✅ [Yêu cầu 1]
+✅ [Yêu cầu 2]
+✅ [Yêu cầu 3]
+
+ĐÃI NGỘ:
+🎁 [Benefit 1]
+🎁 [Benefit 2]
+
+📩 Apply: [Link] hoặc nhắn tin cho tôi trực tiếp
+#tuyendung #[vị trí] #[thành phố]`,
+    tips:['Emoji vừa phải — tăng visibility trong feed','Hashtag cuối: 3-5 tag liên quan vị trí + địa điểm','Giờ vàng: 11:30-12:00 và 18:00-20:00','Trả lời comment trong vòng 1 giờ để duy trì rank bài post'],
+    stats:{ open:'N/A', reply:'Reach: 500-2000', grade:'B' }
+  },
+  zalo:{
+    subject:'Tin nhắn Zalo (ngắn gọn)',
+    body:`Chào [Tên] ạ!
+
+Mình là [Tên], đang tuyển vị trí [Vị trí] tại [Công ty], lương [Range].
+
+Bạn có quan tâm hoặc biết ai phù hợp không ạ? Mình có thể gửi thêm thông tin nếu bạn muốn.
+
+Cảm ơn bạn! 🙏`,
+    tips:['Zalo: ngắn gọn, thân thiện, không formal quá','Gửi vào 8-9h hoặc 12-13h (giờ nghỉ trưa)','Không gửi file/ảnh ngay — chỉ text để tránh spam filter','Nếu đã biết nhau: refer tên người quen chung để tạo trust'],
+    stats:{ open:'65%', reply:'22%', grade:'A' }
+  }
+};
+
+/* ── PASSIVE TALENT DATA ── */
+const S1_PASSIVE = [
+  { init:'NV', name:'Nguyễn Văn An', role:'Senior Recruiter · TechCorp', loc:'TP.HCM', match:96, color:'#0047bb', bg:'#dbe1ff', signal:'Xem nhiều JD Recruiter tuần này', signalIcon:'visibility' },
+  { init:'TT', name:'Trần Thị Bích', role:'HRBP · Scale-up Startup', loc:'Hà Nội', match:89, color:'#006a6a', bg:'#ccf0ee', signal:'Cập nhật LinkedIn profile 3 ngày trước', signalIcon:'edit' },
+  { init:'PH', name:'Phạm Hoài Nam', role:'TA Lead · Enterprise Corp', loc:'TP.HCM', match:82, color:'#45179a', bg:'#e9ddff', signal:'Follow 5 công ty mới trong 7 ngày', signalIcon:'follow_the_signs' },
+  { init:'ML', name:'Mai Lan Anh', role:'HR Manager · Retail', loc:'TP.HCM', match:76, color:'#C65911', bg:'#FEF3E7', signal:'Comment vào bài viết về career change', signalIcon:'comment' },
+  { init:'KD', name:'Kiều Đức Thành', role:'Senior Recruiter · Agency', loc:'TP.HCM', match:74, color:'#0047bb', bg:'#dbe1ff', signal:'Open to Work (ẩn) phát hiện qua AI', signalIcon:'psychology' },
+];
+
+/* ── STATE ── */
+let s1ActiveChannels = new Set(['linkedin','topcv','referral','github']);
+let s1DetailChannel = null;
+let s1OutreachCurrentTab = 'linkedin';
+let s1DetailMode = false;
+
+/* ── INIT ── */
+function s1Init() {
+  s1RenderChannelPills();
+  s1RenderChannelGrid();
+  s1OutreachTab('linkedin');
+  s1RenderPassive();
+}
+
+/* ── CHANNEL PILLS (trong search box) ── */
+function s1RenderChannelPills() {
+  const el = document.getElementById('s1-channel-pills');
+  if (!el) return;
+  el.innerHTML = S1_CHANNELS.map(ch => `
+    <button onclick="s1ToggleChannel('${ch.id}')" id="pill-${ch.id}"
+      class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border-2 transition-all"
+      style="${s1ActiveChannels.has(ch.id)
+        ? `background:${ch.color};color:#fff;border-color:${ch.color};`
+        : `background:${ch.bg};color:${ch.textColor};border-color:${ch.color}40;`}">
+      <span class="material-symbols-outlined text-sm">${ch.icon}</span>${ch.name}
+      ${s1ActiveChannels.has(ch.id)
+        ? '<span class="material-symbols-outlined text-sm" style="font-variation-settings:\'FILL\' 1">check_circle</span>'
+        : ''}
+    </button>`).join('');
+}
+
+function s1ToggleChannel(id) {
+  if (s1ActiveChannels.has(id)) {
+    if (s1ActiveChannels.size === 1) { showToast('Phải chọn ít nhất 1 kênh'); return; }
+    s1ActiveChannels.delete(id);
+  } else {
+    s1ActiveChannels.add(id);
+  }
+  s1RenderChannelPills();
+}
+
+/* ── CHANNEL GRID ── */
+function s1RenderChannelGrid() {
+  const el = document.getElementById('s1-channel-grid');
+  if (!el) return;
+  el.innerHTML = S1_CHANNELS.map(ch => `
+    <div onclick="s1OpenChannelDetail('${ch.id}')"
+      class="rounded-xl p-4 cursor-pointer hover:shadow-md transition-all border-2 group relative"
+      style="background:${ch.bg};border-color:${ch.color}30;"
+      id="ch-card-${ch.id}">
       <div class="flex items-center justify-between mb-3">
-        <p class="text-sm font-bold text-on-surface">Tìm thấy <span class="text-primary">138 ứng viên</span> phù hợp</p>
-        <button onclick="showToast('Đã lưu tất cả 138 ứng viên vào pipeline')" class="text-xs font-semibold text-primary hover:underline">Thêm tất cả vào pipeline</button>
+        <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background:${ch.color}20">
+          <span class="material-symbols-outlined text-xl" style="color:${ch.color};font-variation-settings:'FILL' 1">${ch.icon}</span>
+        </div>
+        <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full" style="background:${ch.color};color:#fff">${ch.conversion}</span>
       </div>
-      ${H1_CANDIDATES.map(c => `
-        <div class="h1-candidate group" onclick="showToast('Đã thêm ${c.name} vào shortlist')">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full ${c.color} flex items-center justify-center font-bold text-sm flex-shrink-0">${c.init}</div>
-            <div>
-              <p class="font-semibold text-sm text-on-surface group-hover:text-primary transition-colors">${c.name}</p>
-              <p class="text-xs text-outline">${c.title} · ${c.loc}</p>
-              <div class="flex flex-wrap gap-1 mt-1.5">${c.skills.map(s=>`<span class="text-[10px] bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded font-medium">${s}</span>`).join('')}</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-3 flex-shrink-0 ml-4">
-            <div class="text-right">
-              <p class="text-xs text-outline mb-1">Match</p>
-              <div class="flex items-center gap-2">
-                <div class="w-14 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full bg-primary rounded-full" style="width:${c.match}%"></div></div>
-                <span class="text-sm font-bold text-primary">${c.match}%</span>
+      <p class="font-black text-sm mb-0.5" style="color:${ch.textColor}">${ch.name}</p>
+      <p class="text-[10px] text-outline leading-snug">${ch.desc.split('·')[0]}</p>
+      <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <span class="material-symbols-outlined text-sm" style="color:${ch.color}">open_in_new</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ── CHANNEL DETAIL DRAWER ── */
+function s1OpenChannelDetail(id) {
+  const ch = S1_CHANNELS.find(c => c.id === id);
+  if (!ch) return;
+  s1DetailChannel = id;
+  const drawer = document.getElementById('s1-channel-drawer');
+  const content = document.getElementById('s1-drawer-content');
+
+  // highlight card
+  S1_CHANNELS.forEach(c => {
+    const card = document.getElementById('ch-card-' + c.id);
+    if (card) card.style.borderColor = c.id === id ? ch.color : ch.color.replace(/ff$/, '30') + '30';
+  });
+
+  content.innerHTML = `
+    <div class="flex items-center justify-between px-8 py-5 border-b border-outline-variant/15" style="background:${ch.bg}">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm" style="background:${ch.color}">
+          <span class="material-symbols-outlined text-2xl text-white" style="font-variation-settings:'FILL' 1">${ch.icon}</span>
+        </div>
+        <div>
+          <h3 class="text-xl font-black" style="color:${ch.textColor}">${ch.name}</h3>
+          <p class="text-xs text-outline mt-0.5">${ch.desc}</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-6">
+        <div class="text-center"><p class="text-2xl font-black" style="color:${ch.color}">${ch.conversion}</p><p class="text-[10px] text-outline uppercase tracking-wider">Conversion</p></div>
+        <div class="text-center"><p class="text-sm font-bold text-on-surface">${ch.candidates}</p><p class="text-[10px] text-outline uppercase tracking-wider">Pool</p></div>
+        <div class="text-center"><p class="text-sm font-bold text-on-surface">${ch.avgTime}</p><p class="text-[10px] text-outline uppercase tracking-wider">Avg Response</p></div>
+        <button onclick="s1CloseDrawer()" class="text-outline hover:text-on-surface p-2 rounded-lg hover:bg-white/50 transition-colors"><span class="material-symbols-outlined">close</span></button>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-0 divide-x divide-outline-variant/15">
+      <!-- Steps -->
+      <div class="p-6">
+        <p class="text-xs font-black uppercase tracking-wider text-outline mb-4">Quy trình tối ưu</p>
+        <div class="space-y-3">
+          ${ch.steps.map((s,i) => `
+            <div class="flex items-start gap-3">
+              <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-white text-xs font-bold" style="background:${ch.color}">${i+1}</div>
+              <div class="flex items-start gap-2 flex-1">
+                <span class="material-symbols-outlined text-sm flex-shrink-0 mt-0.5" style="color:${ch.color};font-variation-settings:'FILL' 1">${s.icon}</span>
+                <p class="text-sm text-on-surface-variant leading-snug">${s.text}</p>
               </div>
-            </div>
-            <button onclick="event.stopPropagation();showToast('${c.name} đã được bookmark')" class="text-outline hover:text-primary p-1"><span class="material-symbols-outlined text-lg">bookmark_add</span></button>
+            </div>`).join('')}
+        </div>
+        <div class="mt-5 p-3 rounded-xl text-xs leading-relaxed" style="background:${ch.bg};color:${ch.textColor}">
+          <span class="font-black">💡 Pro tip:</span> ${ch.tip}
+        </div>
+      </div>
+      <!-- Boolean Query Generator -->
+      <div class="p-6">
+        <p class="text-xs font-black uppercase tracking-wider text-outline mb-4">Query tối ưu cho kênh này</p>
+        <div id="s1-drawer-query-${id}" class="bg-surface-container-low rounded-xl p-4 font-mono text-xs text-on-surface-variant leading-relaxed min-h-[80px] border border-outline-variant/20">
+          Nhập mô tả ở ô Search trên → query sẽ xuất hiện ở đây
+        </div>
+        <div class="mt-3 flex gap-2">
+          <button onclick="s1CopyQuery('${id}')" class="flex-1 py-2 rounded-lg text-xs font-bold border transition-colors hover:opacity-80" style="border-color:${ch.color};color:${ch.textColor}">
+            <span class="material-symbols-outlined text-sm align-middle mr-1">content_copy</span>Copy query
+          </button>
+          <button onclick="s1SearchThisChannel('${id}')" class="flex-1 py-2 rounded-lg text-xs font-bold text-white transition-colors hover:opacity-90" style="background:${ch.color}">
+            <span class="material-symbols-outlined text-sm align-middle mr-1">bolt</span>Search ngay
+          </button>
+        </div>
+        <p class="text-[10px] text-outline mt-3"><strong>Tốt nhất cho:</strong> ${ch.bestFor}</p>
+      </div>
+      <!-- Mock results for this channel -->
+      <div class="p-6">
+        <p class="text-xs font-black uppercase tracking-wider text-outline mb-4">Ứng viên tiêu biểu từ kênh</p>
+        <div class="space-y-3">
+          ${ch.mockResults.map(r => `
+            <div class="flex items-center justify-between p-3 rounded-xl border border-outline-variant/20 hover:border-[${ch.color}] hover:bg-[${ch.bg}] transition-all cursor-pointer group" onclick="showToast('Đã thêm ${r.name} vào shortlist')">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${r.color}">${r.init}</div>
+                <div>
+                  <p class="font-semibold text-sm group-hover:text-primary transition-colors">${r.name}</p>
+                  <p class="text-xs text-outline">${r.role}</p>
+                  <span class="text-[10px] px-2 py-0.5 rounded-full font-medium" style="background:${ch.color}18;color:${ch.color}">${r.badge}</span>
+                </div>
+              </div>
+              <div class="text-right flex-shrink-0 ml-2">
+                <p class="text-sm font-black" style="color:${ch.color}">${r.match}%</p>
+                <p class="text-[10px] text-outline">match</p>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+
+  drawer.classList.remove('hidden');
+  drawer.scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+  // Nếu đã có query → fill vào drawer
+  const q = document.getElementById('s1-query');
+  if (q && q.value.trim()) s1UpdateDrawerQuery(id, q.value.trim());
+}
+
+function s1CloseDrawer() {
+  document.getElementById('s1-channel-drawer').classList.add('hidden');
+  s1DetailChannel = null;
+  S1_CHANNELS.forEach(c => {
+    const card = document.getElementById('ch-card-' + c.id);
+    if (card) card.style.borderColor = c.color + '30';
+  });
+}
+
+function s1UpdateDrawerQuery(id, userQuery) {
+  const ch = S1_CHANNELS.find(c => c.id === id);
+  if (!ch) return;
+  const el = document.getElementById('s1-drawer-query-' + id);
+  if (el) el.textContent = ch.queryTemplate(userQuery);
+}
+
+function s1CopyQuery(id) {
+  const el = document.getElementById('s1-drawer-query-' + id);
+  if (!el || el.textContent.includes('Nhập mô tả')) { showToast('Nhập mô tả ở ô Search trước!'); return; }
+  navigator.clipboard.writeText(el.textContent).then(() => showToast('Đã copy query!'));
+}
+
+function s1SearchThisChannel(id) {
+  s1ActiveChannels = new Set([id]);
+  s1RenderChannelPills();
+  s1MultiSearch();
+}
+
+/* ── MULTI-SOURCE SEARCH ── */
+function s1SetQuery(text) {
+  const el = document.getElementById('s1-query');
+  if (el) { el.value = text; el.focus(); }
+}
+
+function extractKeywords(q) {
+  const stopwords = new Set(['có','và','với','cho','tại','năm','kinh','nghiệm','thành','thạo','hoặc','trong','đang','tìm','cần','yêu','cầu']);
+  return q.split(/[\s,]+/).filter(w => w.length > 3 && !stopwords.has(w.toLowerCase())).slice(0, 8);
+}
+
+function extractSkillBoolean(q) {
+  const skills = extractKeywords(q).slice(0, 4);
+  return skills.length ? skills.map(s => `"${s}"`).join(' OR ') : '"HR" OR "Recruiter"';
+}
+
+function s1MultiSearch() {
+  const q = document.getElementById('s1-query').value.trim();
+  if (!q) { showToast('Vui lòng nhập mô tả ứng viên!'); return; }
+  if (s1ActiveChannels.size === 0) { showToast('Chọn ít nhất 1 kênh!'); return; }
+
+  document.getElementById('s1-results-empty').classList.add('hidden');
+  const content = document.getElementById('s1-results-content');
+  content.classList.remove('hidden');
+
+  // Nếu drawer đang mở, update query
+  if (s1DetailChannel) s1UpdateDrawerQuery(s1DetailChannel, q);
+
+  const channels = S1_CHANNELS.filter(c => s1ActiveChannels.has(c.id));
+
+  // Render loading state for each channel
+  content.innerHTML = `
+    <div class="mb-4 flex items-center justify-between">
+      <p class="text-sm font-bold text-on-surface">Đang tìm trên <span class="text-primary">${channels.length} kênh</span> đồng thời...</p>
+      <button onclick="s1ClearResults()" class="text-xs text-outline hover:text-primary">Xóa kết quả</button>
+    </div>
+    ${channels.map(ch => `
+      <div id="s1-ch-result-${ch.id}" class="mb-4 rounded-xl overflow-hidden border border-outline-variant/20">
+        <div class="flex items-center gap-3 px-4 py-3" style="background:${ch.bg}">
+          <span class="material-symbols-outlined text-lg" style="color:${ch.color};font-variation-settings:'FILL' 1">${ch.icon}</span>
+          <span class="font-bold text-sm" style="color:${ch.textColor}">${ch.name}</span>
+          <div class="ml-auto flex items-center gap-2">
+            <div class="w-4 h-4 border-2 rounded-full spinner" style="border-color:${ch.color}40;border-top-color:${ch.color}"></div>
+            <span class="text-xs text-outline" id="s1-ch-status-${ch.id}">Đang tạo query...</span>
           </div>
         </div>
-      `).join('')}
-      <div class="text-center pt-2"><button onclick="showToast('Đang tải thêm ứng viên...')" class="text-sm font-semibold text-primary hover:underline">Xem thêm 134 ứng viên →</button></div>
-    `;
-  }, 2600);
+        <div id="s1-ch-body-${ch.id}" class="px-4 py-3 bg-white text-xs text-outline italic">Chờ kết quả...</div>
+      </div>`).join('')}`;
+
+  // Simulate staggered results for each channel
+  channels.forEach((ch, idx) => {
+    const delay = 800 + idx * 600 + Math.random() * 400;
+    setTimeout(() => {
+      const statusEl = document.getElementById('s1-ch-status-' + ch.id);
+      if (statusEl) statusEl.textContent = 'Tạo query tối ưu...';
+    }, delay * 0.3);
+
+    setTimeout(() => {
+      const statusEl = document.getElementById('s1-ch-status-' + ch.id);
+      if (statusEl) statusEl.textContent = 'Đang quét...';
+    }, delay * 0.7);
+
+    setTimeout(() => {
+      const bodyEl = document.getElementById('s1-ch-body-' + ch.id);
+      const headerEl = document.getElementById('s1-ch-result-' + ch.id).querySelector('.flex');
+      const query = ch.queryTemplate(q);
+      const totalFound = 20 + Math.floor(Math.random() * 180);
+
+      if (headerEl) {
+        headerEl.innerHTML = `
+          <span class="material-symbols-outlined text-lg" style="color:${ch.color};font-variation-settings:'FILL' 1">${ch.icon}</span>
+          <span class="font-bold text-sm" style="color:${ch.textColor}">${ch.name}</span>
+          <div class="ml-2 bg-white px-2 py-0.5 rounded-full text-xs font-mono text-outline max-w-[40%] truncate border border-outline-variant/20" title="${query}">${query}</div>
+          <div class="ml-auto flex items-center gap-3">
+            <span class="text-xs font-bold" style="color:${ch.color}">${totalFound} ứng viên</span>
+            <button onclick="s1OpenChannelDetail('${ch.id}')" class="text-xs font-semibold hover:underline" style="color:${ch.textColor}">Xem chiến lược</button>
+          </div>`;
+      }
+
+      if (bodyEl) {
+        bodyEl.innerHTML = `<div class="divide-y divide-outline-variant/10">
+          ${ch.mockResults.map(r => `
+            <div class="flex items-center justify-between py-3 group cursor-pointer hover:bg-surface-container-low/50 transition-colors -mx-4 px-4" onclick="showToast('Đã thêm ${r.name} vào pipeline')">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${r.color}">${r.init}</div>
+                <div>
+                  <p class="font-semibold text-sm text-on-surface group-hover:text-primary transition-colors">${r.name}</p>
+                  <p class="text-xs text-outline">${r.role} · ${r.loc}</p>
+                  <div class="flex gap-1 mt-1 flex-wrap">${r.tags.map(t => `<span class="text-[10px] bg-surface-container-high px-2 py-0.5 rounded">${t}</span>`).join('')}</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 flex-shrink-0">
+                <div class="text-right">
+                  <div class="flex items-center gap-1.5"><div class="w-16 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${r.match}%;background:${ch.color}"></div></div><span class="text-sm font-black" style="color:${ch.color}">${r.match}%</span></div>
+                  <p class="text-[10px] text-outline mt-0.5">${r.badge}</p>
+                </div>
+                <button onclick="event.stopPropagation();showToast('${r.name} đã shortlist')" class="text-outline hover:text-primary p-1 opacity-0 group-hover:opacity-100 transition-opacity"><span class="material-symbols-outlined text-lg">bookmark_add</span></button>
+              </div>
+            </div>`).join('')}
+          <div class="py-2 flex items-center justify-between">
+            <p class="text-xs text-outline">+${totalFound - ch.mockResults.length} ứng viên khác</p>
+            <button onclick="showToast('Đang mở toàn bộ kết quả ${ch.name}...')" class="text-xs font-semibold hover:underline" style="color:${ch.color}">Xem tất cả →</button>
+          </div>
+        </div>`;
+        bodyEl.classList.remove('italic');
+      }
+    }, delay);
+  });
+
+  // Summary after all done
+  setTimeout(() => {
+    const totalCandidates = channels.reduce((sum, ch) => sum + ch.mockResults.length + 20 + Math.floor(Math.random() * 80), 0);
+    const summary = document.createElement('div');
+    summary.className = 'mt-4 p-4 rounded-xl flex items-center justify-between bg-primary/5 border border-primary/15';
+    summary.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings:'FILL' 1">check_circle</span>
+        <div>
+          <p class="font-bold text-sm text-on-surface">Tìm xong — <span class="text-primary">${totalCandidates}+ ứng viên</span> từ ${channels.length} kênh</p>
+          <p class="text-xs text-outline mt-0.5">AI đề xuất ưu tiên: <strong>Referral</strong> (ROI cao nhất) → <strong>GitHub</strong> → <strong>LinkedIn</strong></p>
+        </div>
+      </div>
+      <button onclick="showToast('Đã thêm tất cả vào pipeline')" class="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold hover:opacity-90 transition-opacity">Thêm tất cả vào pipeline</button>`;
+    content.appendChild(summary);
+  }, 800 + channels.length * 600 + 500);
 }
+
+function s1ClearResults() {
+  document.getElementById('s1-results-empty').classList.remove('hidden');
+  document.getElementById('s1-results-content').classList.add('hidden');
+  document.getElementById('s1-results-content').innerHTML = '';
+}
+
+/* ── RUN ALL CHANNELS ── */
+function s1RunAllChannels() {
+  s1ActiveChannels = new Set(S1_CHANNELS.map(c => c.id));
+  s1RenderChannelPills();
+  const q = document.getElementById('s1-query').value.trim();
+  if (!q) {
+    s1SetQuery('Senior Recruiter IT 5+ năm, thành thạo LinkedIn Recruiter và ATS, TP.HCM');
+  }
+  showToast('Đang khởi động sourcing trên tất cả 7 kênh...');
+  setTimeout(s1MultiSearch, 400);
+}
+
+/* ── OUTREACH LAB ── */
+function s1OutreachTab(tab) {
+  s1OutreachCurrentTab = tab;
+  ['linkedin','email','facebook','zalo'].forEach(t => {
+    const btn = document.getElementById('oreach-tab-' + t);
+    if (!btn) return;
+    if (t === tab) {
+      btn.className = 'px-3 py-1.5 text-xs font-semibold bg-surface-container-lowest rounded-md shadow-sm';
+      btn.style.color = S1_OUTREACH[t] ? '#00328a' : '#333';
+    } else {
+      btn.className = 'px-3 py-1.5 text-xs font-medium text-outline hover:text-on-surface rounded-md';
+      btn.style.color = '';
+    }
+  });
+
+  const tpl = S1_OUTREACH[tab];
+  const body = document.getElementById('s1-outreach-body');
+  if (!body || !tpl) return;
+  body.innerHTML = `
+    <div class="flex items-center gap-4 mb-4">
+      <div class="flex gap-2">
+        <span class="text-xs px-2.5 py-1 rounded-full font-bold" style="background:#e8f5e9;color:#2e7d32">Open Rate: ${tpl.stats.open}</span>
+        <span class="text-xs px-2.5 py-1 rounded-full font-bold" style="background:#e3f2fd;color:#1565c0">Reply: ${tpl.stats.reply}</span>
+        <span class="text-xs px-2.5 py-1 rounded-full font-bold" style="background:#f3e5f5;color:#6a1b9a">Hiệu quả: ${tpl.stats.grade}</span>
+      </div>
+    </div>
+    ${tab !== 'facebook' ? `<div class="mb-3"><p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Subject / Tiêu đề</p><div class="bg-surface-container-low rounded-lg px-3 py-2 text-sm font-medium text-on-surface border border-outline-variant/20">${tpl.subject}</div></div>` : ''}
+    <div class="mb-4">
+      <p class="text-xs font-bold text-outline uppercase tracking-wider mb-1">Nội dung template</p>
+      <textarea class="w-full bg-surface-container border border-outline-variant/20 rounded-xl p-3 text-xs text-on-surface leading-relaxed resize-none focus:border-primary focus:ring-0 transition-colors font-mono" rows="10">${tpl.body}</textarea>
+    </div>
+    <div class="mb-4">
+      <p class="text-xs font-bold text-outline uppercase tracking-wider mb-2">Tips tối ưu</p>
+      <div class="space-y-1.5">
+        ${tpl.tips.map(tip => `<div class="flex items-start gap-2 text-xs text-on-surface-variant"><span class="material-symbols-outlined text-green-500 text-sm flex-shrink-0 mt-0.5" style="font-variation-settings:'FILL' 1">check_circle</span>${tip}</div>`).join('')}
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="s1CopyTemplate('${tab}')" class="flex-1 bg-surface-container-high text-primary border border-outline-variant/20 py-2.5 rounded-xl text-xs font-bold hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">content_copy</span>Copy template
+      </button>
+      <button onclick="showToast('Đang mở A/B test mode...')" class="flex-1 bg-tertiary text-white py-2.5 rounded-xl text-xs font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-sm">science</span>A/B Test
+      </button>
+    </div>`;
+}
+
+function s1CopyTemplate(tab) {
+  const tpl = S1_OUTREACH[tab];
+  if (!tpl) return;
+  const text = `${tab !== 'facebook' ? 'Subject: ' + tpl.subject + '\n\n' : ''}${tpl.body}`;
+  navigator.clipboard.writeText(text).then(() => showToast('Đã copy template ' + tab + '!'));
+}
+
+/* ── PASSIVE RADAR ── */
+function s1RenderPassive() {
+  const el = document.getElementById('s1-passive-list');
+  if (!el) return;
+  el.innerHTML = S1_PASSIVE.map(p => `
+    <div class="flex items-center justify-between px-6 py-4 hover:bg-surface-container-low/50 transition-colors cursor-pointer group" onclick="showToast('Đã mở profile ${p.name}')">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="background:${p.bg};color:${p.color}">${p.init}</div>
+        <div>
+          <p class="font-semibold text-sm group-hover:text-primary transition-colors">${p.name}</p>
+          <p class="text-xs text-outline">${p.role} · ${p.loc}</p>
+          <div class="flex items-center gap-1 mt-1">
+            <span class="material-symbols-outlined text-[11px]" style="color:${p.color};font-variation-settings:'FILL' 1">${p.signalIcon}</span>
+            <span class="text-[10px] font-medium" style="color:${p.color}">${p.signal}</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 flex-shrink-0">
+        <div class="text-right">
+          <div class="flex items-center gap-1.5"><div class="w-14 h-1.5 bg-surface-variant rounded-full overflow-hidden"><div class="h-full rounded-full" style="width:${p.match}%;background:${p.color}"></div></div><span class="text-sm font-black" style="color:${p.color}">${p.match}%</span></div>
+        </div>
+        <button onclick="event.stopPropagation();showToast('Đã thêm ${p.name} vào outreach queue')" class="text-outline hover:text-primary p-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <span class="material-symbols-outlined text-lg">send</span>
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+/* ── CAMPAIGN MODAL ── */
+function s1OpenCampaignModal() {
+  showToast('Campaign Manager đang được xây dựng — sẽ ra mắt trong sprint tiếp theo');
+}
+
+/* ── TOGGLE DETAIL VIEW ── */
+function s1ToggleChannelView() {
+  s1DetailMode = !s1DetailMode;
+  const btn = document.getElementById('s1-view-toggle-btn');
+  if (btn) btn.innerHTML = s1DetailMode
+    ? '<span class="material-symbols-outlined text-sm">grid_view</span> Chế độ compact'
+    : '<span class="material-symbols-outlined text-sm">grid_view</span> Chế độ chi tiết';
+  // toggle grid layout
+  const grid = document.getElementById('s1-channel-grid');
+  if (grid) grid.className = s1DetailMode
+    ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4'
+    : 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-7 gap-3';
+}
+
+/* Auto-init sourcing hub when navigating to it */
+const _origShowHub = showHub;
+showHub = function(n) {
+  _origShowHub(n);
+  if (n === 1) s1Init();
+};
+
+// Init if already on hub-1
+if (document.getElementById('hub-1').classList.contains('active')) s1Init();
 
 /* ═══════════════════════════════════
    CV INTELLIGENCE — EXTENDED FEATURES
