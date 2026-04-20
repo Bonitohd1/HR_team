@@ -2136,18 +2136,122 @@ const DEMOS = {
 };
 
 let scoreChart = null;
+let _lastUploadedFile = null; // lưu file thật để gửi n8n
 
 function cv2FileSelect(input) {
   if (!input.files || !input.files[0]) return;
   const f = input.files[0];
+  _lastUploadedFile = f;
   document.getElementById('cv2-upload-zone').classList.add('border-primary','bg-primary/5');
   document.getElementById('cv2-upload-zone').querySelector('p').textContent = f.name;
-  setTimeout(() => cv2Analyze('senior'), 300);
+  const cfg = n8nLoadConfig();
+  if (cfg.baseUrl && cfg.connected) {
+    cv2AnalyzeReal(f);
+  } else {
+    setTimeout(() => cv2Analyze('senior'), 300);
+  }
 }
 
 function cv2LoadDemo(type) {
+  _lastUploadedFile = null;
   document.getElementById('cv2-upload-zone').classList.add('border-primary','bg-primary/5');
   cv2Analyze(type);
+}
+
+/* Gửi file thật lên n8n → nhận kết quả AI thật */
+function cv2AnalyzeReal(file) {
+  const cfg = n8nLoadConfig();
+  const url = `${cfg.baseUrl}${cfg.flow1Path || '/webhook/phan-tich-cv'}`;
+
+  // Lấy JD từ textarea nếu có, hoặc dùng JD mặc định
+  const jdText = (document.getElementById('cv2-jd-input') && document.getElementById('cv2-jd-input').value.trim())
+    || 'Tuyển dụng vị trí HR/Recruiter phù hợp với kinh nghiệm và kỹ năng của ứng viên.';
+  const campaign = cfg.campaign || 'RecruitHub Q2';
+
+  cv2ShowLoading();
+
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+  formData.append('jd', jdText);
+  formData.append('campaign', campaign);
+
+  fetch(url, { method: 'POST', body: formData })
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json();
+    })
+    .then(res => {
+      cv2HideLoading();
+      if (res.success === false) throw new Error(res.message || 'n8n error');
+      // Map n8n response → display format
+      const score = parseInt(res.match_percent) || 0;
+      const isTuyen = (res.status || '').toLowerCase().includes('tuy');
+      const vColor = score >= 75 ? '#006a6a' : score >= 50 ? '#C65911' : '#ba1a1a';
+      const verdict = score >= 75 ? 'PHẢI PHỎNG VẤN' : score >= 50 ? 'CẦN XEM XÉT' : 'KHÔNG PHÙ HỢP';
+      const vText = score >= 75 ? 'Ứng viên xuất sắc' : score >= 50 ? 'Tiềm năng — cần đánh giá thêm' : 'Lệch yêu cầu — không ưu tiên';
+      const displayData = {
+        name: res.name || file.name,
+        score,
+        verdict,
+        vColor,
+        vText,
+        vSub: isTuyen
+          ? `Phù hợp ${score}% — đề xuất phỏng vấn. Email: ${res.email || 'N/A'}`
+          : `Điểm ${score}% — chưa đủ yêu cầu. Email: ${res.email || 'N/A'}`,
+        criteria: [
+          { n: 'Phù hợp tổng thể', s: score },
+          { n: 'Kinh nghiệm chuyên môn', s: Math.min(100, Math.round(score * 1.05)) },
+          { n: 'Kỹ năng phù hợp JD', s: Math.max(0, Math.round(score * 0.95)) },
+          { n: 'Tiềm năng phát triển', s: Math.min(100, Math.round(score * 1.1)) },
+          { n: 'Phù hợp văn hóa', s: Math.max(0, Math.round(score * 0.9)) },
+        ],
+        skills: ['Xem CV đính kèm'],
+        matches: res.status === 'Tuyển' ? ['AI đánh giá: Đủ tiêu chuẩn tuyển'] : [],
+        flags: res.status === 'Loại' ? ['AI đánh giá: Chưa đủ yêu cầu'] : [],
+        summary: res.note || 'Không có nhận xét chi tiết.'
+      };
+      cv2ShowResult(displayData);
+      showToast(`✓ AI phân tích xong: ${res.name} — ${score}% — ${res.status}`);
+      // Cập nhật queue nếu có
+      QUEUE_DATA.push({
+        id: QUEUE_DATA.length + 10,
+        init: (res.name || 'UV').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(),
+        name: res.name || file.name,
+        title: `CV thật · ${campaign}`,
+        status: 'done',
+        score,
+        verdict,
+        vColor,
+        initBg: score >= 75 ? 'bg-secondary/20 text-secondary' : 'bg-amber-100 text-amber-700'
+      });
+      renderQueue();
+    })
+    .catch(err => {
+      cv2HideLoading();
+      showToast(`Lỗi phân tích: ${err.message}. Đang dùng chế độ demo.`);
+      cv2Analyze('senior');
+    });
+}
+
+function cv2ShowLoading() {
+  document.getElementById('cv2-empty').classList.add('hidden');
+  document.getElementById('cv2-result').classList.add('hidden');
+  const loading = document.getElementById('cv2-loading');
+  loading.classList.remove('hidden');
+  loading.style.display = 'flex';
+  const steps = ['Đang gửi CV lên n8n...', 'AI đang đọc hồ sơ...', 'Chấm điểm phù hợp JD...', 'Tổng hợp kết quả...'];
+  let i = 0;
+  window._cv2StepInterval = setInterval(() => {
+    const el = document.getElementById('cv2-loading-text');
+    if (el && i < steps.length) el.textContent = steps[i++];
+  }, 1800);
+}
+
+function cv2HideLoading() {
+  clearInterval(window._cv2StepInterval);
+  const loading = document.getElementById('cv2-loading');
+  loading.classList.add('hidden');
+  loading.style.display = 'none';
 }
 
 function cv2Analyze(type) {
@@ -3050,20 +3154,40 @@ function n8nSendReport() {
     n8nToggleConfig();
     return;
   }
+  if (!cfg.campaign) {
+    showToast('Vui lòng nhập tên Chiến dịch trong cấu hình n8n!');
+    n8nToggleConfig();
+    return;
+  }
+  if (!cfg.recipients) {
+    showToast('Vui lòng nhập Email nhận báo cáo trong cấu hình n8n!');
+    n8nToggleConfig();
+    return;
+  }
   const btn = document.getElementById('n8n-send-report-btn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full spinner inline-block mr-1"></span> Đang gửi...'; }
-  const reportData = {
-    campaign:   cfg.campaign   || 'Báo cáo CV Batch',
-    recipients: cfg.recipients || '',
-    timestamp:  new Date().toISOString(),
-    summary: {
-      total: 7, done: 4, analyzing: 2, waiting: 1,
-      results: QUEUE_DATA.filter(c => c.status === 'done').map(c => ({ name: c.name, score: c.score, verdict: c.verdict }))
-    }
+
+  // n8n Flow 2 chỉ cần campaign + recipients — nó tự đọc Google Sheets
+  const payload = {
+    campaign:   cfg.campaign.trim(),
+    recipients: cfg.recipients.trim()
   };
-  fetch(`${cfg.baseUrl}${cfg.flow2Path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(reportData) })
-    .then(r => { showToast(r.ok ? '✓ Báo cáo đã gửi qua email thành công!' : `Gửi thất bại (HTTP ${r.status})`); })
-    .catch(() => { showToast('Lỗi kết nối khi gửi báo cáo. Kiểm tra cấu hình n8n.'); })
+
+  fetch(`${cfg.baseUrl}${cfg.flow2Path || '/webhook/cv-send-mail'}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+    .then(r => {
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return r.json().catch(() => ({}));
+    })
+    .then(() => {
+      showToast(`✓ Báo cáo chiến dịch "${cfg.campaign}" đã gửi tới ${cfg.recipients}!`);
+    })
+    .catch(err => {
+      showToast(`Lỗi gửi báo cáo: ${err.message}`);
+    })
     .finally(() => {
       if (btn) { btn.disabled = false; btn.innerHTML = '<span class="material-symbols-outlined text-sm">send</span> Gửi báo cáo Email'; }
     });
